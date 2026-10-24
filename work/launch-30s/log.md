@@ -1,0 +1,39 @@
+# log — launch-30s
+
+단계 · 장면N · 항목(값/UI) · 내용 · 회차
+- 승인 1 · scenes.md · 사람 승인 (수정 없음) · 2026-10-24
+- snapboard · 장면1 · 값 · 커서 폭 6 · 띄움 6 · 세로 -12 · 높이 78(빌림) · 1회
+- snapboard · 장면2 · 값 · 옆 묶음 글자 왼쪽 정렬 · 1회
+- snapboard · 장면3 · 값 · 제목 y 174 · 왼쪽 정렬 · 1회
+- snapboard · 장면4 · 값 · 제목 y 174 · 왼쪽 정렬 · 1회
+- snapboard · 장면5 · 값 · 제목 y 174 · 왼쪽 정렬 · 1회
+- snapboard · 장면6 · 값 · 왼쪽 정렬 · 1회
+- snapboard · 장면9 · 값 · 제목 y 174 · 왼쪽 정렬 · 1회
+- snapboard · 장면11 · 값 · grain 난수 mulberry32 · 1회
+- snapboard · 장면1 · 값 · 커서 폭 6 · 띄움 6 · 2회 → 멈춤
+- snapboard · 장면2·3·4·5·6·9 · 값 · 옆 묶음 글자 왼쪽 정렬 · 2회 → 멈춤
+- snapboard · 장면11 · 값 · grain 난수 mulberry32 · 2회 → 멈춤
+- 결정 · 장면1·2·3·4·5·6·9·11 · 커서 치수 · 묶음 안 정렬 · grain 생성기 → 사람 선택 "docs에 넣기", motion.md 3장 text-type · video.md 2장 video-grain · 3장 정렬 줄에 반영 · 2026-10-24
+- 반려 2 · snapboard · 장면 구성 → 장면표로 돌아감: 폰은 2장만(나머지 UI 확대) · 3+4 합쳐 스킬 카드만 skill-carousel · 5 삭제 · 6 버튼만 · 8 삭제 · 9 "이번 달 수익" 글자 + count-up · 10 폰 뺌 · 길이는 hold 규칙대로(약 20초) · 2026-10-24
+- 결정 · motion.md 3장에 skill-carousel 추가 · count-up 새 후보 → 승인 · 2026-10-24
+- scenes · 장면6 · 값 · stat-card 줄 숨김 상태 없음 (src 결정 필요) · 1회
+- 결정 · 장면6 · stat-card에 data-state="amount-only" 추가 (src/parts, 영상 전용) · count-up은 part-in 바로 뒤 · 장면3 카드는 처음부터 놓여 있고 hold-m · 2026-10-24
+- 결정 변경 · 장면6 · stat-card 줄 그대로 보임 → amount-only 상태 되돌림 (src 원래대로) · 장면표 승인(이 변경 포함) · 2026-10-24
+- 승인 2 · snapboard (8장면) · 사람 승인 · 2026-10-24
+- video · out.mp4 · critic 통과 · 18.9초 · 567f · 2026-10-24
+- 요청 · 장면2 · 폰 등장을 snapcn phone-frame showcase 크레인으로 → motion.md 1장 crane-angle · 5장 cam-crane 추가 (사람 선택) · 장면표로 돌아감 · 2026-10-24
+- 승인 1 · scenes.md 장면2 cam-crane · 사람 승인 · 2026-10-24
+- 결정 · 장면2 · crane-angle에 perspective 2400px · 중심 폰 가운데, 1장 dist-l 70px 추가, cam-crane 시작 위치 = 아래 dist-l (사람 선택) · 2026-10-24
+- snapboard · 장면2 · 02a · crane-angle perspective 2400px · 중심 폰 가운데 · 시작 아래 dist-l 반영, 02a.png 다시 캡처 (02b · 02 그대로) · 2026-10-24
+- 정리 · motion.md 5장 cam-crane 사이 경로 = 각도·위치·줌 동시 보간 (dur-2xl · ease-inout 정의를 풀어 씀) · 2026-10-24
+- 요청 · 장면2 · 02(머묾) 빼고 02a → 02b로 끝냄 · motion.md 5장 cam-crane 뒤 cam-pull 생략 가능으로 · 장면표로 돌아감 · 2026-10-24
+- 승인 1 · scenes.md 장면2 crane만 (17.9초) · 사람 "ㄱㄱ" + critic 통과 · 2026-10-24
+- 승인 2 · snapboard 장면2 02a · 02b · 사람 승인 · 2026-10-24
+- video · out.mp4 다시 렌더 · critic 통과 · 17.9초 · 537f · 2026-10-24
+- 요청 · 장면2→3 멈춤 해소 · button-press(기존 후보 → 승인) · press-scale 0.96 추가 · 장면2 끝: hold-m → button-press → 컷 (사람 선택) · 장면표로 돌아감 · 2026-10-24
+- 승인 1 · scenes.md 장면2 button-press (17.6초) · 사람 선택 + critic 통과 · 2026-10-24
+- 결정 · 장면2 · 화면 이미지 속 버튼 위에 color-bg 덮개판 + button-submit 겹침 (video.md 4장 예외, 배율 1.066) · press 중심 버튼 가운데 (motion.md 3장) · 2026-10-24
+- 정리 · video.md 4장 덮개판 사방 1px 크게 (가장자리 자국 해소) · 2026-10-24
+- snapboard · 장면2 · 덮개판 사방 1px@1x(1.0667px) 크게 (video.md 4장 바뀜), 02a · 02b · 02c 다시 캡처 · 02c 둘레 자국 0 · 2026-10-24
+- 승인 2 · snapboard 장면2 02a · 02b · 02c (button-press · 덮개판) · 사람 "ㄱㄱ" + critic 통과 · 2026-10-24
+- video · out.mp4 다시 렌더 (button-press) · critic 통과 · 17.6초 · 528f · 2026-10-24

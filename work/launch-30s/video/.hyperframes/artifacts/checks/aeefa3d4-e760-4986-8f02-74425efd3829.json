@@ -1,0 +1,760 @@
+{
+  "ok": false,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "filesScanned": 9
+  },
+  "runtime": {
+    "ok": false,
+    "errorCount": 22,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/button-submit.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/button-submit.html?state=submit"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/stat-card.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/stat-card.html"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/logo.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/logo.html?state=logotype-white"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/skill-card-1.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/skill-card-1.html"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/skill-card-2.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/skill-card-2.html"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/skill-card-3.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/skill-card-3.html"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/asset-card.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/asset-card.html?state=private-image"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/asset-card.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/asset-card.html?state=review"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/asset-card.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/asset-card.html?state=selling"
+      },
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load assets/src/parts/asset-card.html: net::ERR_ABORTED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "17.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:58520/assets/src/parts/asset-card.html?state=private-file"
+      }
+    ]
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 3,
+    "findings": [
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 0.978,
+        "selector": "#s1-cam",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": -1772.34,
+          "top": -756,
+          "right": 2835.66,
+          "bottom": 1836,
+          "width": 4608,
+          "height": 2592
+        },
+        "containerSelector": "#s1 > div:nth-of-type(1)",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "left": 1772.34,
+          "right": 915.66,
+          "top": 756,
+          "bottom": 756
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/s1.html",
+        "bbox": {
+          "x": -1772.34,
+          "y": -756,
+          "width": 4608,
+          "height": 2592
+        },
+        "firstSeen": 0.978,
+        "lastSeen": 0.978,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          0.978
+        ]
+      },
+      {
+        "code": "escaped_container",
+        "severity": "info",
+        "time": 0.978,
+        "selector": "#s1-cam",
+        "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
+        "rect": {
+          "left": -1772.34,
+          "top": -756,
+          "right": 2835.66,
+          "bottom": 1836,
+          "width": 4608,
+          "height": 2592
+        },
+        "containerSelector": "#s1 > div:nth-of-type(1)",
+        "text": "오늘도 하나씩, 내 실력으로",
+        "fixHint": "Compute left/top in the offset parent's frame (subtract its rect), or mark intentional placement with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/s1.html",
+        "bbox": {
+          "x": -1772.34,
+          "y": -756,
+          "width": 4608,
+          "height": 2592
+        },
+        "firstSeen": 0.978,
+        "lastSeen": 0.978,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          0.978
+        ]
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 8.8,
+        "selector": "#s5-title",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": 669.39,
+          "top": 495.18,
+          "right": 1250.59,
+          "bottom": 590.18,
+          "width": 581.2,
+          "height": 95
+        },
+        "containerSelector": "div.mask",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 669.39,
+          "top": 492.5,
+          "right": 1250.59,
+          "bottom": 587.5,
+          "width": 581.2,
+          "height": 95
+        },
+        "overflow": {
+          "bottom": 2.68
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/s5.html",
+        "bbox": {
+          "x": 669.39,
+          "y": 495.18,
+          "width": 581.2,
+          "height": 95
+        },
+        "firstSeen": 8.8,
+        "lastSeen": 8.8,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          8.8
+        ]
+      }
+    ],
+    "duration": 17.6,
+    "samples": [
+      0.978,
+      2.933,
+      4.889,
+      6.844,
+      8.8,
+      10.756,
+      12.711,
+      14.667,
+      16.622
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 3,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      0.978,
+      4.889,
+      8.8,
+      12.711,
+      16.622
+    ],
+    "checked": 8,
+    "passed": 8
+  },
+  "craft": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 3,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "line_unread",
+        "severity": "warning",
+        "message": "\"오 늘 도 하 나 씩 , 내 실 력 으 로\" (11 words) is on screen 2.70 s (±0.01 s), under its 2.85 s floor: hold it about 0.5 s + 0.3 s a word (3.80 s here) before it leaves or changes; see references/motion.md.",
+        "text": "오 늘 도 하 나 씩 , 내 실 력 으 로",
+        "selector": "#s1-line",
+        "dataAttributes": {},
+        "sourceFile": "compositions/s1.html",
+        "bbox": {
+          "x": 778.16,
+          "y": 428.4,
+          "width": 161.82000000000005,
+          "height": 223.19999999999993
+        },
+        "time": 0,
+        "words": 11,
+        "seconds": 2.703,
+        "floorSeconds": 2.85
+      },
+      {
+        "code": "film_silent",
+        "severity": "warning",
+        "message": "This 18 s film has no sound source (no <audio>, no <video> with sound): add a music bed and sounds on the visible actions unless the person asked for silence; see references/sound.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0
+      },
+      {
+        "code": "line_unread",
+        "severity": "warning",
+        "message": "The film's last line \"오늘도 하나씩, 내 실력으로\" (4 words) is on screen 1.84 s (±0.01 s), under the 2.00 s a closing line needs: hold it about 0.5 s + 0.3 s a word and at least 2 s before the film ends; see references/motion.md.",
+        "text": "오늘도 하나씩, 내 실력으로",
+        "selector": "#s8-slogan",
+        "dataAttributes": {},
+        "sourceFile": "compositions/s8.html",
+        "bbox": {
+          "x": 609.11,
+          "y": 581,
+          "width": 701.7799999999999,
+          "height": 80
+        },
+        "time": 15.767,
+        "words": 4,
+        "seconds": 1.837,
+        "floorSeconds": 2
+      }
+    ],
+    "enabled": true,
+    "step": 0.125,
+    "samples": 141
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  }
+}

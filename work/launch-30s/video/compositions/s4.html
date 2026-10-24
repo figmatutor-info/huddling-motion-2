@@ -1,0 +1,90 @@
+<!--
+  장면 4 · 7.7–8.7 (30프레임) — scenes.md 4행
+  배경 video-bg-soft · src/parts/button-submit.html (data-state="submit") 하나 · 화면 가운데
+  움직임: cam-hold · button-submit part-in → hold-m → scene-out · 경계 cut-in-motion
+-->
+<template>
+  <style>
+    /* design.md 3장 A · video.md 3장: 로컬 파일 */
+    @font-face { font-family: "Pretendard"; font-weight: 400; src: url("assets/src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 600; src: url("assets/src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 700; src: url("assets/src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Pretendard", sans-serif; word-break: keep-all; /* video.md 3장 */ }
+    #root p { margin: 0; }
+    /* parts: video.md 5장 — 부품 전체에 × 2.8 한 번 (iframe 원본 크기 = Figma 크기) */
+    #root .part { flex: none; position: relative; }
+    #root .part iframe { position: absolute; left: 0; top: 0; border: 0; background: transparent; transform: scale(2.8); transform-origin: 0 0; }
+    #root .p-mission { width: 980px; height: 708.4px; } #root .p-mission iframe { width: 350px; height: 253px; }
+    #root .p-stat    { width: 980px; height: 226.8px; } #root .p-stat    iframe { width: 350px; height: 81px; }
+    #root .p-asset   { width: 980px; height: 207.2px; } #root .p-asset   iframe { width: 350px; height: 74px; }
+    #root .p-skill   { width: 980px; height: 134.4px; } #root .p-skill   iframe { width: 350px; height: 48px; }
+    #root .p-button  { width: 980px; height: 123.2px; } #root .p-button  iframe { width: 350px; height: 44px; }
+    /* 묶음 전체 화면 가운데 (video.md 3장) */
+    #root .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    #root .center.one-line { text-align: center; }
+    /* enter 마스크 (motion.md 2장 enter · 1장 mask-rise): 줄 밖은 잘림 */
+    #root .mask { overflow: hidden; }
+    #root .mask > * { display: block; }
+    #root { background: #f7f7f8; /* video-bg-soft */ }
+  </style>
+  <div id="root" data-composition-id="s4" data-width="1920" data-height="1080">
+    <div id="s4-out" class="center">
+      <div id="s4-button" class="part p-button"><iframe data-src="assets/src/parts/button-submit.html?state=submit"></iframe></div>
+    </div>
+  </div>
+  <script>
+  (() => {
+    // ── 공통 (장면 파일마다 같음) ─────────────────────────────────────
+    // motion.md 1장: 프레임(30fps) · Duration · Easing 곡선 · 4장 hold
+    const F = (n) => n / 30;
+    const DUR = { xs: F(2), s: F(3), m: F(6), l: F(12), xl: F(24), x2l: F(30) };
+    const HOLD = { s: F(12), m: F(21), l: F(36), end: F(45) };
+    function bez(x1, y1, x2, y2) { // cubic-bezier 값을 GSAP ease 함수로 (곡선 값은 motion.md 1장 그대로)
+      const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+      const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+      const sx = (t) => ((ax * t + bx) * t + cx) * t, sy = (t) => ((ay * t + by) * t + cy) * t;
+      return (p) => {
+        if (p <= 0) return 0; if (p >= 1) return 1;
+        let lo = 0, hi = 1, t = p;
+        for (let i = 0; i < 50; i++) { const v = sx(t); if (Math.abs(v - p) < 1e-7) break; if (v < p) lo = t; else hi = t; t = (lo + hi) / 2; }
+        return sy(t);
+      };
+    }
+    const EASE_OUT = bez(0.16, 1, 0.3, 1);      // ease-out
+    const EASE_IN = bez(0.5, 0, 0.75, 0);       // ease-in
+    const EASE_INOUT = bez(0.65, 0, 0.35, 1);   // ease-inout
+    const EASE_LINEAR = "none";                 // ease-linear
+    // 부품(iframe) 로드 + 부품 안 폰트 · 이미지 준비 (design.md 3장: 첫 프레임 전에 fonts.ready)
+    function partReady(f) {
+      return new Promise((res) => {
+        const loaded = () => { const d = f.contentDocument; return d && d.readyState === "complete" && d.location.href !== "about:blank"; };
+        const go = () => { const d = f.contentDocument; d.fonts.ready.then(() => Promise.all([...d.images].map((i) => i.decode().catch(() => {})))).then(res); };
+        if (loaded()) go(); else f.addEventListener("load", go, { once: true });
+      });
+    }
+    function ready(root) {
+      // 부품 iframe 은 data-src 로 적고 장면 스크립트가 붙을 때 한 번만 연다 (장면 삽입 중 이중 로드 · 중단 방지)
+      root.querySelectorAll("iframe[data-src]").forEach((f) => { if (!f.getAttribute("src")) f.src = f.dataset.src; });
+      return document.fonts.ready.then(() => Promise.all([
+        ...[...root.querySelectorAll("iframe")].map(partReady),
+        ...[...root.querySelectorAll("img")].map((i) => i.decode().catch(() => {})),
+      ]));
+    }
+    function offsetIn(el, root) { let x = 0, y = 0; while (el && el !== root) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x, y }; }
+    // cut-in-motion (motion.md 3장): scene-out(exit, dur-s)이 절반 진행된 프레임 = 장면 끝
+    const exitAt = (sceneDur) => sceneDur - DUR.s / 2;
+    function sceneOut(tl, target, sceneDur) { tl.fromTo(target, { opacity: 1 }, { opacity: 0, duration: DUR.s, ease: EASE_IN, immediateRender: false }, exitAt(sceneDur)); }
+    // ───────────────────────────────────────────────────────────────
+    const SCENE = 1.0;
+    const root = document.getElementById("s4-out").closest('[data-composition-id="s4"]');
+    ready(root).then(() => {
+      const tl = gsap.timeline({ paused: true });
+      // part-in = enter + 마스크 대신 위 dist-m(24px) · 투명도 0 → 1 (dur-m · ease-out)
+      tl.fromTo("#s4-button", { y: -24, opacity: 0 }, { y: 0, opacity: 1, duration: DUR.m, ease: EASE_OUT }, 0);
+      // hold-m 뒤 scene-out
+      sceneOut(tl, "#s4-out", SCENE);
+      window.__timelines["s4"] = tl;
+    });
+  })();
+  </script>
+</template>

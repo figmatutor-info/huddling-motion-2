@@ -1,0 +1,323 @@
+<!doctype html>
+<!--
+  work/launch-30s/snapboard.html — 스냅보드 (scenes.md 승인본 8장면 · 17.9초, 장면마다 "머묾" 한 컷 · 각 1920×1080)
+  2장만 예외: cam-crane 시작(#s02a) · cam-crane 끝 = cam-in 상태 hold-m(#s02b) · button-press 눌린 순간(#s02c) 세 컷, 모두 원래 크기.
+  3장(skill-carousel)만 예외: 카드 1장째가 가운데인 컷(#s03) + 2 · 3장째가 가운데인 컷(#s03b · #s03c)을 보드에 작게 같이.
+  값 출처: docs/video.md 1~5장 · docs/design.md 1~3장 · docs/motion.md (머묾 상태 판단 · text-type 커서 · skill-carousel 거리).
+  쓴 이름 목록: used-snapboard.md
+  부품 · 화면: src/parts/*.html (iframe, 원본 그대로 · 상태는 ?state= 로만) · src/screens/01-home.png
+  열기: 저장소 루트에서 로컬 서버로 연다 (예: python3 -m http.server → /work/launch-30s/snapboard.html).
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>snapboard — launch-30s</title>
+<style>
+  /* design.md 3장 A · video.md 3장: 로컬 파일 */
+  @font-face { font-family: "Pretendard"; font-weight: 400; src: url("../../src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+  @font-face { font-family: "Pretendard"; font-weight: 600; src: url("../../src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+  @font-face { font-family: "Pretendard"; font-weight: 700; src: url("../../src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+
+  :root {
+    /* video.md 2장 배경 */
+    --video-bg: #ffffff;
+    --video-bg-soft: #f7f7f8;
+    --video-bg-dark: #18191b;
+    /* video.md 3장 글자 색 */
+    --video-text: #18191b;
+    --video-text-muted: #75777c;
+    --video-text-accent: #3759de;
+    --video-text-on-dark: #ffffff;
+    /* video.md 3장 간격 */
+    --video-gap: 56px;
+    --video-gap-end: 48px;
+    /* video.md 4장 폰 프레임 */
+    --phone-bezel: 14px;
+    --phone-radius-outer: 64px;
+    --phone-radius-screen: 50px;
+    --phone-color: #18191b;
+    --phone-screen-bg: #ffffff;
+  }
+
+  html, body { margin: 0; padding: 0; }
+  body { font-family: "Pretendard", sans-serif; }
+
+  .cut {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    word-break: keep-all; /* video.md 3장 */
+  }
+  .bg-soft { background: var(--video-bg-soft); }
+  .bg { background: var(--video-bg); }
+
+  /* video.md 3장 글자 스타일 */
+  .video-display { font-weight: 700; font-size: 78px; line-height: 95px; }
+  .video-title   { font-weight: 600; font-size: 67px; line-height: 90px; }
+  .video-heading { font-weight: 600; font-size: 50px; line-height: 78px; }
+  .t-text    { color: var(--video-text); }
+  .t-muted   { color: var(--video-text-muted); }
+  .t-accent  { color: var(--video-text-accent); }
+  .t-on-dark { color: var(--video-text-on-dark); }
+  p { margin: 0; }
+
+  /* 묶음 전체 화면 가운데 (video.md 3장). 화면 가운데 한 줄 장면(훅 · dark-cut · 엔드)은 글자 가운데 정렬 */
+  .center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .center.one-line { text-align: center; }
+
+  /* 2장: 폰 하나 — 화면 가운데 (가로 · 세로, video.md 3장 · 장면표) */
+  .stage {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: row; align-items: center; justify-content: center;
+  }
+  .phone {
+    flex: none;
+    box-sizing: border-box;
+    width: 444px; height: 928px;               /* phone-size */
+    padding: var(--phone-bezel);
+    border-radius: var(--phone-radius-outer);
+    background: var(--phone-color);
+  }
+  .phone img {
+    display: block;
+    width: 416px; height: 900px;               /* phone-screen */
+    border-radius: var(--phone-radius-screen);
+    background: var(--phone-screen-bg);
+  }
+
+  .gap     { height: var(--video-gap); flex: none; }
+  .gap-end { height: var(--video-gap-end); flex: none; }
+
+  /* parts: video.md 5장 — 부품 전체에 × 2.8 한 번 */
+  .part { flex: none; position: relative; }
+  .part iframe {
+    position: absolute; left: 0; top: 0;
+    border: 0; background: transparent;
+    transform: scale(2.8); transform-origin: 0 0;
+  }
+  .p-stat    { width: 980px; height: 226.8px; } .p-stat    iframe { width: 350px; height: 81px; }
+  .p-asset   { width: 980px; height: 207.2px; } .p-asset   iframe { width: 350px; height: 74px; }
+  .p-skill   { width: 980px; height: 134.4px; } .p-skill   iframe { width: 350px; height: 48px; }
+  .p-button  { width: 980px; height: 123.2px; } .p-button  iframe { width: 350px; height: 44px; }
+  /* logo-hero: video.md 5장 배율 예외 × 6 */
+  .p-logo-hero { width: 894px; height: 114px; } .p-logo-hero iframe { width: 149px; height: 19px; transform: scale(6); }
+
+  /* 1장 text-type 끝 글자 뒤 커서 (motion.md 3장 text-type):
+     폭 6px · 끝 글자와 6px 띄움 · 높이 = video-display 행간 95 (video.md 3장) · 색 video-text */
+  .cursor {
+    display: inline-block;
+    width: 6px; height: 95px;
+    margin-left: 6px;
+    vertical-align: top;
+    background: var(--video-text);
+  }
+
+  /* 3장 skill-carousel (motion.md 3장): 카드 3장 가로 한 줄, 카드 사이 video-gap.
+     보이는 카드를 화면 가운데(가로 · 세로) → 줄의 왼쪽 끝 = (1920 - 980) / 2 - n × (980 + 56) */
+  .carousel {
+    position: absolute; top: 0; height: 1080px;
+    display: flex; flex-direction: row; align-items: center;
+    gap: var(--video-gap);
+  }
+  #s03  .carousel { left: 470px; }    /* 카드 1 가운데 */
+  #s03b .carousel { left: -566px; }   /* 왼쪽으로 한 장 (980 + 56) → 카드 2 가운데 */
+  #s03c .carousel { left: -1602px; }  /* 왼쪽으로 두 장 → 카드 3 가운데 */
+
+  /* 2장 카메라 (motion.md 5장 cam-crane, 다음 cam-pull 생략 → cam-in 상태로 hold-l). 부제 · mission-card 부품 없음 (장면표) */
+  .cam { position: absolute; inset: 0; transform-origin: 0 0; }
+  /* 02a: cam-crane 시작 (motion.md 5장) = 폰이 머묾 자리보다 아래 dist-l 70px (1장) · × 1
+     + crane-angle (1장) rotateX 12° · rotateY -18° · perspective 2400px · 회전 중심 폰 가운데 (transform-origin 50% 50%) */
+  #s02a .phone {
+    transform-origin: 50% 50%;
+    transform: translateY(70px) perspective(2400px) rotateX(12deg) rotateY(-18deg);
+  }
+  /* 02b: cam-crane 끝 = 각도 0 · cam-in × 2.4 (motion.md 1장), 대상 = 01-home 미션 카드 영역 가운데
+     대상 점 (화면 이미지 780×1688 안 390 · 841, video/compositions/s2.html과 같은 잰 값)
+     폰 가운데 → 폰 x 738–1182 · y 76–1004, 화면 x 752–1168 · y 90–990
+     → 컷 좌표 fx = 752 + 416 × 390/780 = 960 · fy = 90 + 900 × 841/1688 = 538.40
+     → translate(960 - 960 × 2.4, 540 - 538.40 × 2.4) scale(2.4) */
+  #s02b .cam, #s02c .cam { transform: translate(-1344px, -752.16px) scale(2.4); }
+
+  /* 02b · 02c: button-submit apply-case를 01-home 화면 이미지 속 "적용 사례 정리하기 →" 버튼 자리에 겹침 (장면표 · motion.md 3장 button-press)
+     화면 이미지 속 버튼 (잰 값): 이미지 780×1688 안 x 74–709 · y 972–1059 (636×88 = 부품 318×44 @2x)
+     배율 = 화면 이미지와 같게 phone-screen 416 / 390 = 1.066667 (video.md 4장) · 부품 전체에 한 번
+     위치 (폰 안, 베젤 포함) left = 14 + 74 × 416/780 = 53.4667 · top = 14 + 972 × 900/1688 = 532.2464
+     → 부품 영역 339.2×46.9333 (폰 좌표) · cam-in × 2.4 뒤 컷 좌표 x 555.49–1369.54 · y 707.60–820.22 (814.05×112.64) */
+  .phone { position: relative; }
+  .phone .overlay-btn {
+    position: absolute; left: 53.4667px; top: 532.2464px;
+    width: 339.2px; height: 46.9333px;
+  }
+  .phone .overlay-btn iframe {
+    position: absolute; left: 0; top: 0; border: 0; background: transparent;
+    width: 318px; height: 44px;
+    transform: scale(1.066667); transform-origin: 0 0;
+  }
+  /* 02a · 02b · 02c: 덮개판 (video.md 4장 예외 줄) — 부품 바로 아래, 같은 크기 · 같은 모서리 · 색 phone-screen-bg (= color-bg).
+     모서리 = 부품 border-radius 8px × 같은 배율 1.066667 = 8.5333px. 덮개판은 고정, 누름(press-scale)은 부품에만 */
+  .phone .overlay-cover {
+    /* 사방 1px @1x 크게 (video.md 4장) = 1 × 1.066667 (phone-screen 배율) = 1.0667px */
+    position: absolute; left: 52.4px; top: 531.1797px;
+    width: 341.3333px; height: 49.0667px;
+    border-radius: 8.5333px;
+    background: var(--phone-screen-bg);
+  }
+  /* 02c: button-press 누름 끝 = press-scale 0.96 (motion.md 1장), 중심 = 버튼 가운데 (motion.md 3장 button-press), 부품만 — 덮개판은 고정 */
+  #s02c .overlay-btn { transform: scale(0.96); transform-origin: 50% 50%; }
+
+  /* 8장 video-bg-end (video.md 2장) */
+  .bg-end { background: var(--video-bg-dark); }
+  .bg-end .glow {
+    position: absolute; left: 50%; top: 50%;
+    width: 1200px; height: 1200px; margin: -600px 0 0 -600px;
+    border-radius: 50%;
+    background: radial-gradient(circle closest-side, rgba(55, 89, 222, 0.45), rgba(55, 89, 222, 0));
+    filter: blur(160px);
+  }
+  .bg-end canvas.grain { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; opacity: 0.06; }
+
+  /* 보드 틀 (영상 아님): 3장 2 · 3장째 컷을 반 크기로 나란히 */
+  .board-row { display: flex; flex-direction: row; width: 1920px; height: 540px; overflow: hidden; }
+  .board-row .mini { width: 960px; height: 540px; overflow: hidden; }
+  .board-row .mini .cut { transform: scale(0.5); transform-origin: 0 0; }
+</style>
+</head>
+<body>
+
+<!-- 1 · 0.0–2.7 · 머묾 = text-type 끝 + cam-pull 끝(× 1) 뒤 hold-m -->
+<section class="cut bg-soft" id="s01" data-scene="1">
+  <div class="center one-line">
+    <p class="video-display t-text">오늘도 하나씩, 내 <span class="t-accent">실력</span>으로<span class="cursor"></span></p>
+  </div>
+</section>
+
+<!-- 2a · 2.7 · cam-crane 시작 = crane-angle · 아래 dist-l · × 1 (motion.md 1장 · 5장) · 버튼은 첫 프레임부터 놓여 있음 → 덮개판 + button-submit apply-case 겹침 (video.md 4장) -->
+<section class="cut bg-soft" id="s02a" data-scene="2a">
+  <div class="cam">
+  <div class="stage">
+    <div class="phone"><img src="../../src/screens/01-home.png" alt="">
+      <div class="overlay-cover"></div>
+      <div class="overlay-btn"><iframe src="../../src/parts/button-submit.html?state=apply-case"></iframe></div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- 2b · 머묾 = cam-crane 끝 (각도 0 · cam-in × 2.4, 대상 01-home 미션 카드 영역) · cam-pull 생략 → cam-in 상태로 button-press 앞 hold-m · button-submit apply-case 겹침 -->
+<section class="cut bg-soft" id="s02b" data-scene="2b">
+  <div class="cam">
+  <div class="stage">
+    <div class="phone"><img src="../../src/screens/01-home.png" alt="">
+      <div class="overlay-cover"></div>
+      <div class="overlay-btn"><iframe src="../../src/parts/button-submit.html?state=apply-case"></iframe></div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- 2c · button-press 누름 끝 = press-scale 0.96 (motion.md 1장 · 3장) · 뗀 끝 프레임에 장면3으로 transition (컷) -->
+<section class="cut bg-soft" id="s02c" data-scene="2c">
+  <div class="cam">
+  <div class="stage">
+    <div class="phone"><img src="../../src/screens/01-home.png" alt="">
+      <div class="overlay-cover"></div>
+      <div class="overlay-btn"><iframe src="../../src/parts/button-submit.html?state=apply-case"></iframe></div>
+    </div>
+  </div>
+  </div>
+</section>
+
+
+<!-- 3 · 5.0–8.0 · skill-carousel 카드 1 hold-m (카드 1 가운데) -->
+<section class="cut bg-soft" id="s03" data-scene="3">
+  <div class="carousel">
+    <div class="part p-skill"><iframe src="../../src/parts/skill-card-1.html"></iframe></div>
+    <div class="part p-skill"><iframe src="../../src/parts/skill-card-2.html"></iframe></div>
+    <div class="part p-skill"><iframe src="../../src/parts/skill-card-3.html"></iframe></div>
+  </div>
+</section>
+
+<!-- 3 (보드용 작게) · 카드 2 hold-m · 카드 3 hold-m -->
+<div class="board-row">
+  <div class="mini">
+    <section class="cut bg-soft" id="s03b" data-scene="3b">
+      <div class="carousel">
+        <div class="part p-skill"><iframe src="../../src/parts/skill-card-1.html"></iframe></div>
+        <div class="part p-skill"><iframe src="../../src/parts/skill-card-2.html"></iframe></div>
+        <div class="part p-skill"><iframe src="../../src/parts/skill-card-3.html"></iframe></div>
+      </div>
+    </section>
+  </div>
+  <div class="mini">
+    <section class="cut bg-soft" id="s03c" data-scene="3c">
+      <div class="carousel">
+        <div class="part p-skill"><iframe src="../../src/parts/skill-card-1.html"></iframe></div>
+        <div class="part p-skill"><iframe src="../../src/parts/skill-card-2.html"></iframe></div>
+        <div class="part p-skill"><iframe src="../../src/parts/skill-card-3.html"></iframe></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- 4 · 8.0–9.0 · 머묾 = button-submit part-in 뒤 hold-m -->
+<section class="cut bg-soft" id="s04" data-scene="4">
+  <div class="center">
+    <div class="part p-button"><iframe src="../../src/parts/button-submit.html?state=submit"></iframe></div>
+  </div>
+</section>
+
+<!-- 5 · 9.0–11.2 · 머묾 = dark-cut 바탕 바뀐 뒤 hold-m (video-bg-soft · video-text) -->
+<section class="cut bg-soft" id="s05" data-scene="5">
+  <div class="center one-line">
+    <p class="video-display t-text">미션을 완성했어요!</p>
+  </div>
+</section>
+
+<!-- 6 · 11.2–12.9 · 머묾 = part-in → count-up 끝(data-final) 뒤 hold-s -->
+<section class="cut bg-soft" id="s06" data-scene="6">
+  <div class="center">
+    <div class="part p-stat"><iframe src="../../src/parts/stat-card.html"></iframe></div>
+  </div>
+</section>
+
+<!-- 7 · 12.9–15.0 · 머묾 = asset-list 뒤 hold-l -->
+<section class="cut bg" id="s07" data-scene="7">
+  <div class="center">
+    <div class="part p-asset"><iframe src="../../src/parts/asset-card.html?state=private-image"></iframe></div>
+    <div class="gap"></div>
+    <div class="part p-asset"><iframe src="../../src/parts/asset-card.html?state=review"></iframe></div>
+    <div class="gap"></div>
+    <div class="part p-asset"><iframe src="../../src/parts/asset-card.html?state=selling"></iframe></div>
+    <div class="gap"></div>
+    <div class="part p-asset"><iframe src="../../src/parts/asset-card.html?state=private-file"></iframe></div>
+  </div>
+</section>
+
+<!-- 8 · 15.0–17.9 · 머묾 = end-reveal 뒤 hold-end (마지막 정지) -->
+<section class="cut bg-end" id="s08" data-scene="8">
+  <div class="glow"></div>
+  <canvas class="grain" width="1920" height="1080"></canvas>
+  <div class="center one-line">
+    <div class="part p-logo-hero"><iframe src="../../src/parts/logo.html?state=logotype-white"></iframe></div>
+    <div class="gap-end"></div>
+    <p class="video-title t-on-dark">오늘도 하나씩, 내 실력으로</p>
+  </div>
+</section>
+
+<script>
+  // video-grain (video.md 2장): #ffffff 노이즈 · 1px · 알파 0–255 고르게 · seed 1 · 고정 · mulberry32
+  (function grain() {
+    let s = 1;
+    const rand = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    const c = document.querySelector("#s08 canvas.grain"), ctx = c.getContext("2d");
+    const img = ctx.createImageData(c.width, c.height), d = img.data;
+    for (let i = 0; i < d.length; i += 4) { d[i] = 255; d[i + 1] = 255; d[i + 2] = 255; d[i + 3] = Math.floor(rand() * 256); }
+    ctx.putImageData(img, 0, 0);
+  })();
+</script>
+</body>
+</html>
