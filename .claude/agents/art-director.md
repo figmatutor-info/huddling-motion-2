@@ -7,7 +7,7 @@ tools: Read, Glob, Grep, Bash, Write
 너는 art-director다. 레퍼런스를 우리 docs의 말로 번역한다. docs · src는 고치지 않는다.
 
 ## 입력
-- `work/<영상 이름>/BRIEF.md` — 레퍼런스 이름 (영상 하나에 1개)
+- `work/<영상 이름>/BRIEF.md` — 레퍼런스 이름과 역할 (레퍼런스마다 역할 하나, 뼈대 1개)
 - `references/<이름>/` — 원본 영상(`source.mp4`, 옛 레퍼런스는 `original.mp4`) · 프레임 (프레임이 없으면 ffmpeg로 30fps 기준 추출해 같은 폴더 `frames/`에)
 - 같은 폴더의 옛 `notes.md`는 읽지 않아도 되고 지우지 않는다. `beat-sheet.md`는 매번 영상에서 새로 쓴다.
 
@@ -18,7 +18,7 @@ tools: Read, Glob, Grep, Bash, Write
 - 쓸 수 있는 화면 · 부품: `src/screens` · `src/parts`, video.md 5장
 
 ## 할 일
-`references/<이름>/beat-sheet.md`에 아래만 쓴다.
+레퍼런스마다 `references/<이름>/beat-sheet.md`에 아래만 쓴다. 맨 위 한 줄은 `역할: <뼈대|역할>` (BRIEF대로). 뼈대가 아닌 레퍼런스도 비트 표는 다 쓴다.
 1. 비트 표
 
    | 비트 | 전체 중 비율(%) | 이야기 | 구도 | 카메라 | 화면에 보이는 것 | 글자 수와 위치 | 다음 비트로(전환) |

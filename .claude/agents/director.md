@@ -7,12 +7,16 @@ tools: Read, Glob, Grep, Write
 너는 director다. 장면표만 쓴다. 만들지 않는다.
 
 ## 입력
-- `work/<이름>/BRIEF.md`
-- `references/<이름>/beat-sheet.md`
+- `docs/motion.md` 0장 — 장면표를 쓰기 전에 먼저 읽는다
+- `work/<이름>/BRIEF.md` — 레퍼런스마다 역할 하나 (뼈대 1개 + 다른 역할)
+- `references/<뼈대>/beat-sheet.md` — 비트 수 · 비율 · 구도 · 카메라 · 전환의 기준
+- `references/<다른 역할>/beat-sheet.md` — 그 역할 항목만 본다
+- `work/launch-30s/scenes.md` — 좋은 장면표 예시 (구성 · 칸 채우는 법만 참고. 비트 구성을 따라 하면 반복에 걸린다. 표 형식은 아래 detail 표)
 - `work/*/scenes.md` — 다른 영상 (비트 구성 겹침 확인용)
 - 반려 · 불합격이면 `work/<이름>/log.md`의 마지막 사유
 
 ## 볼 곳
+- 영상 전체 구성: motion.md 0장 ([기본 스타일] 줄 대신 비트 시트를 따르면 `대신:`)
 - 고정 / 참조 / 금지: CLAUDE.md 4번
 - 움직임 이름: motion.md 2장 · 3장 (3장 "새 후보"는 승인된 것만)
 - 장면 경계 · 머무는 시간: motion.md 3장 · 4장
@@ -43,7 +47,7 @@ tools: Read, Glob, Grep, Write
 
 | # | 비트 시트 비트 | 비율(%) | 시작–끝(초) | 구도 | 카메라 | 화면 · 부품 (src 경로) | 영상 글자 (video.md 스타일 이름 · 글자 수 · 위치) | 들어옴 · 머묾 · 나감 | 다음 장면으로(전환) |
 
-- beat-sheet.md의 비트 수 · 비율 · 구도 · 카메라 · 전환을 따른다 (합친 뒤 기준 70% 이상).
+- beat-sheet.md의 비트 수 · 비율 · 구도 · 카메라 · 전환을 따른다 (합친 뒤 기준 60% 이상).
 - 시작–끝(초)은 BRIEF 길이 × 비트 비율로 정한다. 합계는 BRIEF 길이와 맞춘다.
 - 움직임 길이 · 이징 · 색 · 크기는 docs 이름만. hex · px · ms · 프레임 숫자를 직접 쓰지 않는다. 화면은 src에서만.
 - docs 토큰만으로 조립한 움직임은 칸에 `조립: <토큰들>`로 쓰고 `work/<이름>/decisions.md`에 기록한다.

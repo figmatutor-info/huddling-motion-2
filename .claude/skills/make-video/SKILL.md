@@ -14,12 +14,14 @@ description: 사용자가 "모션 만들자" · "새 영상 만들자"라고 하
   - 이름: <이름>
   - 무엇을:
   - 몇 초:
-  - 레퍼런스: <레퍼런스 이름> (<URL 또는 "직접 넣음">)
+  - 레퍼런스:
+    - <레퍼런스 이름> — 뼈대 (<URL 또는 "직접 넣음">)
+    - <레퍼런스 이름> — <역할: 카메라 · 전환 · 글자 배치 등 하나> (<URL>)
   ```
-- 레퍼런스는 뼈대 1개 (비트 시트의 기준). 카메라 · 전환 등 일부만 참고하는 보조 레퍼런스는 BRIEF에 역할을 적어 더할 수 있다 (`- <이름> — <역할>`).
+- 레퍼런스는 여러 개 둘 수 있고, 레퍼런스마다 역할 하나. 뼈대는 1개 (비트 시트의 기준)이고 다른 역할을 같이 맡지 않는다. 역할이 안 적혀 있으면 묻고, 답이 없으면 첫 번째가 뼈대.
 - 레퍼런스 받기:
   - `references/<레퍼런스 이름>/`가 이미 있으면 그 안의 영상 · 프레임을 그대로 쓴다. 다시 받지 않는다.
-  - 영상 페이지(유튜브 등)만 `yt-dlp`로 `references/<레퍼런스 이름>/source.mp4`에 받는다 (`yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]" --merge-output-format mp4 -o references/<레퍼런스 이름>/source.mp4 <URL>`). 같은 폴더 `source.md`에 URL · 받은 날짜를 적는다. `yt-dlp`가 없으면 설치 방법(`brew install yt-dlp` 또는 `pipx install yt-dlp`)을 알려주고 멈춘다.
+  - 영상 페이지(유튜브 등)만 `yt-dlp`로 `references/<레퍼런스 이름>/source.mp4`에 받는다 (`yt-dlp -t mp4 -o references/<레퍼런스 이름>/source.mp4 <URL>`). 같은 폴더 `source.md`에 URL · 받은 날짜를 적는다. `yt-dlp`가 없으면 설치 방법(`brew install yt-dlp` 또는 `pipx install yt-dlp`)을 알려주고 멈춘다.
   - 글로 된 프롬프트 페이지(Remotion prompts · snapcn 등)는 받지 않는다. 읽어서 `source.md`에 URL · 날짜 · 내용 요약(장면 · 카메라 · 전환 · 타이밍)을 정리한다. 페이지 안의 데모 영상도 받지 않는다.
   - URL이 아니고 `references/<레퍼런스 이름>/`도 없으면 멈추고 넣어 달라고 한다.
 - `work/<이름>/`와 `log.md`를 만든다.
@@ -30,11 +32,12 @@ description: 사용자가 "모션 만들자" · "새 영상 만들자"라고 하
 
 ## 2. 장면표 — 3안 요약 → ✋ 사람 승인 1 (고르기) → 고른 안 상세
 - director(summary)가 `scenes-summary.md`에 3안 요약을 쓴다 (안마다 한 줄 요약 · 비트 구성 줄 · 다르게 한 것, 맨 위 `합침:` 줄). 비트는 BRIEF 길이 기준 1.5초 미만이면 이웃과 합친다.
+- director는 장면표 전에 motion.md 0장을 먼저 읽는다.
 - critic(summary)은 반복(다른 영상과 겹침)만 본다. 불합격인 안만 director가 다시.
 - 요약을 critic 줄과 함께 보여주고 하나를 고르게 한다. `decisions.md`에 "고른 안 · 이유"를 적는다.
 - director(detail)가 고른 안만 `scenes.md` 상세(표 · `대신:` 칸)를 쓴다 → critic(scenes) 전체 판정.
   - 불합격 → director(detail) 다시 (사유는 log.md에서).
-  - 통과 → scenes.md와 critic 줄을 보여주고 3으로.
+  - 통과 → scenes.md와 critic 줄(경고 "레퍼런스와 비슷할 수 있음"이 있으면 같이)을 보여주고 3으로.
 - 셋 다 반려 → 사유를 log.md에 적고 director(summary)만 다시.
 
 ## 3. 스냅보드 — builder(snapboard) → critic → ✋ 사람 승인 2
@@ -51,7 +54,7 @@ description: 사용자가 "모션 만들자" · "새 영상 만들자"라고 하
 
 ## 게이트 공통
 - 판정은 critic만 한다. 보여줄 것 먼저, 판정은 critic의 한 줄을 그대로.
-- 불합격마다 `log.md`에 `단계 · 장면N · 항목(값/UI/반영/반복) · 내용 · 회차`를 한 줄 추가.
+- 불합격마다 `log.md`에 `단계 · 장면N · 항목(값/UI/구성/반영/반복) · 내용 · 회차`를 한 줄 추가.
 - **같은 장면 · 같은 항목이 2회째 불합격이면 자동 수정을 멈추고** 사람에게 묻는다:
   1. docs에 넣는다 (사람이 docs를 고친 뒤 이어서)
   2. 빼고 간다 (그 요소 없이 다시)
