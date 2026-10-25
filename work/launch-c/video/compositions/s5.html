@@ -1,0 +1,162 @@
+<!--
+장면 5 · 14.8667–18.6667 (446–560 · 114프레임) — scenes.md 5행 · 비트 10+11 하나로 모임 → 엔드
+  배경 video-bg-end (video-bg-dark + video-glow + video-grain) · 폰 없음 · cam-hold
+  brand-icon (× 2.8) 화면 가운데 → logo logotype-white (logo-hero × 6 = 894×114) · video-gap-end 48 · 슬로건 video-title · video-text-on-dark 가운데 한 줄
+  묶음 (114 + 48 + 90 = 252) 화면 가운데 · 엔드 카드에 brand-icon 없음 · QR 없음
+  움직임:
+    match-cut 뒤 첫 프레임 brand-icon 같은 자리 · 원래 크기 → icon-spin (spin · dur-m · ease-out 0–6 + 고리 × 1 → cut-scale · 0.45 → 0 · dur-l · ease-out 0–12)
+    hold-s 12–24 (대표 컷 12f · snap/05a) → brand-icon exit (투명도 1 → 0 · dur-s · ease-in) 24–27
+    end-reveal: logo-reveal (엔드 카드: logo 글자마다 enter (mask-rise · dur-m · ease-out), 글자 사이 stagger dur-xs, 7번째부터 같이) 27–45
+               → dur-l 뒤 슬로건 enter + 마스크 대신 투명도 0 → 1 · dur-l 57–69
+    hold-end 69–114 (대표 컷 69f · snap/05b) · 마지막 hold 정지 (motion.md 4장 예외)
+  logo 글자 칸 13개 = launch-b 와 같은 svg 경계 (같은 logo.html iframe 을 clip-path 로 자름)
+-->
+<template>
+  <style>
+    /* design.md 3장 A · video.md 3장: 로컬 파일 (src/assets/fonts 를 그대로 복사한 assets/src/assets/fonts) */
+    @font-face { font-family: "Pretendard"; font-weight: 400; src: url("assets/src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 600; src: url("assets/src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 700; src: url("assets/src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Pretendard", sans-serif; word-break: keep-all; /* video.md 3장 */ }
+    #root p { margin: 0; }
+    #root .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    /* 카메라 (motion.md 5장): 월드 좌표 = 카메라 × 1 · 가운데 (960, 540) 일 때의 화면 좌표 */
+    #root .cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+    /* parts: video.md 5장 — iframe 크기 = 부품 원래 크기, 부품 전체에 × 2.8 한 번 */
+    #root .part { flex: none; position: relative; }
+    #root .part iframe { position: absolute; left: 0; top: 0; border: 0; background: transparent; transform: scale(2.8); transform-origin: 0 0; }
+    #root .p-brand   { width: 274.4px; height: 274.4px; } #root .p-brand   iframe { width: 98px;  height: 98px;  }
+    #root .p-badge   { width: 302.4px; height: 89.6px;  } #root .p-badge   iframe { width: 108px; height: 32px;  }
+    #root .p-skill   { width: 980px;   height: 246.4px; } #root .p-skill   iframe { width: 350px; height: 88px;  }
+    #root .p-btn     { width: 980px;   height: 123.2px; } #root .p-btn     iframe { width: 350px; height: 44px;  }
+    #root .p-mission { width: 980px;   height: 708.4px; } #root .p-mission iframe { width: 350px; height: 253px; }
+    #root .p-stat    { width: 980px;   height: 282.8px; } #root .p-stat    iframe { width: 350px; height: 101px; }
+    #root .p-asset   { width: 980px;   height: 207.2px; } #root .p-asset   iframe { width: 350px; height: 74px;  }
+    /* 가운데 점 (left, top) 에 놓는 상자: 장면 스크립트가 transform 을 translate(-50%, -50%) 부터 쓴다 */
+    #root .at { position: absolute; transform: translate(-50%, -50%); }
+
+
+    #root { background: #18191b; /* video-bg-dark */ }
+    #root .glow { position: absolute; left: 50%; top: 50%; width: 1200px; height: 1200px; margin: -600px 0 0 -600px; border-radius: 50%;
+      background: radial-gradient(circle closest-side, rgba(55, 89, 222, 0.45), rgba(55, 89, 222, 0)); filter: blur(160px); }  /* video-glow */
+    #root canvas.grain { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; opacity: 0.06; }                /* video-grain */
+    #s5-ring { position: absolute; width: 274.4px; height: 274.4px; border-radius: 33.6px; background: #3759de; /* color-primary */ opacity: 0; }
+    #s5-logo { position: relative; flex: none; width: 894px; height: 114px; }
+    #root .glyph { position: absolute; inset: 0; }
+    #root .glyph-in { position: absolute; inset: 0; }
+    #root .glyph-in iframe { position: absolute; left: 0; top: 0; border: 0; background: transparent; width: 149px; height: 19px; transform: scale(6); transform-origin: 0 0; }
+    #root .gap-end { flex: none; height: 48px; /* video-gap-end */ }
+    /* video-title (Text/title 24/32 × 2.8) · video-text-on-dark */
+    #s5-slogan { font-weight: 600; font-size: 67px; line-height: 90px; color: #ffffff; text-align: center; opacity: 0; }
+  </style>
+  <div data-hf-id="hf-90m0" id="root" data-composition-id="s5" data-width="1920" data-height="1080" data-layout-allow-overflow="" data-layout-allow-overlap="">
+    <div data-hf-id="hf-2s7n" class="glow"></div>
+    <canvas data-hf-id="hf-m0ne" id="s5-grain" class="grain" width="1920" height="1080"></canvas>
+    <div data-hf-id="hf-0oij" class="center">
+      <div data-hf-id="hf-36fj" id="s5-logo">
+          <div data-hf-id="hf-yqxm" class="glyph" style="clip-path: inset(0 788.37px 0 0px);"><div data-hf-id="hf-1eqo" id="s5-g0" class="glyph-in"><iframe data-hf-id="hf-ja3a" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-acal" class="glyph" style="clip-path: inset(0 687.93px 0 105.63px);"><div data-hf-id="hf-26eh" id="s5-g1" class="glyph-in"><iframe data-hf-id="hf-gv5m" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-h81h" class="glyph" style="clip-path: inset(0 615.63px 0 206.07px);"><div data-hf-id="hf-8c4a" id="s5-g2" class="glyph-in"><iframe data-hf-id="hf-h9gn" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-zm2k" class="glyph" style="clip-path: inset(0 544.89px 0 278.37px);"><div data-hf-id="hf-ca8b" id="s5-g3" class="glyph-in"><iframe data-hf-id="hf-hnro" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-57dd" class="glyph" style="clip-path: inset(0 472.89px 0 349.11px);"><div data-hf-id="hf-osqs" id="s5-g4" class="glyph-in"><iframe data-hf-id="hf-i22p" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-p1g2" class="glyph" style="clip-path: inset(0 441.69px 0 421.11px);"><div data-hf-id="hf-pkel" id="s5-g5" class="glyph-in"><iframe data-hf-id="hf-igdq" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-2vb3" class="glyph" style="clip-path: inset(0 410.37px 0 452.31px);"><div data-hf-id="hf-tiim" id="s5-g6" class="glyph-in"><iframe data-hf-id="hf-iuor" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-jf77" class="glyph" style="clip-path: inset(0 337.89px 0 483.63px);"><div data-hf-id="hf-xgmn" id="s5-g7" class="glyph-in"><iframe data-hf-id="hf-j8zs" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-w5mg" class="glyph" style="clip-path: inset(0 259.41px 0 556.11px);"><div data-hf-id="hf-suc8" id="s5-g8" class="glyph-in"><iframe data-hf-id="hf-jnat" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-o2c6" class="glyph" style="clip-path: inset(0 168.96px 0 634.59px);"><div data-hf-id="hf-vtlt" id="s5-g9" class="glyph-in"><iframe data-hf-id="hf-k1lu" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-06pe" class="glyph" style="clip-path: inset(0 139.77px 0 725.04px);"><div data-hf-id="hf-lher" id="s5-g10" class="glyph-in"><iframe data-hf-id="hf-jfb2" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-5ncc" class="glyph" style="clip-path: inset(0 68.79px 0 754.23px);"><div data-hf-id="hf-fboy" id="s5-g11" class="glyph-in"><iframe data-hf-id="hf-j101" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+          <div data-hf-id="hf-z8ov" class="glyph" style="clip-path: inset(0 0px 0 825.21px);"><div data-hf-id="hf-bdkx" id="s5-g12" class="glyph-in"><iframe data-hf-id="hf-k7x4" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div></div>
+      </div>
+      <div data-hf-id="hf-eig8" class="gap-end"></div>
+      <p data-hf-id="hf-sh5p" id="s5-slogan">오늘도 하나씩, 내 실력으로</p>
+    </div>
+    <div data-hf-id="hf-e9sw" id="s5-ring" class="at" style="left: 960px; top: 540px;"></div>
+    <div data-hf-id="hf-d7fu" id="s5-icon" class="part p-brand at" style="left: 960px; top: 540px;"><iframe data-hf-id="hf-r7nm" data-src="assets/src/parts/brand-icon.html"></iframe></div>
+  </div>
+  <script>
+  (() => {
+    // ── 공통 (장면 파일마다 같음 · launch-b 와 같은 방식) ─────────────────
+    const FPS = 30;
+    const D = { xs: 2, s: 3, m: 6, l: 12, xl: 24, x2l: 30 };   // motion.md 1장 Duration (프레임)
+    const H = { s: 12, m: 21, l: 36, end: 45 };                 // motion.md 4장 hold (프레임)
+    function bez(x1, y1, x2, y2) {                              // cubic-bezier → 함수 (곡선 값은 motion.md 1장 그대로)
+      const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+      const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+      const sx = (t) => ((ax * t + bx) * t + cx) * t, sy = (t) => ((ay * t + by) * t + cy) * t;
+      return (p) => {
+        if (p <= 0) return 0; if (p >= 1) return 1;
+        let lo = 0, hi = 1, t = p;
+        for (let i = 0; i < 50; i++) { const v = sx(t); if (Math.abs(v - p) < 1e-7) break; if (v < p) lo = t; else hi = t; t = (lo + hi) / 2; }
+        return sy(t);
+      };
+    }
+    const EASE_OUT = bez(0.16, 1, 0.3, 1);     // ease-out
+    const EASE_IN = bez(0.5, 0, 0.75, 0);      // ease-in
+    const EASE_INOUT = bez(0.65, 0, 0.35, 1);  // ease-inout
+    const EASE_LINEAR = (p) => Math.min(1, Math.max(0, p)); // ease-linear
+    const prog = (f, at, dur, ease) => ease(Math.min(1, Math.max(0, (f - at) / dur)));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    // 카메라: 월드 점 (cx, cy) 를 화면 가운데에, 배율 s
+    const camAt = (el, cx, cy, s) => { el.style.transform = `translate(960px, 540px) scale(${s}) translate(${-cx}px, ${-cy}px)`; };
+    function partReady(fr) {
+      return new Promise((res) => {
+        const loaded = () => { const d = fr.contentDocument; return d && d.readyState === "complete" && d.location.href !== "about:blank"; };
+        const go = () => { const d = fr.contentDocument; d.fonts.ready.then(() => Promise.all([...d.images].map((i) => i.decode().catch(() => {})))).then(res); };
+        if (loaded()) go(); else fr.addEventListener("load", go, { once: true });
+      });
+    }
+    function ready(root) {
+      root.querySelectorAll("iframe[data-src]").forEach((fr) => { if (!fr.getAttribute("src")) fr.src = fr.dataset.src; });
+      return document.fonts.ready.then(() => Promise.all([
+        ...[...root.querySelectorAll("iframe")].map(partReady),
+        ...[...root.querySelectorAll("img")].map((i) => i.decode().catch(() => {})),
+      ]));
+    }
+    // 장면 상태는 모두 장면 프레임 f 하나로 정한다 (어느 프레임으로 바로 가도 같은 그림).
+    // 부품 상자 transform 은 GSAP 가 직접 트윈하지 않는다 (iframe 다시 로드 방지) — paint 가 style 을 직접 쓴다.
+    function run(id, root, frames, paint) {
+      const tl = gsap.timeline({ paused: true });
+      const c = { f: 0 };
+      const go = () => paint(Math.round(c.f * 1e4) / 1e4);
+      tl.fromTo(c, { f: 0 }, { f: frames, duration: frames / FPS, ease: "none", onUpdate: go }, 0);
+      root.querySelectorAll("iframe").forEach((fr) => fr.addEventListener("load", () => { go(); fr.contentDocument.fonts.ready.then(go); }));
+      go();
+      window.__timelines[id] = tl;
+    }
+    const inner = (fr, sel) => fr.contentDocument && fr.contentDocument.querySelector(sel);
+    // ────────────────────────────────────────────────────────────────
+
+
+    const root = document.getElementById("s5-logo").closest('[data-composition-id="s5"]');
+    const $ = (s) => root.querySelector(s);
+    const CUT_SCALE = 1.7, SPIN = 360, GLOW = 0.45;
+    // video-grain (video.md 2장): #ffffff 노이즈 · 1px · 알파 0–255 고르게 · seed 1 · 고정 · mulberry32
+    (function grain() {
+      let s = 1;
+      const rand = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+      const c = $("#s5-grain"), ctx = c.getContext("2d");
+      const img = ctx.createImageData(c.width, c.height), d = img.data;
+      for (let i = 0; i < d.length; i += 4) { d[i] = 255; d[i + 1] = 255; d[i + 2] = 255; d[i + 3] = Math.floor(rand() * 256); }
+      ctx.putImageData(img, 0, 0);
+    })();
+    const G = [...root.querySelectorAll(".glyph-in")];
+    const T = { exit: 24, logo: 27 };
+    const paint = (f) => {
+      const sp = prog(f, 0, D.m, EASE_OUT), g = prog(f, 0, D.l, EASE_OUT);
+      const ex = 1 - prog(f, T.exit, D.s, EASE_IN);
+      $("#s5-icon").style.transform = `translate(-50%, -50%) rotate(${SPIN * sp}deg)`;
+      $("#s5-icon").style.opacity = String(ex);
+      $("#s5-ring").style.transform = `translate(-50%, -50%) scale(${lerp(1, CUT_SCALE, g)})`;
+      $("#s5-ring").style.opacity = String(GLOW * (1 - g));
+      G.forEach((el, i) => {
+        const at = T.logo + Math.min(i, 6) * D.xs;          // 7번째부터 같이
+        el.style.transform = `translateY(${(1 - prog(f, at, D.m, EASE_OUT)) * 100}%)`;
+      });
+      const logoEnd = T.logo + 6 * D.xs + D.m;               // 45
+      $("#s5-slogan").style.opacity = String(prog(f, logoEnd + D.l, D.l, EASE_OUT));
+    };
+    ready(root).then(() => run("s5", root, 114, paint));
+  })();
+  </script>
+</template>

@@ -1,0 +1,202 @@
+<!doctype html>
+<!--
+  work/launch-c/snapboard.html — 스냅보드 (scenes.md 승인본 안 a · 5장면 · 18.52초). 머묾(hold) 첫 프레임마다 한 컷 · 각 1920×1080 · 장면 순서대로.
+  장면 안 머묾이 여럿이면 01 · 02a · 02b · 03a–03e · 04a · 04b · 05a · 05b. 04b는 hold-l 끝 = cam-dolly-out 끝 (dolly-scale 상태 컷, 요청).
+  값 출처: docs/video.md 1~5장 · docs/design.md 1~3장 · docs/motion.md 1~5장 (이름은 used-snapboard.md).
+  부품: src/parts/*.html (iframe, 원본 파일 그대로 · 상태는 ?state= · --progress 로만)
+  열기: file:// (--allow-file-access-from-files) 또는 저장소 루트 로컬 서버.
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>snapboard — launch-c</title>
+<style>
+  /* design.md 3장 A · video.md 3장: 로컬 파일 */
+  @font-face { font-family: "Pretendard"; font-weight: 400; src: url("../../src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+  @font-face { font-family: "Pretendard"; font-weight: 600; src: url("../../src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+  @font-face { font-family: "Pretendard"; font-weight: 700; src: url("../../src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+
+  :root {
+    /* video.md 2장 배경 */
+    --video-bg: #ffffff;
+    --video-bg-soft: #f7f7f8;
+    --video-bg-dark: #18191b;
+    /* video.md 3장 글자 색 */
+    --video-text-on-dark: #ffffff;
+    /* video.md 3장 간격 */
+    --video-gap: 56px;
+    --video-gap-end: 48px;
+  }
+
+  html, body { margin: 0; padding: 0; }
+  body { font-family: "Pretendard", sans-serif; }
+  p { margin: 0; }
+
+  .cut { position: relative; width: 1920px; height: 1080px; overflow: hidden; word-break: keep-all; /* video.md 3장 */ }
+  .bg      { background: var(--video-bg); }
+  .bg-soft { background: var(--video-bg-soft); }
+
+  /* 카메라: 화면 가운데 기준 (motion.md 5장). cam-hold = × 1 */
+  .cam { position: absolute; inset: 0; transform-origin: 960px 540px; }
+  .cam.dolly { transform: scale(0.5); } /* dolly-scale (motion.md 1장) · cam-dolly-out 끝 */
+
+  /* 묶음 전체 화면 가운데 (video.md 3장) */
+  .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .center.one-line { text-align: center; }
+
+  /* parts: video.md 5장 — 부품 전체에 × 2.8 한 번. iframe 크기 = 부품 원래 크기 */
+  .part { flex: none; position: relative; }
+  .part iframe { position: absolute; left: 0; top: 0; border: 0; background: transparent; transform: scale(2.8); transform-origin: 0 0; }
+  .p-brand   { width: 274.4px; height: 274.4px; } .p-brand   iframe { width: 98px;  height: 98px;  }
+  .p-badge   { width: 302.4px; height: 89.6px;  } .p-badge   iframe { width: 108px; height: 32px;  }
+  .p-skill   { width: 980px;   height: 246.4px; } .p-skill   iframe { width: 350px; height: 88px;  }
+  .p-btn     { width: 980px;   height: 123.2px; } .p-btn     iframe { width: 350px; height: 44px;  }
+  .p-mission { width: 980px;   height: 708.4px; } .p-mission iframe { width: 350px; height: 253px; }
+  .p-stat    { width: 980px;   height: 282.8px; } .p-stat    iframe { width: 350px; height: 101px; }
+  .p-asset   { width: 980px;   height: 207.2px; } .p-asset   iframe { width: 350px; height: 74px;  }
+  /* logo-hero: video.md 5장 배율 예외 × 6 = 894×114 */
+  .p-logo-hero { width: 894px; height: 114px; } .p-logo-hero iframe { width: 149px; height: 19px; transform: scale(6); }
+
+  /* 가운데 점(cx, cy)에 놓기 */
+  .at { position: absolute; left: var(--cx); top: var(--cy); transform: translate(-50%, -50%); }
+
+  /* 장면1 격자: brand-icon 칸 274.4 × 3칸 · 2줄 · 칸 사이 video-gap 56 → 935.2 × 604.8, 화면 가운데 */
+  .grid { position: absolute; left: 492.4px; top: 237.6px; display: grid; grid-template-columns: repeat(3, 274.4px); grid-template-rows: repeat(2, 274.4px); gap: var(--video-gap); }
+  .grid .cell { position: relative; width: 274.4px; height: 274.4px; display: flex; align-items: center; justify-content: center; }
+
+  /* video-title (video.md 3장) */
+  .video-title { font-weight: 600; font-size: 67px; line-height: 90px; }
+  .t-on-dark { color: var(--video-text-on-dark); }
+  .gap-end { height: var(--video-gap-end); flex: none; }
+
+  /* video-bg-end (video.md 2장) = video-bg-dark + video-glow + video-grain */
+  .bg-end { background: var(--video-bg-dark); }
+  .bg-end .glow {
+    position: absolute; left: 50%; top: 50%;
+    width: 1200px; height: 1200px; margin: -600px 0 0 -600px;
+    border-radius: 50%;
+    background: radial-gradient(circle closest-side, rgba(55, 89, 222, 0.45), rgba(55, 89, 222, 0));
+    filter: blur(160px);
+  }
+  .bg-end canvas.grain { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; opacity: 0.06; }
+</style>
+</head>
+<body>
+
+<!-- 1 · 0.00–2.10 · flip-wave 끝 → hold-s 첫 프레임: 격자 6칸 모두 badge-approved (cam-pull 끝 × 1) -->
+<section class="cut bg-soft" id="s01" data-cut="01">
+  <div class="grid">
+    <div class="cell"><div class="part p-badge"><iframe src="../../src/parts/badge-approved.html"></iframe></div></div>
+    <div class="cell"><div class="part p-badge"><iframe src="../../src/parts/badge-approved.html"></iframe></div></div>
+    <div class="cell"><div class="part p-badge"><iframe src="../../src/parts/badge-approved.html"></iframe></div></div>
+    <div class="cell"><div class="part p-badge"><iframe src="../../src/parts/badge-approved.html"></iframe></div></div>
+    <div class="cell"><div class="part p-badge"><iframe src="../../src/parts/badge-approved.html"></iframe></div></div>
+    <div class="cell"><div class="part p-badge"><iframe src="../../src/parts/badge-approved.html"></iframe></div></div>
+  </div>
+</section>
+
+<!-- 2a · 2.10–5.00 · cam-release 끝 → icon-spin 끝 → hold-s 첫 프레임: brand-icon 화면 가운데 (고리는 투명도 0으로 끝남) -->
+<section class="cut bg-soft" id="s02a" data-cut="02a">
+  <div class="center"><div class="part p-brand"><iframe src="../../src/parts/brand-icon.html"></iframe></div></div>
+</section>
+
+<!-- 2b · cam-pan 오른쪽 끝 → hold-m 첫 프레임: skill-card-1 화면 가운데 -->
+<section class="cut bg-soft" id="s02b" data-cut="02b">
+  <div class="center"><div class="part p-skill"><iframe src="../../src/parts/skill-card-1.html"></iframe></div></div>
+</section>
+
+<!-- 3a · 5.00–11.60 · ① cam-pan 끝 → button-press 앞 hold-m 첫 프레임 -->
+<section class="cut bg-soft" id="s03a" data-cut="03a">
+  <div class="center"><div class="part p-btn"><iframe src="../../src/parts/button-submit.html?state=submit"></iframe></div></div>
+</section>
+
+<!-- 3b · ② cam-pan → 진행 바 · 글자 emphasis 끝 (--progress 1) → hold-m 첫 프레임 -->
+<section class="cut bg-soft" id="s03b" data-cut="03b">
+  <div class="center"><div class="part p-mission"><iframe class="mission-done" src="../../src/parts/mission-card.html"></iframe></div></div>
+</section>
+
+<!-- 3c · ③ cam-pan → badge-pulse 끝 → hold-s 첫 프레임 -->
+<section class="cut bg-soft" id="s03c" data-cut="03c">
+  <div class="center"><div class="part p-badge"><iframe src="../../src/parts/badge-approved.html"></iframe></div></div>
+</section>
+
+<!-- 3d · ④ cam-pan → count-up 끝 (data-final) → hold-s 첫 프레임 -->
+<section class="cut bg-soft" id="s03d" data-cut="03d">
+  <div class="center"><div class="part p-stat"><iframe src="../../src/parts/stat-card.html"></iframe></div></div>
+</section>
+
+<!-- 3e · ⑤ cam-pan + pan-bg-shift 끝 (바탕 video-bg) → hold-m 첫 프레임 -->
+<section class="cut bg" id="s03e" data-cut="03e">
+  <div class="center"><div class="part p-asset"><iframe src="../../src/parts/asset-card.html?state=selling"></iframe></div></div>
+</section>
+
+<!-- 4a · 11.60–14.85 · cam-release 끝 → part-in · stagger 끝 → hold-l 첫 프레임 (× 1): 둘레 부품은 화면 가장자리에 반쯤 잘림 -->
+<section class="cut bg-soft" id="s04a" data-cut="04a">
+  <div class="cam">
+    <div class="part p-brand at" style="--cx:960px; --cy:540px"><iframe src="../../src/parts/brand-icon.html"></iframe></div>
+    <div class="part p-skill at" style="--cx:400px; --cy:0px"><iframe src="../../src/parts/skill-card-1.html"></iframe></div>
+    <div class="part p-stat at" style="--cx:1520px; --cy:0px"><iframe src="../../src/parts/stat-card.html"></iframe></div>
+    <div class="part p-badge at" style="--cx:1920px; --cy:540px"><iframe src="../../src/parts/badge-approved.html"></iframe></div>
+    <div class="part p-btn at" style="--cx:960px; --cy:1080px"><iframe src="../../src/parts/button-submit.html?state=submit"></iframe></div>
+    <div class="part p-mission at" style="--cx:0px; --cy:540px"><iframe class="mission-done" src="../../src/parts/mission-card.html"></iframe></div>
+  </div>
+</section>
+
+<!-- 4b · hold-l 끝 = cam-dolly-out 끝 (× 1 → dolly-scale, 화면 가운데 기준): 그물 전체가 화면 안 -->
+<section class="cut bg-soft" id="s04b" data-cut="04b">
+  <div class="cam dolly">
+    <div class="part p-brand at" style="--cx:960px; --cy:540px"><iframe src="../../src/parts/brand-icon.html"></iframe></div>
+    <div class="part p-skill at" style="--cx:400px; --cy:0px"><iframe src="../../src/parts/skill-card-1.html"></iframe></div>
+    <div class="part p-stat at" style="--cx:1520px; --cy:0px"><iframe src="../../src/parts/stat-card.html"></iframe></div>
+    <div class="part p-badge at" style="--cx:1920px; --cy:540px"><iframe src="../../src/parts/badge-approved.html"></iframe></div>
+    <div class="part p-btn at" style="--cx:960px; --cy:1080px"><iframe src="../../src/parts/button-submit.html?state=submit"></iframe></div>
+    <div class="part p-mission at" style="--cx:0px; --cy:540px"><iframe class="mission-done" src="../../src/parts/mission-card.html"></iframe></div>
+  </div>
+</section>
+
+<!-- 5a · 14.85–18.52 · match-cut → icon-spin 끝 → hold-s 첫 프레임: brand-icon × 2.8 화면 가운데 · video-bg-end -->
+<section class="cut bg-end" id="s05a" data-cut="05a">
+  <div class="glow"></div>
+  <canvas class="grain" width="1920" height="1080"></canvas>
+  <div class="center"><div class="part p-brand"><iframe src="../../src/parts/brand-icon.html"></iframe></div></div>
+</section>
+
+<!-- 5b · end-reveal 끝 → hold-end 첫 프레임 (마지막 정지): logo logo-hero + video-gap-end + 슬로건 video-title -->
+<section class="cut bg-end" id="s05b" data-cut="05b">
+  <div class="glow"></div>
+  <canvas class="grain" width="1920" height="1080"></canvas>
+  <div class="center one-line">
+    <div class="part p-logo-hero"><iframe src="../../src/parts/logo.html?state=logotype-white"></iframe></div>
+    <div class="gap-end"></div>
+    <p class="video-title t-on-dark">오늘도 하나씩, 내 실력으로</p>
+  </div>
+</section>
+
+<script>
+  // mission-card 진행 최종값 (scenes.md 장면3 ② · 장면4): 부품 주석대로 --progress만 1로.
+  // 진행 글자 최종값은 04-approved 화면 속 같은 카드 문구 그대로 (src/screens/04-approved.png "100% · 4/4 단계 완료").
+  document.querySelectorAll("iframe.mission-done").forEach((f) => {
+    const apply = () => {
+      const d = f.contentDocument; if (!d) return;
+      const fill = d.getElementById("mission-card-progress-fill");
+      const text = d.getElementById("mission-card-progress-text");
+      if (fill) fill.style.setProperty("--progress", "1");
+      if (text) text.textContent = "100% · 4/4 단계 완료";
+      f.dataset.ready = "1";
+    };
+    if (f.contentDocument && f.contentDocument.readyState === "complete") apply();
+    f.addEventListener("load", apply);
+  });
+
+  // video-grain (video.md 2장): #ffffff 노이즈 · 1px · 알파 0–255 고르게 · seed 1 · 고정 · mulberry32
+  document.querySelectorAll("canvas.grain").forEach((c) => {
+    let s = 1;
+    const rand = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    const ctx = c.getContext("2d");
+    const img = ctx.createImageData(c.width, c.height), d = img.data;
+    for (let i = 0; i < d.length; i += 4) { d[i] = 255; d[i + 1] = 255; d[i + 2] = 255; d[i + 3] = Math.floor(rand() * 256); }
+    ctx.putImageData(img, 0, 0);
+  });
+</script>
+</body>
+</html>

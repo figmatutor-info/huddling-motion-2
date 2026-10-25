@@ -1,3 +1,5 @@
+역할: 뼈대 · 구도 · 글자 배치 (launch-b) · 구도 · 글자 배치 (launch-c)
+
 # beat-sheet — skillry-saadpastadev
 
 근거: `original.mp4` (1280×720 · 30fps · 736f · 24.55초)를 30fps 프레임으로 직접 봄 (`frames/30fps/`, 경계는 ffmpeg 장면 점수와 함께 확인). 프레임 번호는 0부터.

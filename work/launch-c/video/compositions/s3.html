@@ -1,0 +1,146 @@
+<!--
+장면 3 · 5.00–11.60 (150–348 · 198프레임) — scenes.md 3행 · 비트 7 쓰임새 목록 (5개 지그재그)
+  배경 video-bg-soft → ⑤로 가는 cam-pan 동안 video-bg (pan-bg-shift, video.md 5장 예외) · 폰 없음 · 연결선 · 노드 아이콘 없음
+  한 바탕 위 지그재그 세로 줄 (월드 가운데 점, 장면2 skill-card-1 자리가 (960, 540)):
+    skill-card-1 (960, 540) → ① button-submit submit (0, 1620) → ② mission-card (960, 2700) → ③ badge-approved (0, 3780)
+    → ④ stat-card (960, 4860) → ⑤ asset-card selling (0, 5940)   · 모두 × 2.8 · 왼쪽 아래 / 오른쪽 아래 번갈아 (간격 가로 960 · 세로 1080 = 멈춘 프레임에 부품 하나만)
+  움직임 (cam-pan 마다 × 1 · dur-l · ease-inout):
+    ① cam-pan 0–12 → button-press 앞 hold-m 12–33 (대표 컷 12f · snap/03a) → 누름 press-scale 0.96 · dur-s · ease-in 33–36 → 뗌 · dur-m · ease-out 36–42 → 바로 다음 cam-pan
+    ② cam-pan 42–54 → 진행 바 · 글자 emphasis (--progress 0.5 → 1 · dur-m · ease-out) 54–60 → hold-m 60–81 (대표 컷 60f · snap/03b)
+    ③ cam-pan 81–93 → badge-pulse (enter + 마스크 대신 scale-from 0 → 1 · dur-m · ease-out) 93–99 → hold-s 99–111 (대표 컷 99f · snap/03c)
+    ④ cam-pan 111–123 → count-up (0 → data-final 29,700 · dur-2xl · ease-out · 정수) 123–153 → hold-s 153–165 (대표 컷 153f · snap/03d)
+    ⑤ cam-pan + pan-bg-shift (video-bg-soft → video-bg · dur-l · ease-linear) 165–177 → hold-m 177–198 (대표 컷 177f · snap/03e)
+  다음: transition (컷) → 장면4 첫 프레임 brand-icon cut-scale
+-->
+<template>
+  <style>
+    /* design.md 3장 A · video.md 3장: 로컬 파일 (src/assets/fonts 를 그대로 복사한 assets/src/assets/fonts) */
+    @font-face { font-family: "Pretendard"; font-weight: 400; src: url("assets/src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 600; src: url("assets/src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 700; src: url("assets/src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Pretendard", sans-serif; word-break: keep-all; /* video.md 3장 */ }
+    #root p { margin: 0; }
+    #root .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    /* 카메라 (motion.md 5장): 월드 좌표 = 카메라 × 1 · 가운데 (960, 540) 일 때의 화면 좌표 */
+    #root .cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+    /* parts: video.md 5장 — iframe 크기 = 부품 원래 크기, 부품 전체에 × 2.8 한 번 */
+    #root .part { flex: none; position: relative; }
+    #root .part iframe { position: absolute; left: 0; top: 0; border: 0; background: transparent; transform: scale(2.8); transform-origin: 0 0; }
+    #root .p-brand   { width: 274.4px; height: 274.4px; } #root .p-brand   iframe { width: 98px;  height: 98px;  }
+    #root .p-badge   { width: 302.4px; height: 89.6px;  } #root .p-badge   iframe { width: 108px; height: 32px;  }
+    #root .p-skill   { width: 980px;   height: 246.4px; } #root .p-skill   iframe { width: 350px; height: 88px;  }
+    #root .p-btn     { width: 980px;   height: 123.2px; } #root .p-btn     iframe { width: 350px; height: 44px;  }
+    #root .p-mission { width: 980px;   height: 708.4px; } #root .p-mission iframe { width: 350px; height: 253px; }
+    #root .p-stat    { width: 980px;   height: 282.8px; } #root .p-stat    iframe { width: 350px; height: 101px; }
+    #root .p-asset   { width: 980px;   height: 207.2px; } #root .p-asset   iframe { width: 350px; height: 74px;  }
+    /* 가운데 점 (left, top) 에 놓는 상자: 장면 스크립트가 transform 을 translate(-50%, -50%) 부터 쓴다 */
+    #root .at { position: absolute; transform: translate(-50%, -50%); }
+
+
+    #root { background: #f7f7f8; /* video-bg-soft */ }
+    #s3-bg { position: absolute; inset: 0; background: #f7f7f8; /* video-bg-soft → video-bg (pan-bg-shift) */ }
+  </style>
+  <div data-hf-id="hf-hh26" id="root" data-composition-id="s3" data-width="1920" data-height="1080" data-layout-allow-overflow="" data-layout-allow-overlap="">
+    <div data-hf-id="hf-5d41" id="s3-bg"></div>
+    <div data-hf-id="hf-zov7" id="s3-cam" class="cam">
+      <div data-hf-id="hf-rqqa" id="s3-skill" class="part p-skill at" style="left: 960px; top: 540px;"><iframe data-hf-id="hf-yief" data-src="assets/src/parts/skill-card-1.html"></iframe></div>
+      <div data-hf-id="hf-qdwd" id="s3-btn" class="part p-btn at" style="left: 0px; top: 1620px;"><iframe data-hf-id="hf-few3" data-src="assets/src/parts/button-submit.html?state=submit"></iframe></div>
+      <div data-hf-id="hf-hegw" id="s3-mission" class="part p-mission at" style="left: 960px; top: 2700px;"><iframe data-hf-id="hf-f1z4" data-src="assets/src/parts/mission-card.html"></iframe></div>
+      <div data-hf-id="hf-jyxc" id="s3-badge" class="part p-badge at" style="left: 0px; top: 3780px;"><iframe data-hf-id="hf-qofe" data-src="assets/src/parts/badge-approved.html"></iframe></div>
+      <div data-hf-id="hf-13hl" id="s3-stat" class="part p-stat at" style="left: 960px; top: 4860px;"><iframe data-hf-id="hf-kof8" data-src="assets/src/parts/stat-card.html"></iframe></div>
+      <div data-hf-id="hf-erh6" id="s3-asset" class="part p-asset at" style="left: 0px; top: 5940px;"><iframe data-hf-id="hf-cz37" data-src="assets/src/parts/asset-card.html?state=selling"></iframe></div>
+    </div>
+  </div>
+  <script>
+  (() => {
+    // ── 공통 (장면 파일마다 같음 · launch-b 와 같은 방식) ─────────────────
+    const FPS = 30;
+    const D = { xs: 2, s: 3, m: 6, l: 12, xl: 24, x2l: 30 };   // motion.md 1장 Duration (프레임)
+    const H = { s: 12, m: 21, l: 36, end: 45 };                 // motion.md 4장 hold (프레임)
+    function bez(x1, y1, x2, y2) {                              // cubic-bezier → 함수 (곡선 값은 motion.md 1장 그대로)
+      const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+      const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+      const sx = (t) => ((ax * t + bx) * t + cx) * t, sy = (t) => ((ay * t + by) * t + cy) * t;
+      return (p) => {
+        if (p <= 0) return 0; if (p >= 1) return 1;
+        let lo = 0, hi = 1, t = p;
+        for (let i = 0; i < 50; i++) { const v = sx(t); if (Math.abs(v - p) < 1e-7) break; if (v < p) lo = t; else hi = t; t = (lo + hi) / 2; }
+        return sy(t);
+      };
+    }
+    const EASE_OUT = bez(0.16, 1, 0.3, 1);     // ease-out
+    const EASE_IN = bez(0.5, 0, 0.75, 0);      // ease-in
+    const EASE_INOUT = bez(0.65, 0, 0.35, 1);  // ease-inout
+    const EASE_LINEAR = (p) => Math.min(1, Math.max(0, p)); // ease-linear
+    const prog = (f, at, dur, ease) => ease(Math.min(1, Math.max(0, (f - at) / dur)));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    // 카메라: 월드 점 (cx, cy) 를 화면 가운데에, 배율 s
+    const camAt = (el, cx, cy, s) => { el.style.transform = `translate(960px, 540px) scale(${s}) translate(${-cx}px, ${-cy}px)`; };
+    function partReady(fr) {
+      return new Promise((res) => {
+        const loaded = () => { const d = fr.contentDocument; return d && d.readyState === "complete" && d.location.href !== "about:blank"; };
+        const go = () => { const d = fr.contentDocument; d.fonts.ready.then(() => Promise.all([...d.images].map((i) => i.decode().catch(() => {})))).then(res); };
+        if (loaded()) go(); else fr.addEventListener("load", go, { once: true });
+      });
+    }
+    function ready(root) {
+      root.querySelectorAll("iframe[data-src]").forEach((fr) => { if (!fr.getAttribute("src")) fr.src = fr.dataset.src; });
+      return document.fonts.ready.then(() => Promise.all([
+        ...[...root.querySelectorAll("iframe")].map(partReady),
+        ...[...root.querySelectorAll("img")].map((i) => i.decode().catch(() => {})),
+      ]));
+    }
+    // 장면 상태는 모두 장면 프레임 f 하나로 정한다 (어느 프레임으로 바로 가도 같은 그림).
+    // 부품 상자 transform 은 GSAP 가 직접 트윈하지 않는다 (iframe 다시 로드 방지) — paint 가 style 을 직접 쓴다.
+    function run(id, root, frames, paint) {
+      const tl = gsap.timeline({ paused: true });
+      const c = { f: 0 };
+      const go = () => paint(Math.round(c.f * 1e4) / 1e4);
+      tl.fromTo(c, { f: 0 }, { f: frames, duration: frames / FPS, ease: "none", onUpdate: go }, 0);
+      root.querySelectorAll("iframe").forEach((fr) => fr.addEventListener("load", () => { go(); fr.contentDocument.fonts.ready.then(go); }));
+      go();
+      window.__timelines[id] = tl;
+    }
+    const inner = (fr, sel) => fr.contentDocument && fr.contentDocument.querySelector(sel);
+    // ────────────────────────────────────────────────────────────────
+
+
+    const root = document.getElementById("s3-cam").closest('[data-composition-id="s3"]');
+    const $ = (s) => root.querySelector(s);
+    const PRESS_SCALE = 0.96;                                // motion.md 1장 press-scale
+    const STOPS = [[960, 540], [0, 1620], [960, 2700], [0, 3780], [960, 4860], [0, 5940]];
+    const PAN_AT = [0, 42, 81, 111, 165];                    // 항목마다 cam-pan 시작 프레임
+    const SOFT = [247, 247, 248], BG = [255, 255, 255];      // video-bg-soft #f7f7f8 · video-bg #ffffff
+    const T = { press: 33, emph: 54, pulse: 93, count: 123, shift: 165 };
+    const paint = (f) => {
+      let x = STOPS[0][0], y = STOPS[0][1];
+      PAN_AT.forEach((at, k) => { const p = prog(f, at, D.l, EASE_INOUT); x = lerp(x, STOPS[k + 1][0], p); y = lerp(y, STOPS[k + 1][1], p); });
+      camAt($("#s3-cam"), x, y, 1);
+      // pan-bg-shift
+      const b = prog(f, T.shift, D.l, EASE_LINEAR);
+      $("#s3-bg").style.background = `rgb(${SOFT.map((v, i) => Math.round(lerp(v, BG[i], b))).join(", ")})`;
+      // ① button-press
+      const k = f < T.press + D.s ? lerp(1, PRESS_SCALE, prog(f, T.press, D.s, EASE_IN)) : lerp(PRESS_SCALE, 1, prog(f, T.press + D.s, D.m, EASE_OUT));
+      $("#s3-btn").style.transform = `translate(-50%, -50%) scale(${k})`;
+      // ② emphasis (mission-in 뒷부분)
+      const fm = $("#s3-mission iframe");
+      const fill = inner(fm, "#mission-card-progress-fill"), txt = inner(fm, "#mission-card-progress-text");
+      if (fill && txt) {
+        const e = prog(f, T.emph, D.m, EASE_OUT), v = lerp(0.5, 1, e);
+        fill.style.setProperty("--progress", String(v));
+        const pct = Math.round(v * 100);
+        txt.textContent = `${pct}% · ${Math.floor(pct / 25)}/4 단계 완료`;
+      }
+      // ③ badge-pulse
+      $("#s3-badge").style.transform = `translate(-50%, -50%) scale(${prog(f, T.pulse, D.m, EASE_OUT)})`;
+      // ④ count-up (#stat-card-amount textContent 만, ₩ 는 span 밖)
+      const amt = inner($("#s3-stat iframe"), "#stat-card-amount");
+      if (amt) {
+        const fin = Number(String(amt.dataset.final).replace(/,/g, ""));
+        amt.textContent = Math.round(fin * prog(f, T.count, D.x2l, EASE_OUT)).toLocaleString("en-US");
+      }
+    };
+    ready(root).then(() => run("s3", root, 198, paint));
+  })();
+  </script>
+</template>

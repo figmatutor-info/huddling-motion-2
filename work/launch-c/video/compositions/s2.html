@@ -1,0 +1,119 @@
+<!--
+장면 2 · 2.10–5.00 (63–150 · 87프레임) — scenes.md 2행 · 비트 4+5+6 주인공 등장 → 연결 → 첫 쓰임새
+  배경 video-bg-soft · 폰 없음 · 한 바탕 위에 brand-icon (× 2.8) 화면 가운데 (960, 540) · skill-card-1 (× 2.8) 오른쪽 한 화면 폭 너머 (2880, 540)
+  연결선 · 자물쇠 · 칩 없음. skill-card-1 은 첫 프레임부터 놓여 있음 (따로 enter 없음)
+  움직임:
+    cam-release (cut-scale × 1.7 → × 1 · 대상 brand-icon · dur-2xl · ease-out) 0–30   — 첫 프레임 = 컷 너머 주인공 클로즈
+    icon-spin (spin rotateZ 360° · dur-m · ease-out 30–36 + 같은 자리 brand-icon 모양 고리 color-primary × 1 → cut-scale · 투명도 0.45 → 0 · dur-l · ease-out 30–42)
+    hold-s 42–54 (대표 컷 = 42f · snap/02a)
+    cam-pan 오른쪽 (brand-icon → skill-card-1, 거리 1920 · dur-l · ease-inout) 54–66
+    hold-m 66–87 (대표 컷 = 66f · snap/02b)
+  다음: 장면3 첫 움직임 cam-pan 아래 (같은 월드 · 같은 자리에서 이어짐)
+  고리: brand-icon 과 같은 외곽 (274.4 정사각 · 모서리 radius-card 12 × 2.8) 을 color-primary 로 채운 판을 아이콘 뒤에 둠 → 아이콘 밖으로 번지는 띠만 보임
+-->
+<template>
+  <style>
+    /* design.md 3장 A · video.md 3장: 로컬 파일 (src/assets/fonts 를 그대로 복사한 assets/src/assets/fonts) */
+    @font-face { font-family: "Pretendard"; font-weight: 400; src: url("assets/src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 600; src: url("assets/src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 700; src: url("assets/src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Pretendard", sans-serif; word-break: keep-all; /* video.md 3장 */ }
+    #root p { margin: 0; }
+    #root .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    /* 카메라 (motion.md 5장): 월드 좌표 = 카메라 × 1 · 가운데 (960, 540) 일 때의 화면 좌표 */
+    #root .cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+    /* parts: video.md 5장 — iframe 크기 = 부품 원래 크기, 부품 전체에 × 2.8 한 번 */
+    #root .part { flex: none; position: relative; }
+    #root .part iframe { position: absolute; left: 0; top: 0; border: 0; background: transparent; transform: scale(2.8); transform-origin: 0 0; }
+    #root .p-brand   { width: 274.4px; height: 274.4px; } #root .p-brand   iframe { width: 98px;  height: 98px;  }
+    #root .p-badge   { width: 302.4px; height: 89.6px;  } #root .p-badge   iframe { width: 108px; height: 32px;  }
+    #root .p-skill   { width: 980px;   height: 246.4px; } #root .p-skill   iframe { width: 350px; height: 88px;  }
+    #root .p-btn     { width: 980px;   height: 123.2px; } #root .p-btn     iframe { width: 350px; height: 44px;  }
+    #root .p-mission { width: 980px;   height: 708.4px; } #root .p-mission iframe { width: 350px; height: 253px; }
+    #root .p-stat    { width: 980px;   height: 282.8px; } #root .p-stat    iframe { width: 350px; height: 101px; }
+    #root .p-asset   { width: 980px;   height: 207.2px; } #root .p-asset   iframe { width: 350px; height: 74px;  }
+    /* 가운데 점 (left, top) 에 놓는 상자: 장면 스크립트가 transform 을 translate(-50%, -50%) 부터 쓴다 */
+    #root .at { position: absolute; transform: translate(-50%, -50%); }
+
+
+    #root { background: #f7f7f8; /* video-bg-soft */ }
+    #s2-ring { position: absolute; width: 274.4px; height: 274.4px; border-radius: 33.6px; /* radius-card × video-scale */ background: #3759de; /* color-primary */ opacity: 0; }
+  </style>
+  <div data-hf-id="hf-08gn" id="root" data-composition-id="s2" data-width="1920" data-height="1080" data-layout-allow-overflow="" data-layout-allow-overlap="">
+    <div data-hf-id="hf-uzmy" id="s2-cam" class="cam">
+      <div data-hf-id="hf-5xw7" id="s2-ring" class="at" style="left: 960px; top: 540px;"></div>
+      <div data-hf-id="hf-d7h5" id="s2-icon" class="part p-brand at" style="left: 960px; top: 540px;"><iframe data-hf-id="hf-r7nm" data-src="assets/src/parts/brand-icon.html"></iframe></div>
+      <div data-hf-id="hf-rlwy" id="s2-skill" class="part p-skill at" style="left: 2880px; top: 540px;"><iframe data-hf-id="hf-yief" data-src="assets/src/parts/skill-card-1.html"></iframe></div>
+    </div>
+  </div>
+  <script>
+  (() => {
+    // ── 공통 (장면 파일마다 같음 · launch-b 와 같은 방식) ─────────────────
+    const FPS = 30;
+    const D = { xs: 2, s: 3, m: 6, l: 12, xl: 24, x2l: 30 };   // motion.md 1장 Duration (프레임)
+    const H = { s: 12, m: 21, l: 36, end: 45 };                 // motion.md 4장 hold (프레임)
+    function bez(x1, y1, x2, y2) {                              // cubic-bezier → 함수 (곡선 값은 motion.md 1장 그대로)
+      const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+      const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+      const sx = (t) => ((ax * t + bx) * t + cx) * t, sy = (t) => ((ay * t + by) * t + cy) * t;
+      return (p) => {
+        if (p <= 0) return 0; if (p >= 1) return 1;
+        let lo = 0, hi = 1, t = p;
+        for (let i = 0; i < 50; i++) { const v = sx(t); if (Math.abs(v - p) < 1e-7) break; if (v < p) lo = t; else hi = t; t = (lo + hi) / 2; }
+        return sy(t);
+      };
+    }
+    const EASE_OUT = bez(0.16, 1, 0.3, 1);     // ease-out
+    const EASE_IN = bez(0.5, 0, 0.75, 0);      // ease-in
+    const EASE_INOUT = bez(0.65, 0, 0.35, 1);  // ease-inout
+    const EASE_LINEAR = (p) => Math.min(1, Math.max(0, p)); // ease-linear
+    const prog = (f, at, dur, ease) => ease(Math.min(1, Math.max(0, (f - at) / dur)));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    // 카메라: 월드 점 (cx, cy) 를 화면 가운데에, 배율 s
+    const camAt = (el, cx, cy, s) => { el.style.transform = `translate(960px, 540px) scale(${s}) translate(${-cx}px, ${-cy}px)`; };
+    function partReady(fr) {
+      return new Promise((res) => {
+        const loaded = () => { const d = fr.contentDocument; return d && d.readyState === "complete" && d.location.href !== "about:blank"; };
+        const go = () => { const d = fr.contentDocument; d.fonts.ready.then(() => Promise.all([...d.images].map((i) => i.decode().catch(() => {})))).then(res); };
+        if (loaded()) go(); else fr.addEventListener("load", go, { once: true });
+      });
+    }
+    function ready(root) {
+      root.querySelectorAll("iframe[data-src]").forEach((fr) => { if (!fr.getAttribute("src")) fr.src = fr.dataset.src; });
+      return document.fonts.ready.then(() => Promise.all([
+        ...[...root.querySelectorAll("iframe")].map(partReady),
+        ...[...root.querySelectorAll("img")].map((i) => i.decode().catch(() => {})),
+      ]));
+    }
+    // 장면 상태는 모두 장면 프레임 f 하나로 정한다 (어느 프레임으로 바로 가도 같은 그림).
+    // 부품 상자 transform 은 GSAP 가 직접 트윈하지 않는다 (iframe 다시 로드 방지) — paint 가 style 을 직접 쓴다.
+    function run(id, root, frames, paint) {
+      const tl = gsap.timeline({ paused: true });
+      const c = { f: 0 };
+      const go = () => paint(Math.round(c.f * 1e4) / 1e4);
+      tl.fromTo(c, { f: 0 }, { f: frames, duration: frames / FPS, ease: "none", onUpdate: go }, 0);
+      root.querySelectorAll("iframe").forEach((fr) => fr.addEventListener("load", () => { go(); fr.contentDocument.fonts.ready.then(go); }));
+      go();
+      window.__timelines[id] = tl;
+    }
+    const inner = (fr, sel) => fr.contentDocument && fr.contentDocument.querySelector(sel);
+    // ────────────────────────────────────────────────────────────────
+
+
+    const root = document.getElementById("s2-cam").closest('[data-composition-id="s2"]');
+    const $ = (s) => root.querySelector(s);
+    const CUT_SCALE = 1.7, SPIN = 360, GLOW = 0.45;         // motion.md 1장 cut-scale · spin · 3장 icon-spin (video-glow 가운데 불투명도)
+    const paint = (f) => {
+      const r = prog(f, 0, D.x2l, EASE_OUT);                 // cam-release 0–30
+      const pan = prog(f, D.x2l + D.l + H.s, D.l, EASE_INOUT); // cam-pan 54–66
+      camAt($("#s2-cam"), lerp(960, 2880, pan), 540, lerp(CUT_SCALE, 1, r));
+      const sp = prog(f, D.x2l, D.m, EASE_OUT);              // spin 30–36
+      $("#s2-icon").style.transform = `translate(-50%, -50%) rotate(${SPIN * sp}deg)`;
+      const g = prog(f, D.x2l, D.l, EASE_OUT);               // 고리 30–42
+      $("#s2-ring").style.transform = `translate(-50%, -50%) scale(${lerp(1, CUT_SCALE, g)})`;
+      $("#s2-ring").style.opacity = f < D.x2l ? "0" : String(GLOW * (1 - g));
+    };
+    ready(root).then(() => run("s2", root, 87, paint));
+  })();
+  </script>
+</template>

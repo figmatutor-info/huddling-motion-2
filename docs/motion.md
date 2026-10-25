@@ -62,6 +62,10 @@ beat-sheet.md에 해당 규칙이 없으면 [기본 스타일]을 따른다.
 | `type-step` | 100ms (3프레임) = `dur-s` | 레퍼런스 입력창 타이핑 (한 글자 간격) |
 | `cut-scale` | × 1.7 (컷 너머 클로즈 크기) | 요청 (2026-10-24, snapcn wordmark-cut 1.71배) |
 | `crane-angle` | rotateX 12° · rotateY -18° (왼쪽 아래에서 올려다봄) · perspective 2400px · 회전 중심 폰 가운데 | 요청 (2026-10-24, snapcn phone-frame `showcase`) |
+| `flip-turn` | rotateY 180° (세로축 뒤집힘 반 바퀴) · perspective 2400px (`crane-angle`과 같음) · 회전 중심 부품 가운데 | 요청 (2026-10-25, launch-c 후보 승인 · 1password 격자 뒤집힘 · langease 카드 뒤집힘) |
+| `spin` | rotateZ 360° (제자리 한 바퀴) · 회전 중심 부품 가운데 | 요청 (2026-10-25, launch-c 후보 승인 · 1password 아이콘 회전 측정 약 6f) |
+| `dolly-scale` | × 0.5 (× 1보다 멀리) | 요청 (2026-10-25, launch-c 후보 승인 · 1password 그물 줌아웃 측정 끝 배율 약 × 0.5) |
+| `ring-count` | 4 (둘레에 놓는 같은 요소 수) | 요청 (2026-10-25, launch-c 후보 승인 · langease 폰 터널 4대 · 흩어진 카드 4장) |
 
 ---
 
@@ -115,6 +119,13 @@ src/parts · src/screens에 있는 것만. Semantic 이름으로 적고, 다른 
 | `zoom-through` | 장면 경계 (부품 안으로 들어가며) | 대상 부품 쪽으로 × 1 → `cam-in` · `dur-l` · `ease-in` → 끝 프레임에 `transition`. 다음 장면 첫 프레임은 그 부품 자리에서 이어짐 (`match-cut`처럼) | 기존 이름 · 2026-10-25 토큰 조립 |
 | `icon-expand` | 장면 경계 (부품이 커져 다음 바탕이 됨) | 부품 글자 `exit` → 부품이 화면을 덮을 때까지 커짐 · `dur-m` · `ease-in` → `transition`, 다음 장면 바탕이 그 색 | 기존 이름 · 2026-10-25 토큰 조립 |
 | `word-swap` | 영상 글자 한 단어 자리 → brand-icon (video.md `icon-inline`) | 단어 `exit` → 같은 자리에 brand-icon `enter` + 마스크 대신 `scale-from` → 1 | 기존 이름 · 2026-10-25 토큰 조립 (`word-close`를 합침) |
+| `flip-wave` | 같은 부품 여러 개 격자 (brand-icon → badge-approved, 또는 asset-card · skill-card 같은 부품끼리) | 부품마다 `flip-turn` × 3 · `dur-m` · `ease-out`, 90°를 지나는 프레임에 앞면이 다음 상태로 바뀜 · 왼쪽 위부터 대각선 순서로 `stagger` (6개 상한 그대로, 7번째부터 같이) | 요청 (2026-10-25, launch-c 후보 승인 · 1password 비트 2, 측정 한 개 약 6f · 물결 약 1.2초) |
+| `icon-spin` | brand-icon | `spin` · `dur-m` · `ease-out` + 같은 자리에 brand-icon 모양 고리 하나가 `color-primary`로 × 1 → `cut-scale` · 투명도 0.45 → 0 (`video-glow` 가운데 불투명도) · `dur-l` · `ease-out`. 블러 없음 | 요청 (2026-10-25, launch-c 후보 승인 · 1password 비트 4 · 10, 측정 회전 6f · 빛 12f) |
+| `phone-ring` | 폰 프레임 `ring-count`대 (화면 이미지 01–05, video.md 4장 크기 그대로) · 가운데 영상 글자 한 줄 | 폰이 화면 위 · 아래 · 왼쪽 · 오른쪽 가장자리 가운데에 반쯤 잘린 채 놓임, 각 폰은 `crane-angle`을 가운데 쪽으로 돌린 각도 (반대편은 부호 반대). 들어옴: 화면 밖 → 자리 · `crane-angle` 각도 그대로 · `dur-xl` · `ease-out`, 폰 사이 `stagger`. 머묾: 둘레 전체 rotateZ 0 → `tilt` · hold 길이 동안 · `ease-linear`. 나감: `phone-tip` 묶음으로. 0장 "폰 한 장면" [기본 스타일] 대신이므로 비트 시트에 있을 때만 · `대신:` 기록 | 요청 (2026-10-25, launch-c 후보 승인 · langease 비트 6–7, 측정 들어옴 약 22f · 머묾 약 70f) |
+| `bar-stretch` | button-submit → mission-card 진행 바 | 버튼 글자 `exit` → 버튼 폭이 mission-card 진행 바 폭으로 · 높이가 진행 바 높이로 (design.md 4장 mission-card 치수 × `video-scale`) · 오른쪽으로 늘어남 · `dur-l` · `ease-inout` · 카메라는 `cam-pan`으로 늘어나는 끝을 따라감 → 끝 프레임에 `match-cut`으로 mission-card의 진행 바 자리 (`mission-in` 진행 `emphasis`가 이어짐) | 요청 (2026-10-25, launch-c 후보 승인 · langease 비트 8, 측정 약 30f · 카메라 회전은 뺌) |
+| `focus-lift` | 화면 · 목록 속 부품 하나 (skill-card · asset-card) | 대상 부품 위 `dist-m` · `dur-l` · `ease-out` + 같은 시간에 주변 요소 전부 `exit` (투명도 1 → 0, 길이는 `dur-l`로). 블러 없음 · 크기 변화 없음 | 요청 (2026-10-25, launch-c 후보 승인 · langease 비트 13, 측정 약 11f · 심도 흐림은 뺌) |
+| `card-flip-scatter` | 카드 한 장 (skill-card · asset-card) → 같은 카드 `ring-count`장 | 카드 `flip-turn` · `dur-m` · `ease-in` → 뒤집힌 끝 프레임에 같은 카드 `ring-count`장으로 나뉘어 화면 네 귀퉁이(반쯤 잘림)로 · 각 카드 `crane-angle`을 가운데 쪽으로 · `dur-l` · `ease-out`. 다음 글자 장면 둘레로 남고, 머무는 동안 `cam-drift` 쓸 수 있음 (비트 시트에 있을 때) | 요청 (2026-10-25, launch-c 후보 승인 · langease 비트 13–14, 측정 뒤집힘 약 7f · 흩어짐 약 10f) |
+| `icon-flight` | brand-icon (통째, 조각 아님) | 화면 오른쪽 밖 → 영상 글자 줄 끝 자리 · 위로 볼록한 곡선 (높이 `dist-l`) · `dur-l` · `ease-out`. 꼬리 없음. 글자가 붙는 동안 줄 끝을 따라 `video-gap` 띄워 붙어 감 (`stagger`와 같은 박자). 끝: 글자 `exit` → `match-cut`으로 logo 심볼 자리 | 요청 (2026-10-25, launch-c 후보 승인 · langease 비트 18–19, 측정 나감 약 4f · 들어옴 약 10f · 꼬리 · 별 조각은 뺌) |
 
 - 장면 경계는 `match-cut`을 먼저, 이어지는 요소가 없으면 `cut-in-motion`. button-submit에서 나갈 때는 `shape-morph`를 쓸 수 있다. 주인공 요소는 같은 자리에 둬서 경계에서 눈이 움직이지 않게 한다. (레퍼런스 L 아이콘) [기본 스타일]
 - 강조 색 글자(둘째 줄 색 바꿈)는 움직임이 아니다. 색은 video.md에서만. [고정]
@@ -130,6 +141,10 @@ docs에 없는 숫자가 필요하거나, 대상 부품 · 화면이 없는 것.
 | `line-draw` | 아이콘 사이 연결선이 `dur-2xl`로 그려짐 | 레퍼런스 "連携。" · 연결선 부품 없음 |
 | `modal-dismiss` | 등록 후 창이 줄며 빠지고 위에 알림이 내려옴 | 레퍼런스 "登録する" · 모달 부품 없음 |
 | `whip-blur` | 전환 중 흐림 | 흐림 값이 docs에 없음 |
+| `grid-collapse` (승인 2026-10-25 · 부품 대기) | 격자가 한 줄로 모여 입력창이 되고 점이 하나씩 채워짐 | 입력창 · 비밀 점 부품이 src에 없음. 부품이 들어오면 Pattern으로 (1password 비트 3) |
+| `orbit-in` (승인 2026-10-25 · 부품 대기) | brand-icon 둘레에 서비스 로고가 하나씩 `scale-from`으로 붙음 | 서비스 로고 부품이 src에 없음 (다른 회사 로고는 CLAUDE.md 4번 금지) · 6개 넘는 stagger (1password 비트 8) |
+| `confetti` (승인 2026-10-25 · 부품 대기) | 완료 순간 색종이가 터져 흩날림 | 색종이 부품이 src에 없음 (langease 비트 10) |
+| `cursor-tap` (승인 2026-10-25 · 부품 대기) | 손 커서가 대상을 가리키고 누름 | 커서 부품이 src에 없음. 그동안은 커서 없이 `button-press` (langease 비트 12 · 15–17) |
 
 ---
 
@@ -167,8 +182,9 @@ docs에 없는 숫자가 필요하거나, 대상 부품 · 화면이 없는 것.
 | `cam-push` | × 1 → `cut-scale` · 대상 쪽으로 · `dur-2xl` · `ease-in` (점점 빨라짐, 멈추지 않고 다음은 `transition`) | 장면을 밀어붙이며 끝낼 때 (비트 시트에 그 카메라 · 전환이 있을 때만) | 기존 이름 · 2026-10-25 토큰 조립 |
 | `cam-pan` | × 1 그대로 다음 대상까지 가로 · 세로 이동 (거리 = 두 대상 사이) · `dur-l` · `ease-inout` | 한 화면 안에서 대상을 옮겨 갈 때 | 기존 이름 · 2026-10-25 토큰 조립 |
 | `cam-drift` | × 1 그대로 가로 `dist-m` · hold 길이 동안 · `ease-linear` | hold 중 화면을 살짝 살려 둘 때 (비트 시트에 그 카메라 · 전환이 있을 때만) | 기존 이름 · 2026-10-25 토큰 조립 |
+| `cam-dolly-out` | × 1 → `dolly-scale` · 화면 가운데 기준 · hold 길이 동안 · `ease-linear` (`cam-drift`처럼 머묾과 같이 감) | 엔드 앞 전체를 한 번 넓게 볼 때 (비트 시트에 그 카메라가 있을 때만, 영상에 1곳) | 요청 (2026-10-25, launch-c 후보 승인 · 1password 비트 9, 측정 약 4.5초) |
 
-- 확대는 `cam-in`(× 2.4)을 넘지 않는다. [고정]
-- 한 장면에 카메라는 한 묶음 (`cam-follow` → `cam-pull` 또는 `cam-crane` → `cam-pull`, `cam-crane`만, 또는 `cam-focus` · `cam-pan` · `cam-drift` · `cam-release` · `cam-push` 중 하나). (레퍼런스) [기본 스타일]
+- 확대는 `cam-in`(× 2.4)을 넘지 않고, 축소는 `dolly-scale`(× 0.5) 아래로 가지 않는다. [고정]
+- 한 장면에 카메라는 한 묶음 (`cam-follow` → `cam-pull` 또는 `cam-crane` → `cam-pull`, `cam-crane`만, 또는 `cam-focus` · `cam-pan` · `cam-drift` · `cam-dolly-out` · `cam-release` · `cam-push` 중 하나). (레퍼런스) [기본 스타일]
 - 카메라가 움직이는 동안 요소의 `enter` · `emphasis`를 시작하지 않는다. 멈추고 나서 시작한다 (예외: `cam-follow`는 `text-type`과 같이). (레퍼런스 줌아웃 뒤 주변 등장) [기본 스타일]
-- `cam-drift` · `cam-release` · `cam-push`는 비트 시트에 그 카메라 · 전환이 있을 때만 쓴다. 그때는 4장 "hold 동안 카메라 정지" · "경계는 `scene-out`", 5장 "카메라 움직이는 동안 요소 시작 안 함" 중 해당 [기본 스타일]을 대신하고 decisions.md에 기록한다. [고정]
+- `cam-drift` · `cam-dolly-out` · `cam-release` · `cam-push`는 비트 시트에 그 카메라 · 전환이 있을 때만 쓴다. 그때는 4장 "hold 동안 카메라 정지" · "경계는 `scene-out`", 5장 "카메라 움직이는 동안 요소 시작 안 함" 중 해당 [기본 스타일]을 대신하고 decisions.md에 기록한다. [고정]

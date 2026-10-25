@@ -15,6 +15,7 @@
 
 - 영상 위에 올리는 모든 글자(parts 안 글자 포함)는 31px 이상.
 - 예외: 폰 프레임 **안의 화면 이미지** 글자. 화면 배율이 작아 31px보다 작다(4장). 읽혀야 하는 정보는 화면 이미지가 아니라 parts(5장)나 영상 글자(3장)로 보여준다.
+- 예외 (요청 2026-10-25, launch-c 장면5): `cam-dolly-out`(motion.md 5장)으로 × 1 아래로 물러나 있는 동안의 parts 글자. 물러난 장면은 전체 모양을 보는 곳이라 글자를 읽지 않는다. × 1에서는 31px 이상이어야 한다.
 
 ---
 
@@ -125,6 +126,7 @@ src/parts의 HTML 부품을 `video-scale`(× 2.8)로 키워 쓴다. 그러면 �
 - 배율은 부품 전체에 한 번만 건다. 글자만 따로 키우거나 줄이지 않는다.
 - stat-card · skill-card는 흰 바탕에 모서리 12(`radius-card`)와 안쪽 여백 20(`space-page`)이 있는 카드다. `video-bg`(흰색) 위에서는 모서리와 여백이 안 보여 카드 모양이 사라지므로 `video-bg-soft` 위에 놓는다. mission-card는 테두리 1px이 있어 `video-bg` 위에 놓아도 된다.
 - stat-card와 asset-card가 한 장면에 나오면 부품으로 따로 놓지 않고 05-assets 화면(폰 프레임) 안에서 보여준다 (둘이 원하는 바탕이 달라서).
+  - 예외 (요청 2026-10-25, launch-c 장면4 `pan-bg-shift`): `cam-pan`으로 stat-card에서 asset-card로 옮겨 갈 때는 부품으로 따로 놓아도 된다. 그 `cam-pan` 동안 바탕이 `video-bg-soft` → `video-bg` · `dur-l` · `ease-linear`로 바뀐다 (두 부품이 한 프레임에 같이 머물지 않는다).
 - asset-card는 바탕이 `color-surface`(#f7f7f8)라 `video-bg-soft` 위에서는 사라진다. `video-bg` 위에만 놓는다.
 - logo 색: `video-bg` · `video-bg-soft` · `video-bg-character` 위에는 `*-black`, `video-bg-brand` · `video-bg-dark` · `video-bg-end` 위에는 `*-white`.
 

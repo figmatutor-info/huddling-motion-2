@@ -1,0 +1,152 @@
+<!--
+장면 1 · 0.00–2.10 (0–63프레임) — scenes.md 1행 · 비트 1+2+3 하나에서 여럿 → 여럿이 확인됨 → 모여서 하나
+  배경 video-bg-soft · 폰 없음 · brand-icon × 6 (× 2.8) 2줄 × 3칸 격자 · 칸 사이 video-gap 56 · 격자 935.2×604.8 화면 가운데 (스냅보드와 같은 자리)
+  칸마다 앞면 brand-icon / 뒤집힌 면 badge-approved (같은 칸 가운데). 첫 프레임부터 놓여 있음 (주변 enter 없음)
+  움직임:
+    cam-pull (cam-in × 2.4 · 대상 = 격자 첫 줄 가운데 brand-icon (960, 374.8) → × 1 · 화면 가운데, dur-l · ease-inout) 0–12
+    flip-wave (칸마다 flip-turn × 3 = rotateY 540° · perspective 2400 · 중심 칸 가운데 · dur-m · ease-out,
+               90° 지나는 프레임에 앞면 → badge-approved, 왼쪽 위부터 대각선 순서 stagger dur-m) 12–48
+               순서: (1줄1칸) (1줄2칸) (2줄1칸) (1줄3칸) (2줄2칸) (2줄3칸)
+    hold-s 48–60 (대표 컷 = 48f · snap/01)
+    나감 조립 (깊이 컷): 격자 전체 × 1 → scale-from 0 · dur-s · ease-in · 중심 화면 가운데 60–63 → transition (컷) → 장면2 cam-release
+-->
+<template>
+  <style>
+    /* design.md 3장 A · video.md 3장: 로컬 파일 (src/assets/fonts 를 그대로 복사한 assets/src/assets/fonts) */
+    @font-face { font-family: "Pretendard"; font-weight: 400; src: url("assets/src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 600; src: url("assets/src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 700; src: url("assets/src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Pretendard", sans-serif; word-break: keep-all; /* video.md 3장 */ }
+    #root p { margin: 0; }
+    #root .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    /* 카메라 (motion.md 5장): 월드 좌표 = 카메라 × 1 · 가운데 (960, 540) 일 때의 화면 좌표 */
+    #root .cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+    /* parts: video.md 5장 — iframe 크기 = 부품 원래 크기, 부품 전체에 × 2.8 한 번 */
+    #root .part { flex: none; position: relative; }
+    #root .part iframe { position: absolute; left: 0; top: 0; border: 0; background: transparent; transform: scale(2.8); transform-origin: 0 0; }
+    #root .p-brand   { width: 274.4px; height: 274.4px; } #root .p-brand   iframe { width: 98px;  height: 98px;  }
+    #root .p-badge   { width: 302.4px; height: 89.6px;  } #root .p-badge   iframe { width: 108px; height: 32px;  }
+    #root .p-skill   { width: 980px;   height: 246.4px; } #root .p-skill   iframe { width: 350px; height: 88px;  }
+    #root .p-btn     { width: 980px;   height: 123.2px; } #root .p-btn     iframe { width: 350px; height: 44px;  }
+    #root .p-mission { width: 980px;   height: 708.4px; } #root .p-mission iframe { width: 350px; height: 253px; }
+    #root .p-stat    { width: 980px;   height: 282.8px; } #root .p-stat    iframe { width: 350px; height: 101px; }
+    #root .p-asset   { width: 980px;   height: 207.2px; } #root .p-asset   iframe { width: 350px; height: 74px;  }
+    /* 가운데 점 (left, top) 에 놓는 상자: 장면 스크립트가 transform 을 translate(-50%, -50%) 부터 쓴다 */
+    #root .at { position: absolute; transform: translate(-50%, -50%); }
+
+
+    #root { background: #f7f7f8; /* video-bg-soft */ }
+    #s1-grid { position: absolute; left: 492.4px; top: 237.6px; width: 935.2px; height: 604.8px; transform-origin: 50% 50%;
+      display: grid; grid-template-columns: repeat(3, 274.4px); grid-template-rows: repeat(2, 274.4px); gap: 56px; /* video-gap */ }
+    #root .cell { position: relative; width: 274.4px; height: 274.4px; transform-origin: 50% 50%; }
+    #root .face { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  </style>
+  <div data-hf-id="hf-21wk" id="root" data-composition-id="s1" data-width="1920" data-height="1080" data-layout-allow-overflow="" data-layout-allow-overlap="">
+    <div data-hf-id="hf-q35l" id="s1-cam" class="cam">
+    <div data-hf-id="hf-9btm" id="s1-grid">
+      <div data-hf-id="hf-ddbm" id="s1-c0" class="cell">
+        <div data-hf-id="hf-icaw" class="face face-icon"><div data-hf-id="hf-szmn" class="part p-brand"><iframe data-hf-id="hf-r7nm" data-src="assets/src/parts/brand-icon.html"></iframe></div></div>
+        <div data-hf-id="hf-kcz4" class="face face-badge"><div data-hf-id="hf-n761" class="part p-badge"><iframe data-hf-id="hf-qofe" data-src="assets/src/parts/badge-approved.html"></iframe></div></div>
+      </div>
+      <div data-hf-id="hf-hbfn" id="s1-c1" class="cell">
+        <div data-hf-id="hf-0ny8" class="face face-icon"><div data-hf-id="hf-hxb3" class="part p-brand"><iframe data-hf-id="hf-vkyu" data-src="assets/src/parts/brand-icon.html"></iframe></div></div>
+        <div data-hf-id="hf-b348" class="face face-badge"><div data-hf-id="hf-tngd" class="part p-badge"><iframe data-hf-id="hf-uium" data-src="assets/src/parts/badge-approved.html"></iframe></div></div>
+      </div>
+      <div data-hf-id="hf-8njs" id="s1-c2" class="cell">
+        <div data-hf-id="hf-zh15" class="face face-icon"><div data-hf-id="hf-hj02" class="part p-brand"><iframe data-hf-id="hf-vz9v" data-src="assets/src/parts/brand-icon.html"></iframe></div></div>
+        <div data-hf-id="hf-9w75" class="face face-badge"><div data-hf-id="hf-uudg" class="part p-badge"><iframe data-hf-id="hf-ux5n" data-src="assets/src/parts/badge-approved.html"></iframe></div></div>
+      </div>
+      <div data-hf-id="hf-9f7l" id="s1-c3" class="cell">
+        <div data-hf-id="hf-zvc6" class="face face-icon"><div data-hf-id="hf-h4p1" class="part p-brand"><iframe data-hf-id="hf-wdkw" data-src="assets/src/parts/brand-icon.html"></iframe></div></div>
+        <div data-hf-id="hf-aai6" class="face face-badge"><div data-hf-id="hf-ug2f" class="part p-badge"><iframe data-hf-id="hf-vbgo" data-src="assets/src/parts/badge-approved.html"></iframe></div></div>
+      </div>
+      <div data-hf-id="hf-yjpy" id="s1-c4" class="cell">
+        <div data-hf-id="hf-yof3" class="face face-icon"><div data-hf-id="hf-jwu8" class="part p-brand"><iframe data-hf-id="hf-tlfp" data-src="assets/src/parts/brand-icon.html"></iframe></div></div>
+        <div data-hf-id="hf-93l3" class="face face-badge"><div data-hf-id="hf-vmzi" class="part p-badge"><iframe data-hf-id="hf-sjbh" data-src="assets/src/parts/badge-approved.html"></iframe></div></div>
+      </div>
+      <div data-hf-id="hf-4pfr" id="s1-c5" class="cell">
+        <div data-hf-id="hf-z2q4" class="face face-icon"><div data-hf-id="hf-jij7" class="part p-brand"><iframe data-hf-id="hf-tzqq" data-src="assets/src/parts/brand-icon.html"></iframe></div></div>
+        <div data-hf-id="hf-9hw4" class="face face-badge"><div data-hf-id="hf-v8oh" class="part p-badge"><iframe data-hf-id="hf-sxmi" data-src="assets/src/parts/badge-approved.html"></iframe></div></div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <script>
+  (() => {
+    // ── 공통 (장면 파일마다 같음 · launch-b 와 같은 방식) ─────────────────
+    const FPS = 30;
+    const D = { xs: 2, s: 3, m: 6, l: 12, xl: 24, x2l: 30 };   // motion.md 1장 Duration (프레임)
+    const H = { s: 12, m: 21, l: 36, end: 45 };                 // motion.md 4장 hold (프레임)
+    function bez(x1, y1, x2, y2) {                              // cubic-bezier → 함수 (곡선 값은 motion.md 1장 그대로)
+      const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+      const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+      const sx = (t) => ((ax * t + bx) * t + cx) * t, sy = (t) => ((ay * t + by) * t + cy) * t;
+      return (p) => {
+        if (p <= 0) return 0; if (p >= 1) return 1;
+        let lo = 0, hi = 1, t = p;
+        for (let i = 0; i < 50; i++) { const v = sx(t); if (Math.abs(v - p) < 1e-7) break; if (v < p) lo = t; else hi = t; t = (lo + hi) / 2; }
+        return sy(t);
+      };
+    }
+    const EASE_OUT = bez(0.16, 1, 0.3, 1);     // ease-out
+    const EASE_IN = bez(0.5, 0, 0.75, 0);      // ease-in
+    const EASE_INOUT = bez(0.65, 0, 0.35, 1);  // ease-inout
+    const EASE_LINEAR = (p) => Math.min(1, Math.max(0, p)); // ease-linear
+    const prog = (f, at, dur, ease) => ease(Math.min(1, Math.max(0, (f - at) / dur)));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    // 카메라: 월드 점 (cx, cy) 를 화면 가운데에, 배율 s
+    const camAt = (el, cx, cy, s) => { el.style.transform = `translate(960px, 540px) scale(${s}) translate(${-cx}px, ${-cy}px)`; };
+    function partReady(fr) {
+      return new Promise((res) => {
+        const loaded = () => { const d = fr.contentDocument; return d && d.readyState === "complete" && d.location.href !== "about:blank"; };
+        const go = () => { const d = fr.contentDocument; d.fonts.ready.then(() => Promise.all([...d.images].map((i) => i.decode().catch(() => {})))).then(res); };
+        if (loaded()) go(); else fr.addEventListener("load", go, { once: true });
+      });
+    }
+    function ready(root) {
+      root.querySelectorAll("iframe[data-src]").forEach((fr) => { if (!fr.getAttribute("src")) fr.src = fr.dataset.src; });
+      return document.fonts.ready.then(() => Promise.all([
+        ...[...root.querySelectorAll("iframe")].map(partReady),
+        ...[...root.querySelectorAll("img")].map((i) => i.decode().catch(() => {})),
+      ]));
+    }
+    // 장면 상태는 모두 장면 프레임 f 하나로 정한다 (어느 프레임으로 바로 가도 같은 그림).
+    // 부품 상자 transform 은 GSAP 가 직접 트윈하지 않는다 (iframe 다시 로드 방지) — paint 가 style 을 직접 쓴다.
+    function run(id, root, frames, paint) {
+      const tl = gsap.timeline({ paused: true });
+      const c = { f: 0 };
+      const go = () => paint(Math.round(c.f * 1e4) / 1e4);
+      tl.fromTo(c, { f: 0 }, { f: frames, duration: frames / FPS, ease: "none", onUpdate: go }, 0);
+      root.querySelectorAll("iframe").forEach((fr) => fr.addEventListener("load", () => { go(); fr.contentDocument.fonts.ready.then(go); }));
+      go();
+      window.__timelines[id] = tl;
+    }
+    const inner = (fr, sel) => fr.contentDocument && fr.contentDocument.querySelector(sel);
+    // ────────────────────────────────────────────────────────────────
+
+
+    const root = document.getElementById("s1-cam").closest('[data-composition-id="s1"]');
+    const cam = root.querySelector("#s1-cam"), grid = root.querySelector("#s1-grid");
+    const CAM_IN = 2.4, TARGET = { x: 960, y: 374.8 };     // motion.md 1장 cam-in · 대상 = 격자 첫 줄 가운데 칸 가운데
+    const FLIP_TURN = 180, FLIPS = 3, PERSP = 2400;         // motion.md 1장 flip-turn · 3장 flip-wave "× 3"
+    const RANK = [0, 1, 3, 4, 2, 5];                        // 칸 번호(줄 우선) → 대각선 순서
+    const cells = [...root.querySelectorAll(".cell")];
+    const paint = (f) => {
+      const p = prog(f, 0, D.l, EASE_INOUT);                // cam-pull
+      camAt(cam, lerp(TARGET.x, 960, p), lerp(TARGET.y, 540, p), lerp(CAM_IN, 1, p));
+      cells.forEach((c, i) => {                              // flip-wave
+        const q = prog(f, D.l + RANK[i] * D.m, D.m, EASE_OUT);
+        const a = FLIP_TURN * FLIPS * q;
+        const eff = a - FLIP_TURN * Math.round(a / FLIP_TURN);   // 보이는 면이 늘 앞을 보게 (뒤집힌 면은 거울상이 아님)
+        c.style.transform = `perspective(${PERSP}px) rotateY(${eff}deg)`;
+        const turned = a >= 90;
+        c.querySelector(".face-icon").style.visibility = turned ? "hidden" : "visible";
+        c.querySelector(".face-badge").style.visibility = turned ? "visible" : "hidden";
+      });
+      const e = prog(f, D.l + 36 + H.s, D.s, EASE_IN);      // 나감: scale-from (60–63)
+      grid.style.transform = `scale(${1 - e})`;
+    };
+    ready(root).then(() => run("s1", root, 63, paint));
+  })();
+  </script>
+</template>
