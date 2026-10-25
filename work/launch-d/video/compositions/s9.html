@@ -1,0 +1,116 @@
+<!--
+장면 9 · 18.9667–21.3667 (569–641 · 72프레임) — scenes.md 9행 · 비트 12 크게 내려앉음
+  배경 video-bg (asset-card 규칙, video.md 5장) · 폰 없음 · 영상 글자 0
+  asset-card selling (× 2.8 = 980×207.2) 하나 화면 가운데 · 고리 · 이름표 · 색종이 없음
+  움직임:
+    asset-card enter + 마스크 대신 cut-scale × 1.7 → 1 · 투명도 0 → 1 · dur-m · ease-out (컷 너머 첫 프레임부터) 0–6
+    hold-l 6–42 (대표 컷 = 6f · snap/09)
+    cam-push (× 1 → cut-scale × 1.7 · 대상 asset-card = 화면 가운데 · dur-2xl · ease-in · 멈추지 않음) 42–72
+    screen-dissolve: cam-push 마지막 dur-m 동안 이 장면 투명도 1 → 0 · ease-inout 66–72
+      (아래 트랙의 장면10 = video-bg-end 가 66f 부터 이미 깔려 있음 → 끝난 프레임 72 부터 end-reveal)
+  다음: 장면10 (screen-dissolve)
+-->
+<template>
+  <style>
+    /* design.md 3장 A · video.md 3장: 로컬 파일 (src/assets/fonts 를 그대로 복사한 assets/src/assets/fonts) */
+    @font-face { font-family: "Pretendard"; font-weight: 400; src: url("assets/src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 600; src: url("assets/src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 700; src: url("assets/src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Pretendard", sans-serif; word-break: keep-all; /* video.md 3장 */ }
+    #root p { margin: 0; }
+    #root .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    /* 카메라 (motion.md 5장): 월드 좌표 = 카메라 × 1 · 가운데 (960, 540) 일 때의 화면 좌표 */
+    #root .cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+    /* parts: video.md 5장 — iframe 크기 = 부품 원래 크기, 부품 전체에 × 2.8 한 번 */
+    #root .part { flex: none; position: relative; }
+    #root .part iframe { position: absolute; left: 0; top: 0; border: 0; background: transparent; transform: scale(2.8); transform-origin: 0 0; }
+    #root .p-brand   { width: 274.4px; height: 274.4px; } #root .p-brand   iframe { width: 98px;  height: 98px;  }
+    #root .p-badge   { width: 302.4px; height: 89.6px;  } #root .p-badge   iframe { width: 108px; height: 32px;  }
+    #root .p-skill   { width: 980px;   height: 246.4px; } #root .p-skill   iframe { width: 350px; height: 88px;  }
+    #root .p-btn     { width: 980px;   height: 123.2px; } #root .p-btn     iframe { width: 350px; height: 44px;  }
+    #root .p-mission { width: 980px;   height: 708.4px; } #root .p-mission iframe { width: 350px; height: 253px; }
+    #root .p-stat    { width: 980px;   height: 282.8px; } #root .p-stat    iframe { width: 350px; height: 101px; }
+    #root .p-asset   { width: 980px;   height: 207.2px; } #root .p-asset   iframe { width: 350px; height: 74px;  }
+    /* 가운데 점 (left, top) 에 놓는 상자: 장면 스크립트가 transform 을 translate(-50%, -50%) 부터 쓴다 */
+    #root .at { position: absolute; transform: translate(-50%, -50%); }
+    #root .p-logo   { width: 417.2px; height: 53.2px; } /* logo logotype × 2.8 (video.md 5장) */
+
+    #root { background: transparent; }
+    #s9-all { position: absolute; inset: 0; background: #ffffff; /* video-bg */ }
+    #s9-card { transform-origin: 50% 50%; }
+  </style>
+  <div data-hf-id="hf-jab2" id="root" data-composition-id="s9" data-width="1920" data-height="1080" data-layout-allow-overflow="">
+    <div data-hf-id="hf-agzz" id="s9-all">
+      <div data-hf-id="hf-do3l" id="s9-cam" class="cam">
+        <div data-hf-id="hf-0oij" class="center"><div data-hf-id="hf-dsuj" id="s9-card" class="part p-asset" style="opacity: 0;"><iframe data-hf-id="hf-cz37" data-src="assets/src/parts/asset-card.html?state=selling"></iframe></div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (() => {
+    // ── 공통 (장면 파일마다 같음 · launch-b 와 같은 방식) ─────────────────
+    const FPS = 30;
+    const D = { xs: 2, s: 3, m: 6, l: 12, xl: 24, x2l: 30 };   // motion.md 1장 Duration (프레임)
+    const H = { s: 12, m: 21, l: 36, end: 45 };                 // motion.md 4장 hold (프레임)
+    function bez(x1, y1, x2, y2) {                              // cubic-bezier → 함수 (곡선 값은 motion.md 1장 그대로)
+      const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+      const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+      const sx = (t) => ((ax * t + bx) * t + cx) * t, sy = (t) => ((ay * t + by) * t + cy) * t;
+      return (p) => {
+        if (p <= 0) return 0; if (p >= 1) return 1;
+        let lo = 0, hi = 1, t = p;
+        for (let i = 0; i < 50; i++) { const v = sx(t); if (Math.abs(v - p) < 1e-7) break; if (v < p) lo = t; else hi = t; t = (lo + hi) / 2; }
+        return sy(t);
+      };
+    }
+    const EASE_OUT = bez(0.16, 1, 0.3, 1);     // ease-out
+    const EASE_IN = bez(0.5, 0, 0.75, 0);      // ease-in
+    const EASE_INOUT = bez(0.65, 0, 0.35, 1);  // ease-inout
+    const EASE_LINEAR = (p) => Math.min(1, Math.max(0, p)); // ease-linear
+    const prog = (f, at, dur, ease) => ease(Math.min(1, Math.max(0, (f - at) / dur)));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    // 카메라: 월드 점 (cx, cy) 를 화면 가운데에, 배율 s
+    const camAt = (el, cx, cy, s) => { el.style.transform = `translate(960px, 540px) scale(${s}) translate(${-cx}px, ${-cy}px)`; };
+    function partReady(fr) {
+      return new Promise((res) => {
+        const loaded = () => { const d = fr.contentDocument; return d && d.readyState === "complete" && d.location.href !== "about:blank"; };
+        const go = () => { const d = fr.contentDocument; d.fonts.ready.then(() => Promise.all([...d.images].map((i) => i.decode().catch(() => {})))).then(res); };
+        if (loaded()) go(); else fr.addEventListener("load", go, { once: true });
+      });
+    }
+    function ready(root) {
+      root.querySelectorAll("iframe[data-src]").forEach((fr) => { if (!fr.getAttribute("src")) fr.src = fr.dataset.src; });
+      return document.fonts.ready.then(() => Promise.all([
+        ...[...root.querySelectorAll("iframe")].map(partReady),
+        ...[...root.querySelectorAll("img")].map((i) => i.decode().catch(() => {})),
+      ]));
+    }
+    // 장면 상태는 모두 장면 프레임 f 하나로 정한다 (어느 프레임으로 바로 가도 같은 그림).
+    // 부품 상자 transform 은 GSAP 가 직접 트윈하지 않는다 (iframe 다시 로드 방지) — paint 가 style 을 직접 쓴다.
+    function run(id, root, frames, paint) {
+      const tl = gsap.timeline({ paused: true });
+      const c = { f: 0 };
+      const go = () => paint(Math.round(c.f * 1e4) / 1e4);
+      tl.fromTo(c, { f: 0 }, { f: frames, duration: frames / FPS, ease: "none", onUpdate: go }, 0);
+      root.querySelectorAll("iframe").forEach((fr) => fr.addEventListener("load", () => { go(); fr.contentDocument.fonts.ready.then(go); }));
+      go();
+      window.__timelines[id] = tl;
+    }
+    const inner = (fr, sel) => fr.contentDocument && fr.contentDocument.querySelector(sel);
+    // ────────────────────────────────────────────────────────────────
+
+    const root = document.getElementById("s9-all").closest('[data-composition-id="s9"]');
+    const $ = (s) => root.querySelector(s);
+    const CUT_SCALE = 1.7;                                               // motion.md 1장 cut-scale
+    const T = { push: D.m + H.l, dissolve: D.m + H.l + D.x2l - D.m };   // 42 · 66
+    const paint = (f) => {
+      const e = prog(f, 0, D.m, EASE_OUT);
+      $("#s9-card").style.transform = `scale(${lerp(CUT_SCALE, 1, e)})`;
+      $("#s9-card").style.opacity = String(e);
+      camAt($("#s9-cam"), 960, 540, lerp(1, CUT_SCALE, prog(f, T.push, D.x2l, EASE_IN)));
+      $("#s9-all").style.opacity = String(1 - prog(f, T.dissolve, D.m, EASE_INOUT));
+    };
+    ready(root).then(() => run("s9", root, 72, paint));
+  })();
+  </script>
+</template>

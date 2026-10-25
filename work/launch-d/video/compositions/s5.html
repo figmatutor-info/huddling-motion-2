@@ -1,0 +1,133 @@
+<!--
+장면 5 · 10.00–12.80 (300–384 · 84프레임) — scenes.md 5행 · 비트 7 폰 한 대 · 화면이 바뀜
+  배경 video-bg-soft → 화면 바뀌는 컷에 video-bg · cam-hold (카메라 그대로, 폰이 움직임)
+  2단 묶음 화면 가운데: 왼쪽 제목 "일에 바로 적용하는 AI" (02-skills 제목) video-display · video-text · 왼쪽 정렬
+    ↔ video-gap 56 ↔ 오른쪽 폰 프레임 1대 (phone-size) 02-skills → 03-mission
+  움직임:
+    phone-rise-tilt (아래 dist-l 70 · crane-angle (perspective 2400 · rotateX 12° · rotateY -18° · 중심 폰 가운데) → 0 · dur-l · ease-out) 0–12
+    + 제목 headline-in (enter · mask-rise · dur-m · ease-out) 폰 → 제목 stagger dur-m 6–12 (한 덩어리 · hold 한 번)
+    hold-l 12–48 (대표 컷 = 12f · snap/05)
+    screen-change 02 → 03 (transition) + 같은 컷에 바탕 video-bg-soft → video-bg (제목은 그대로) 48
+    hold-l 48–84
+  다음: transition (컷)
+-->
+<template>
+  <style>
+    /* design.md 3장 A · video.md 3장: 로컬 파일 (src/assets/fonts 를 그대로 복사한 assets/src/assets/fonts) */
+    @font-face { font-family: "Pretendard"; font-weight: 400; src: url("assets/src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 600; src: url("assets/src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 700; src: url("assets/src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Pretendard", sans-serif; word-break: keep-all; /* video.md 3장 */ }
+    #root p { margin: 0; }
+    #root .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    /* 카메라 (motion.md 5장): 월드 좌표 = 카메라 × 1 · 가운데 (960, 540) 일 때의 화면 좌표 */
+    #root .cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+    /* parts: video.md 5장 — iframe 크기 = 부품 원래 크기, 부품 전체에 × 2.8 한 번 */
+    #root .part { flex: none; position: relative; }
+    #root .part iframe { position: absolute; left: 0; top: 0; border: 0; background: transparent; transform: scale(2.8); transform-origin: 0 0; }
+    #root .p-brand   { width: 274.4px; height: 274.4px; } #root .p-brand   iframe { width: 98px;  height: 98px;  }
+    #root .p-badge   { width: 302.4px; height: 89.6px;  } #root .p-badge   iframe { width: 108px; height: 32px;  }
+    #root .p-skill   { width: 980px;   height: 246.4px; } #root .p-skill   iframe { width: 350px; height: 88px;  }
+    #root .p-btn     { width: 980px;   height: 123.2px; } #root .p-btn     iframe { width: 350px; height: 44px;  }
+    #root .p-mission { width: 980px;   height: 708.4px; } #root .p-mission iframe { width: 350px; height: 253px; }
+    #root .p-stat    { width: 980px;   height: 282.8px; } #root .p-stat    iframe { width: 350px; height: 101px; }
+    #root .p-asset   { width: 980px;   height: 207.2px; } #root .p-asset   iframe { width: 350px; height: 74px;  }
+    /* 가운데 점 (left, top) 에 놓는 상자: 장면 스크립트가 transform 을 translate(-50%, -50%) 부터 쓴다 */
+    #root .at { position: absolute; transform: translate(-50%, -50%); }
+    #root .p-logo   { width: 417.2px; height: 53.2px; } /* logo logotype × 2.8 (video.md 5장) */
+
+    #s5-bg { position: absolute; inset: 0; background: #f7f7f8; /* video-bg-soft */ }
+    /* video.md 4장 폰 프레임: phone-size 444×928 · phone-screen 416×900 · phone-bezel 14 · phone-radius 64 / 50 · phone-color · phone-screen-bg · 그림자 없음 */
+    #root .phone { flex: none; box-sizing: border-box; position: relative; width: 444px; height: 928px; padding: 14px; border-radius: 64px; background: #18191b; }
+    #root .phone > img { display: block; width: 416px; height: 900px; border-radius: 50px; background: #ffffff; }
+    /* 폰 5대 줄 · 폰 사이 video-gap 56 → 2444 × 928 · 세로 가운데 top 76 · left −262 (03-mission 가운데 = 화면 가운데) */
+    #root .phone-row { position: absolute; left: -262px; top: 76px; width: 2444px; height: 928px; display: flex; gap: 56px; }
+    #root .row { position: absolute; inset: 0; display: flex; flex-direction: row; align-items: center; justify-content: center; }
+    #root .gap { flex: none; width: 56px; /* video-gap */ }
+    #s5-line { flex: none; overflow: hidden; height: 95px; }
+    /* video-display (Text/display 28/34 × 2.8) · video-text */
+    #s5-title { font-weight: 700; font-size: 78px; line-height: 95px; color: #18191b; white-space: nowrap; transform: translateY(100%); }
+    #s5-phone { transform-origin: 50% 50%; }
+    #s5-phone > img { position: absolute; left: 14px; top: 14px; }
+  </style>
+  <div data-hf-id="hf-90m0" id="root" data-composition-id="s5" data-width="1920" data-height="1080" data-layout-allow-overflow="" data-layout-allow-overlap="">
+    <div data-hf-id="hf-zopz" id="s5-bg"></div>
+    <div data-hf-id="hf-thy4" class="row">
+      <div data-hf-id="hf-d5wg" id="s5-line"><p data-hf-id="hf-xfor" id="s5-title">일에 바로 적용하는 AI</p></div>
+      <div data-hf-id="hf-gypg" class="gap"></div>
+      <div data-hf-id="hf-xipd" id="s5-phone" class="phone">
+        <img data-hf-id="hf-ppa6" id="s5-scr2" src="assets/src/screens/02-skills.png" alt="">
+        <img data-hf-id="hf-v5h9" id="s5-scr3" src="assets/src/screens/03-mission.png" alt="" style="visibility: hidden;">
+      </div>
+    </div>
+  </div>
+  <script>
+  (() => {
+    // ── 공통 (장면 파일마다 같음 · launch-b 와 같은 방식) ─────────────────
+    const FPS = 30;
+    const D = { xs: 2, s: 3, m: 6, l: 12, xl: 24, x2l: 30 };   // motion.md 1장 Duration (프레임)
+    const H = { s: 12, m: 21, l: 36, end: 45 };                 // motion.md 4장 hold (프레임)
+    function bez(x1, y1, x2, y2) {                              // cubic-bezier → 함수 (곡선 값은 motion.md 1장 그대로)
+      const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+      const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+      const sx = (t) => ((ax * t + bx) * t + cx) * t, sy = (t) => ((ay * t + by) * t + cy) * t;
+      return (p) => {
+        if (p <= 0) return 0; if (p >= 1) return 1;
+        let lo = 0, hi = 1, t = p;
+        for (let i = 0; i < 50; i++) { const v = sx(t); if (Math.abs(v - p) < 1e-7) break; if (v < p) lo = t; else hi = t; t = (lo + hi) / 2; }
+        return sy(t);
+      };
+    }
+    const EASE_OUT = bez(0.16, 1, 0.3, 1);     // ease-out
+    const EASE_IN = bez(0.5, 0, 0.75, 0);      // ease-in
+    const EASE_INOUT = bez(0.65, 0, 0.35, 1);  // ease-inout
+    const EASE_LINEAR = (p) => Math.min(1, Math.max(0, p)); // ease-linear
+    const prog = (f, at, dur, ease) => ease(Math.min(1, Math.max(0, (f - at) / dur)));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    // 카메라: 월드 점 (cx, cy) 를 화면 가운데에, 배율 s
+    const camAt = (el, cx, cy, s) => { el.style.transform = `translate(960px, 540px) scale(${s}) translate(${-cx}px, ${-cy}px)`; };
+    function partReady(fr) {
+      return new Promise((res) => {
+        const loaded = () => { const d = fr.contentDocument; return d && d.readyState === "complete" && d.location.href !== "about:blank"; };
+        const go = () => { const d = fr.contentDocument; d.fonts.ready.then(() => Promise.all([...d.images].map((i) => i.decode().catch(() => {})))).then(res); };
+        if (loaded()) go(); else fr.addEventListener("load", go, { once: true });
+      });
+    }
+    function ready(root) {
+      root.querySelectorAll("iframe[data-src]").forEach((fr) => { if (!fr.getAttribute("src")) fr.src = fr.dataset.src; });
+      return document.fonts.ready.then(() => Promise.all([
+        ...[...root.querySelectorAll("iframe")].map(partReady),
+        ...[...root.querySelectorAll("img")].map((i) => i.decode().catch(() => {})),
+      ]));
+    }
+    // 장면 상태는 모두 장면 프레임 f 하나로 정한다 (어느 프레임으로 바로 가도 같은 그림).
+    // 부품 상자 transform 은 GSAP 가 직접 트윈하지 않는다 (iframe 다시 로드 방지) — paint 가 style 을 직접 쓴다.
+    function run(id, root, frames, paint) {
+      const tl = gsap.timeline({ paused: true });
+      const c = { f: 0 };
+      const go = () => paint(Math.round(c.f * 1e4) / 1e4);
+      tl.fromTo(c, { f: 0 }, { f: frames, duration: frames / FPS, ease: "none", onUpdate: go }, 0);
+      root.querySelectorAll("iframe").forEach((fr) => fr.addEventListener("load", () => { go(); fr.contentDocument.fonts.ready.then(go); }));
+      go();
+      window.__timelines[id] = tl;
+    }
+    const inner = (fr, sel) => fr.contentDocument && fr.contentDocument.querySelector(sel);
+    // ────────────────────────────────────────────────────────────────
+
+    const root = document.getElementById("s5-bg").closest('[data-composition-id="s5"]');
+    const $ = (s) => root.querySelector(s);
+    const DIST_L = 70, PERSP = 2400, CRX = 12, CRY = -18;          // motion.md 1장 dist-l · crane-angle
+    const T = { title: D.m, change: D.l + H.l };                    // 6 · 48
+    const paint = (f) => {
+      const p = 1 - prog(f, 0, D.l, EASE_OUT);                      // phone-rise-tilt (남은 양)
+      $("#s5-phone").style.transform = `translateY(${DIST_L * p}px) perspective(${PERSP}px) rotateX(${CRX * p}deg) rotateY(${CRY * p}deg)`;
+      $("#s5-title").style.transform = `translateY(${(1 - prog(f, T.title, D.m, EASE_OUT)) * 100}%)`;
+      const changed = f >= T.change;                                // screen-change + 바탕 컷
+      $("#s5-scr2").style.visibility = changed ? "hidden" : "visible";
+      $("#s5-scr3").style.visibility = changed ? "visible" : "hidden";
+      $("#s5-bg").style.background = changed ? "#ffffff" : "#f7f7f8"; // video-bg · video-bg-soft
+    };
+    ready(root).then(() => run("s5", root, 84, paint));
+  })();
+  </script>
+</template>

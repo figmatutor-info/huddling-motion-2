@@ -1,0 +1,137 @@
+<!--
+장면 8 · 15.80–18.9667 (474–569 · 95프레임) — scenes.md 8행 · 비트 10+11 승인 → 숫자
+  배경 video-bg-soft (asset-card 없음 → 바탕 바뀜 없음) · 폰 없음 · cam-hold (카드 줄이 움직임)
+  card-rail + rail-tilt: 줄 평면 rail-angle (perspective 2400 · rotateX 20° · 회전 중심 줄 가운데 = 화면 가운데 (960, 540)) 처음부터 눕힘
+    카드 2장 (× 2.8): mission-card 가운데 (960, 540) → stat-card 가운데 (1996, 540) (거리 1036 = 980 + video-gap 56) · 세로 가운데 = 줄 가운데 선
+    badge-approved (× 2.8) 는 줄에 세우지 않고 mission-card 아래 video-gap-s 32 · 왼쪽 맞춤 (left 470 · top 926.2), mission-card 와 같이 튕김
+  움직임:
+    mission-done: 진행 바 · 글자 emphasis (--progress 0.5 → 1 · dur-m · ease-out) 0–6 → badge-pulse (enter + 마스크 대신 scale-from 0 → 1 · dur-m · ease-out) 6–12
+    튕김 1번 (줄 왼쪽으로 1036 · dur-2xl · ease-out · 카드 사이 hold 없음) 12–42
+    count-up (튕김 도착 = part-in 자리 · 0 → data-final 29,700 · dur-2xl · ease-out · 정수) 42–72
+    hold-m 72–93 (card-rail 마지막 카드 · 대표 컷 = 72f · snap/08)
+    scene-out (전체 exit · 투명도 1 → 0 · dur-s · ease-in) 93– → 절반에서 transition (93 + 2f = 95)
+  다음: cut-in-motion (컷)
+-->
+<template>
+  <style>
+    /* design.md 3장 A · video.md 3장: 로컬 파일 (src/assets/fonts 를 그대로 복사한 assets/src/assets/fonts) */
+    @font-face { font-family: "Pretendard"; font-weight: 400; src: url("assets/src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 600; src: url("assets/src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 700; src: url("assets/src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Pretendard", sans-serif; word-break: keep-all; /* video.md 3장 */ }
+    #root p { margin: 0; }
+    #root .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    /* 카메라 (motion.md 5장): 월드 좌표 = 카메라 × 1 · 가운데 (960, 540) 일 때의 화면 좌표 */
+    #root .cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+    /* parts: video.md 5장 — iframe 크기 = 부품 원래 크기, 부품 전체에 × 2.8 한 번 */
+    #root .part { flex: none; position: relative; }
+    #root .part iframe { position: absolute; left: 0; top: 0; border: 0; background: transparent; transform: scale(2.8); transform-origin: 0 0; }
+    #root .p-brand   { width: 274.4px; height: 274.4px; } #root .p-brand   iframe { width: 98px;  height: 98px;  }
+    #root .p-badge   { width: 302.4px; height: 89.6px;  } #root .p-badge   iframe { width: 108px; height: 32px;  }
+    #root .p-skill   { width: 980px;   height: 246.4px; } #root .p-skill   iframe { width: 350px; height: 88px;  }
+    #root .p-btn     { width: 980px;   height: 123.2px; } #root .p-btn     iframe { width: 350px; height: 44px;  }
+    #root .p-mission { width: 980px;   height: 708.4px; } #root .p-mission iframe { width: 350px; height: 253px; }
+    #root .p-stat    { width: 980px;   height: 282.8px; } #root .p-stat    iframe { width: 350px; height: 101px; }
+    #root .p-asset   { width: 980px;   height: 207.2px; } #root .p-asset   iframe { width: 350px; height: 74px;  }
+    /* 가운데 점 (left, top) 에 놓는 상자: 장면 스크립트가 transform 을 translate(-50%, -50%) 부터 쓴다 */
+    #root .at { position: absolute; transform: translate(-50%, -50%); }
+    #root .p-logo   { width: 417.2px; height: 53.2px; } /* logo logotype × 2.8 (video.md 5장) */
+
+    #root { background: #f7f7f8; /* video-bg-soft */ }
+    #s8-plane { position: absolute; inset: 0; transform-origin: 960px 540px; transform: perspective(2400px) rotateX(20deg); }
+    #s8-rail { position: absolute; inset: 0; }
+    #s8-badge { position: absolute; transform-origin: 50% 50%; transform: scale(0); }
+  </style>
+  <div data-hf-id="hf-f111" id="root" data-composition-id="s8" data-width="1920" data-height="1080" data-layout-allow-overflow="" data-layout-allow-overlap="">
+    <div data-hf-id="hf-x7ht" id="s8-plane">
+      <div data-hf-id="hf-g9jl" id="s8-rail">
+        <div data-hf-id="hf-ou2l" id="s8-mission" class="part p-mission at" style="left: 960px; top: 540px;"><iframe data-hf-id="hf-f1z4" data-src="assets/src/parts/mission-card.html"></iframe></div>
+        <div data-hf-id="hf-hfwe" id="s8-badge" class="part p-badge" style="left: 470px; top: 926.2px;"><iframe data-hf-id="hf-qofe" data-src="assets/src/parts/badge-approved.html"></iframe></div>
+        <div data-hf-id="hf-p8qf" id="s8-stat" class="part p-stat at" style="left: 1996px; top: 540px;"><iframe data-hf-id="hf-kof8" data-src="assets/src/parts/stat-card.html"></iframe></div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (() => {
+    // ── 공통 (장면 파일마다 같음 · launch-b 와 같은 방식) ─────────────────
+    const FPS = 30;
+    const D = { xs: 2, s: 3, m: 6, l: 12, xl: 24, x2l: 30 };   // motion.md 1장 Duration (프레임)
+    const H = { s: 12, m: 21, l: 36, end: 45 };                 // motion.md 4장 hold (프레임)
+    function bez(x1, y1, x2, y2) {                              // cubic-bezier → 함수 (곡선 값은 motion.md 1장 그대로)
+      const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+      const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+      const sx = (t) => ((ax * t + bx) * t + cx) * t, sy = (t) => ((ay * t + by) * t + cy) * t;
+      return (p) => {
+        if (p <= 0) return 0; if (p >= 1) return 1;
+        let lo = 0, hi = 1, t = p;
+        for (let i = 0; i < 50; i++) { const v = sx(t); if (Math.abs(v - p) < 1e-7) break; if (v < p) lo = t; else hi = t; t = (lo + hi) / 2; }
+        return sy(t);
+      };
+    }
+    const EASE_OUT = bez(0.16, 1, 0.3, 1);     // ease-out
+    const EASE_IN = bez(0.5, 0, 0.75, 0);      // ease-in
+    const EASE_INOUT = bez(0.65, 0, 0.35, 1);  // ease-inout
+    const EASE_LINEAR = (p) => Math.min(1, Math.max(0, p)); // ease-linear
+    const prog = (f, at, dur, ease) => ease(Math.min(1, Math.max(0, (f - at) / dur)));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    // 카메라: 월드 점 (cx, cy) 를 화면 가운데에, 배율 s
+    const camAt = (el, cx, cy, s) => { el.style.transform = `translate(960px, 540px) scale(${s}) translate(${-cx}px, ${-cy}px)`; };
+    function partReady(fr) {
+      return new Promise((res) => {
+        const loaded = () => { const d = fr.contentDocument; return d && d.readyState === "complete" && d.location.href !== "about:blank"; };
+        const go = () => { const d = fr.contentDocument; d.fonts.ready.then(() => Promise.all([...d.images].map((i) => i.decode().catch(() => {})))).then(res); };
+        if (loaded()) go(); else fr.addEventListener("load", go, { once: true });
+      });
+    }
+    function ready(root) {
+      root.querySelectorAll("iframe[data-src]").forEach((fr) => { if (!fr.getAttribute("src")) fr.src = fr.dataset.src; });
+      return document.fonts.ready.then(() => Promise.all([
+        ...[...root.querySelectorAll("iframe")].map(partReady),
+        ...[...root.querySelectorAll("img")].map((i) => i.decode().catch(() => {})),
+      ]));
+    }
+    // 장면 상태는 모두 장면 프레임 f 하나로 정한다 (어느 프레임으로 바로 가도 같은 그림).
+    // 부품 상자 transform 은 GSAP 가 직접 트윈하지 않는다 (iframe 다시 로드 방지) — paint 가 style 을 직접 쓴다.
+    function run(id, root, frames, paint) {
+      const tl = gsap.timeline({ paused: true });
+      const c = { f: 0 };
+      const go = () => paint(Math.round(c.f * 1e4) / 1e4);
+      tl.fromTo(c, { f: 0 }, { f: frames, duration: frames / FPS, ease: "none", onUpdate: go }, 0);
+      root.querySelectorAll("iframe").forEach((fr) => fr.addEventListener("load", () => { go(); fr.contentDocument.fonts.ready.then(go); }));
+      go();
+      window.__timelines[id] = tl;
+    }
+    const inner = (fr, sel) => fr.contentDocument && fr.contentDocument.querySelector(sel);
+    // ────────────────────────────────────────────────────────────────
+
+    const root = document.getElementById("s8-plane").closest('[data-composition-id="s8"]');
+    const $ = (s) => root.querySelector(s);
+    const STEP = 980 + 56;                                               // 두 카드 가운데 사이 = 카드 폭 + video-gap
+    const T = { pulse: D.m, rail: 2 * D.m, count: 2 * D.m + D.x2l, out: 2 * D.m + 2 * D.x2l + H.m }; // 6 · 12 · 42 · 93
+    const paint = (f) => {
+      // mission-done: emphasis (진행 바 · 글자)
+      const fm = $("#s8-mission iframe");
+      const fill = inner(fm, "#mission-card-progress-fill"), txt = inner(fm, "#mission-card-progress-text");
+      if (fill && txt) {
+        const v = lerp(0.5, 1, prog(f, 0, D.m, EASE_OUT));
+        fill.style.setProperty("--progress", String(v));
+        const pct = Math.round(v * 100);
+        txt.textContent = `${pct}% · ${Math.floor(pct / 25)}/4 단계 완료`;
+      }
+      // badge-pulse
+      $("#s8-badge").style.transform = `scale(${prog(f, T.pulse, D.m, EASE_OUT)})`;
+      // card-rail 튕김
+      $("#s8-rail").style.transform = `translateX(${-STEP * prog(f, T.rail, D.x2l, EASE_OUT)}px)`;
+      // count-up (#stat-card-amount textContent 만)
+      const amt = inner($("#s8-stat iframe"), "#stat-card-amount");
+      if (amt) {
+        const fin = Number(String(amt.dataset.final).replace(/,/g, ""));
+        amt.textContent = Math.round(fin * prog(f, T.count, D.x2l, EASE_OUT)).toLocaleString("en-US");
+      }
+      // scene-out
+      $("#s8-plane").style.opacity = String(1 - prog(f, T.out, D.s, EASE_IN));
+    };
+    ready(root).then(() => run("s8", root, 95, paint));
+  })();
+  </script>
+</template>

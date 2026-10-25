@@ -66,6 +66,8 @@ beat-sheet.md에 해당 규칙이 없으면 [기본 스타일]을 따른다.
 | `spin` | rotateZ 360° (제자리 한 바퀴) · 회전 중심 부품 가운데 | 요청 (2026-10-25, launch-c 후보 승인 · 1password 아이콘 회전 측정 약 6f) |
 | `dolly-scale` | × 0.5 (× 1보다 멀리) | 요청 (2026-10-25, launch-c 후보 승인 · 1password 그물 줌아웃 측정 끝 배율 약 × 0.5) |
 | `ring-count` | 4 (둘레에 놓는 같은 요소 수) | 요청 (2026-10-25, launch-c 후보 승인 · langease 폰 터널 4대 · 흩어진 카드 4장) |
+| `plane-angle` | rotateX 55° · rotateZ -20° (흐름도 평면이 뒤로 눕고 비스듬히 돎) · perspective 2400px (`crane-angle`과 같음) · 회전 중심 평면 가운데 | 요청 (2026-10-25, launch-d 후보 승인 · skillry lnkiai 비트 6 측정 그대로) |
+| `rail-angle` | rotateX 20° (카드 줄 바닥만 뒤로 얕게 눕힘, rotateY · rotateZ 0) · perspective 2400px · 회전 중심 줄 가운데 | 요청 (2026-10-25, launch-d 후보 승인 · snapcn card-rail 아래 폭 약 1.2배) |
 
 ---
 
@@ -126,6 +128,9 @@ src/parts · src/screens에 있는 것만. Semantic 이름으로 적고, 다른 
 | `focus-lift` | 화면 · 목록 속 부품 하나 (skill-card · asset-card) | 대상 부품 위 `dist-m` · `dur-l` · `ease-out` + 같은 시간에 주변 요소 전부 `exit` (투명도 1 → 0, 길이는 `dur-l`로). 블러 없음 · 크기 변화 없음 | 요청 (2026-10-25, launch-c 후보 승인 · langease 비트 13, 측정 약 11f · 심도 흐림은 뺌) |
 | `card-flip-scatter` | 카드 한 장 (skill-card · asset-card) → 같은 카드 `ring-count`장 | 카드 `flip-turn` · `dur-m` · `ease-in` → 뒤집힌 끝 프레임에 같은 카드 `ring-count`장으로 나뉘어 화면 네 귀퉁이(반쯤 잘림)로 · 각 카드 `crane-angle`을 가운데 쪽으로 · `dur-l` · `ease-out`. 다음 글자 장면 둘레로 남고, 머무는 동안 `cam-drift` 쓸 수 있음 (비트 시트에 있을 때) | 요청 (2026-10-25, launch-c 후보 승인 · langease 비트 13–14, 측정 뒤집힘 약 7f · 흩어짐 약 10f) |
 | `icon-flight` | brand-icon (통째, 조각 아님) | 화면 오른쪽 밖 → 영상 글자 줄 끝 자리 · 위로 볼록한 곡선 (높이 `dist-l`) · `dur-l` · `ease-out`. 꼬리 없음. 글자가 붙는 동안 줄 끝을 따라 `video-gap` 띄워 붙어 감 (`stagger`와 같은 박자). 끝: 글자 `exit` → `match-cut`으로 logo 심볼 자리 | 요청 (2026-10-25, launch-c 후보 승인 · langease 비트 18–19, 측정 나감 약 4f · 들어옴 약 10f · 꼬리 · 별 조각은 뺌) |
+| `card-rail` | 서로 다른 카드 부품 가로 한 줄 (폰 없이, 흐름 순서: skill-card → mission-card → stat-card → asset-card) | `skill-carousel`처럼 한 장씩 왼쪽으로 튕김 · `dur-2xl` · `ease-out` · 카드 사이 hold 없음, 마지막 카드 뒤 `hold-m`. 거리 = 두 카드 가운데 사이 (카드 폭이 같으면 카드 폭 + `video-gap`). 세로: 모든 카드의 세로 가운데를 줄 가운데 선에 맞춤. 바탕: `video-bg-soft`, asset-card로 넘어가는 튕김 동안 `video-bg`로 · `dur-2xl` · `ease-linear` (video.md 5장 예외). badge-approved는 줄에 세우지 않고 mission-card가 가운데 멈췄을 때 `mission-done`으로 보여줌 (그 동안 다음 튕김 대기) | 요청 (2026-10-25, launch-d 후보 승인 · snapcn card-rail 비트 1–3, 측정 튕김 30f 간격) |
+| `plane-tilt` | 폰 프레임 5대 (화면 01 → 05, video.md 4장 `phone-size` 그대로) 가로 한 줄 흐름도 · 폰 사이 `video-gap` | 평면 전체가 각도 0 → `plane-angle` + 같은 시간에 카메라 × 1 → `dolly-scale` · `dur-l` · `ease-inout`, 이후 그 각도로 머묾. 폰 화면 글자는 평면과 같이 눕는다 (영상 글자는 두지 않음). 0장 "폰 한 장면" [기본 스타일] 대신이므로 비트 시트에 있을 때만 · `대신:` 기록 | 요청 (2026-10-25, launch-d 후보 승인 · skillry lnkiai 비트 6, 측정 약 11f · 폰 높이 63% → 25%) |
+| `rail-tilt` | `card-rail` · `skill-carousel`의 카드 줄 | 카드 줄 평면을 `rail-angle`로 눕힌 채 처음부터 놓음 (눕는 움직임 없음). 위 고정 영상 글자는 눕히지 않음. 튕김은 눕힌 평면 위에서 그대로 | 요청 (2026-10-25, launch-d 후보 승인 · snapcn card-rail 기운 평면) |
 
 - 장면 경계는 `match-cut`을 먼저, 이어지는 요소가 없으면 `cut-in-motion`. button-submit에서 나갈 때는 `shape-morph`를 쓸 수 있다. 주인공 요소는 같은 자리에 둬서 경계에서 눈이 움직이지 않게 한다. (레퍼런스 L 아이콘) [기본 스타일]
 - 강조 색 글자(둘째 줄 색 바꿈)는 움직임이 아니다. 색은 video.md에서만. [고정]

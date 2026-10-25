@@ -1,0 +1,46 @@
+<!doctype html>
+<!--
+  launch-d 영상 — 루트. scenes.md (안 a · 10장면) 를 HyperFrames 장면 10개로 건다. 1920×1080 · 30fps · 728프레임 = 24.2667초.
+  장면표 720f (24.00초) 보다 8f 김: logo 글자 13칸 · 장면6 글자 21자 stagger 를 motion.md 2장 "7번째부터 같이" 그대로 (dur-xs × 6 + dur-m = 18f) 둠
+    장면1 68 → 72f (+4) · 장면6 46 → 48f (+2) · 장면10 85 → 87f (+2, 마지막 정지 2f 는 hold-end 끝 정지로 대신). ../used-video.md 참고.
+  장면 경계 (scenes.md 마지막 열):
+    1→2 transition (컷) · 2→3 transition (컷) · 3→4 이어짐 (같은 폰 줄 · 같은 자리) · 4→5 transition (cam-push 끝 컷)
+    5→6 transition · 6→7 transition (button-press 떼는 끝) · 7→8 transition (dark-cut 바탕 끝) · 8→9 cut-in-motion (scene-out 절반)
+    9→10 screen-dissolve (장면10 은 6f 일찍 아래 트랙에 깔리고 장면9 가 투명도 1 → 0)
+  화면 · 부품: assets/src/ = 저장소 src/ 를 바이트 그대로 복사한 것 (parts 는 iframe, 상태는 ?state= · --progress · textContent 로만).
+  쓴 이름 목록: ../used-video.md
+-->
+<html lang="ko" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* design.md 3장 A · video.md 3장: 로컬 파일 */
+      @font-face { font-family: "Pretendard"; font-weight: 400; src: url("assets/src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+      @font-face { font-family: "Pretendard"; font-weight: 600; src: url("assets/src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+      @font-face { font-family: "Pretendard"; font-weight: 700; src: url("assets/src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #f7f7f8; /* video-bg-soft */ }
+      #root { position: relative; width: 100%; height: 100%; font-family: "Pretendard", sans-serif; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-x4ex" id="root" data-composition-id="main" data-start="0" data-duration="24.26667" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-bff6" id="s1" data-composition-id="s1" data-composition-src="compositions/s1.html" data-start="0" data-duration="2.4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 1;"></div>
+      <div data-hf-id="hf-81xg" id="s2" data-composition-id="s2" data-composition-src="compositions/s2.html" data-start="2.4" data-duration="1.8" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2;"></div>
+      <div data-hf-id="hf-0iet" id="s3" data-composition-id="s3" data-composition-src="compositions/s3.html" data-start="4.2" data-duration="3.2" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 3;"></div>
+      <div data-hf-id="hf-we8o" id="s4" data-composition-id="s4" data-composition-src="compositions/s4.html" data-start="7.4" data-duration="2.6" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 4;"></div>
+      <div data-hf-id="hf-quj3" id="s5" data-composition-id="s5" data-composition-src="compositions/s5.html" data-start="10" data-duration="2.8" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 5;"></div>
+      <div data-hf-id="hf-a4zd" id="s6" data-composition-id="s6" data-composition-src="compositions/s6.html" data-start="12.8" data-duration="1.6" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 6;"></div>
+      <div data-hf-id="hf-2z94" id="s7" data-composition-id="s7" data-composition-src="compositions/s7.html" data-start="14.4" data-duration="1.4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 7;"></div>
+      <div data-hf-id="hf-09we" id="s8" data-composition-id="s8" data-composition-src="compositions/s8.html" data-start="15.8" data-duration="3.16667" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 8;"></div>
+      <div data-hf-id="hf-33vl" id="s9" data-composition-id="s9" data-composition-src="compositions/s9.html" data-start="18.96667" data-duration="2.4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 10;"></div>
+      <div data-hf-id="hf-w5eo" id="s10" data-composition-id="s10" data-composition-src="compositions/s10.html" data-start="21.16667" data-duration="3.1" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 9;"></div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
