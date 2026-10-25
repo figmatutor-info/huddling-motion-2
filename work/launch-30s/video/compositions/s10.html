@@ -1,0 +1,156 @@
+<!--
+  장면 10 · 18.4–21.7 (99프레임) — scenes.md 10행 · 마지막 장면
+  배경 video-bg-end (video-bg-dark + video-glow + video-grain, video.md 2장) · src/parts/logo.html (data-state="logotype-white", logo-hero × 6)
+  logo ↔ 슬로건 video-gap-end · 묶음 가운데 · 슬로건 "오늘도 하나씩, 내 실력으로" video-title · video-text-on-dark · 가운데
+  움직임: end-reveal (logo-reveal 엔드 카드: logo 글자마다 enter · stagger → dur-l 뒤 슬로건 enter + 마스크 대신 투명도 0 → 1 · dur-l) → hold-s
+    → punch-cut (transition 컷 → 같은 logo cut-scale × 1.7, logotype 안 심볼을 화면 가운데, 클로즈에는 logo만 · 컷 뒤 움직임 없음) → hold-end → 마지막 hold 정지
+  프레임: 글자 enter 0–18 (13글자, 7번째부터 같이) · dur-l 18–30 · 슬로건 30–42 · hold-s 42–54 · 컷 54 · hold-end 54–99
+  logo 글자 나누기: logo.html 을 글자 수(13)만큼 같은 iframe 으로 불러 각각 한 글자 칸만 보이게 자른다 (부품 원본은 그대로).
+    칸 경계 = logo-logotype-white.svg 의 path 경계 상자(가로)에서 이웃 글자 사이 가운데 (svg 좌표 0–149, 아래 GLYPH_EDGES)
+-->
+<template>
+  <style>
+    /* design.md 3장 A · video.md 3장: 로컬 파일 */
+    @font-face { font-family: "Pretendard"; font-weight: 400; src: url("assets/src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 600; src: url("assets/src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+    @font-face { font-family: "Pretendard"; font-weight: 700; src: url("assets/src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Pretendard", sans-serif; word-break: keep-all; /* video.md 3장 */ }
+    #root p { margin: 0; }
+    /* parts: video.md 5장 — 부품 전체에 × 2.8 한 번 (iframe 원본 크기 = Figma 크기) */
+    #root .part { flex: none; position: relative; }
+    #root .part iframe { position: absolute; left: 0; top: 0; border: 0; background: transparent; transform: scale(2.8); transform-origin: 0 0; }
+    #root .p-mission { width: 980px; height: 708.4px; } #root .p-mission iframe { width: 350px; height: 253px; }
+    #root .p-stat    { width: 980px; height: 226.8px; } #root .p-stat    iframe { width: 350px; height: 81px; }
+    #root .p-asset   { width: 980px; height: 207.2px; } #root .p-asset   iframe { width: 350px; height: 74px; }
+    #root .p-skill   { width: 980px; height: 134.4px; } #root .p-skill   iframe { width: 350px; height: 48px; }
+    #root .p-button  { width: 980px; height: 123.2px; } #root .p-button  iframe { width: 350px; height: 44px; }
+    /* 묶음 전체 화면 가운데 (video.md 3장) */
+    #root .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    #root .center.one-line { text-align: center; }
+    /* enter 마스크 (motion.md 2장 enter · 1장 mask-rise): 줄 밖은 잘림 */
+    #root .mask { overflow: hidden; }
+    #root .mask > * { display: block; }
+    #root { background: #18191b; /* video-bg-dark */ }
+    /* video-glow: #3759de 원형 · 화면 가운데 · 지름 1200 · 불투명도 0.45 → 0 일직선 · 블러 160px */
+    #s10-glow { position: absolute; left: 50%; top: 50%; width: 1200px; height: 1200px; margin: -600px 0 0 -600px; border-radius: 50%;
+               background: radial-gradient(circle closest-side, rgba(55, 89, 222, 0.45), rgba(55, 89, 222, 0)); filter: blur(160px); }
+    /* video-grain: 겹 전체 불투명도 0.06 */
+    #s10-grain { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; opacity: 0.06; }
+    /* logo-hero: video.md 5장 배율 예외 × 6 = 894×114 */
+    #s10-logo { position: relative; flex: none; width: 894px; height: 114px; }
+    #s10-logo .glyph { position: absolute; inset: 0; overflow: hidden; /* 마스크: 줄 밖은 잘림 */ }
+    #s10-logo .glyph-in { position: absolute; inset: 0; }
+    #s10-logo iframe { position: absolute; left: 0; top: 0; width: 149px; height: 19px; border: 0; background: transparent; transform: scale(6); transform-origin: 0 0; }
+    #s10-gap { height: 48px; flex: none; /* video-gap-end */ }
+    /* video-title 67/90 · 600 · video-text-on-dark */
+    /* punch-cut 클로즈 (motion.md 3장 · 1장 cut-scale × 1.7): 같은 logo-hero(× 6)에 × 1.7.
+       심볼 = logotype svg 앞 5개 path, 상자 x 0–14.4871 · y 2.0016–16.9796 → 가운데 (7.2436, 9.4906) × 6 = (43.4614, 56.9436)
+       → logo 상자 left 960 − 43.4614 · top 540 − 56.9436, 그 점 중심 scale(1.7) → 심볼 가운데 = (960, 540) (스냅보드 10b와 같은 값) */
+    #s10-close { position: absolute; inset: 0; opacity: 0; }
+    #s10-close-logo { position: absolute; left: 916.5386px; top: 483.0564px; width: 894px; height: 114px;
+                      transform: scale(1.7); transform-origin: 43.4614px 56.9436px; }
+    #s10-close-logo iframe { position: absolute; left: 0; top: 0; width: 149px; height: 19px; border: 0; background: transparent; transform: scale(6); transform-origin: 0 0; }
+    #s10-slogan { font-weight: 600; font-size: 67px; line-height: 90px; color: #ffffff; }
+    /* 위치 움직임은 CSS 변수 --ty 로 (GSAP 가 transform 을 직접 읽으면 숨은 장면의 부품 상자를 잠깐 옮겨 iframe 이 다시 로드됨 → check request_failed) */
+    #s10-logo .glyph-in { transform: translateY(var(--ty, 0%)); }
+  </style>
+  <div data-hf-id="hf-8k65" id="root" data-composition-id="s10" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-tm9q" id="s10-glow" data-layout-ignore></div>
+    <canvas data-hf-id="hf-nzvz" id="s10-grain" width="1920" height="1080" data-layout-ignore></canvas>
+    <div data-hf-id="hf-gjxn" id="s10-out" class="center one-line">
+      <div data-hf-id="hf-c87h" id="s10-logo"></div>
+      <div data-hf-id="hf-4kis" id="s10-gap"></div>
+      <p data-hf-id="hf-xxgp" id="s10-slogan">오늘도 하나씩, 내 실력으로</p>
+    </div>
+    <div data-hf-id="hf-74xb" id="s10-close" data-layout-allow-overflow>
+      <div data-hf-id="hf-hosc" id="s10-close-logo"><iframe data-hf-id="hf-ja3a" data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div>
+    </div>
+  </div>
+  <script>
+  (() => {
+    // ── 공통 (장면 파일마다 같음) ─────────────────────────────────────
+    // motion.md 1장: 프레임(30fps) · Duration · Easing 곡선 · 4장 hold
+    const F = (n) => n / 30;
+    const DUR = { xs: F(2), s: F(3), m: F(6), l: F(12), xl: F(24), x2l: F(30) };
+    const HOLD = { s: F(12), m: F(21), l: F(36), end: F(45) };
+    function bez(x1, y1, x2, y2) { // cubic-bezier 값을 GSAP ease 함수로 (곡선 값은 motion.md 1장 그대로)
+      const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+      const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+      const sx = (t) => ((ax * t + bx) * t + cx) * t, sy = (t) => ((ay * t + by) * t + cy) * t;
+      return (p) => {
+        if (p <= 0) return 0; if (p >= 1) return 1;
+        let lo = 0, hi = 1, t = p;
+        for (let i = 0; i < 50; i++) { const v = sx(t); if (Math.abs(v - p) < 1e-7) break; if (v < p) lo = t; else hi = t; t = (lo + hi) / 2; }
+        return sy(t);
+      };
+    }
+    const EASE_OUT = bez(0.16, 1, 0.3, 1);      // ease-out
+    const EASE_IN = bez(0.5, 0, 0.75, 0);       // ease-in
+    const EASE_INOUT = bez(0.65, 0, 0.35, 1);   // ease-inout
+    const EASE_LINEAR = "none";                 // ease-linear
+    // 부품(iframe) 로드 + 부품 안 폰트 · 이미지 준비 (design.md 3장: 첫 프레임 전에 fonts.ready)
+    function partReady(f) {
+      return new Promise((res) => {
+        const loaded = () => { const d = f.contentDocument; return d && d.readyState === "complete" && d.location.href !== "about:blank"; };
+        const go = () => { const d = f.contentDocument; d.fonts.ready.then(() => Promise.all([...d.images].map((i) => i.decode().catch(() => {})))).then(res); };
+        if (loaded()) go(); else f.addEventListener("load", go, { once: true });
+      });
+    }
+    function ready(root) {
+      // 부품 iframe 은 data-src 로 적고 장면 스크립트가 붙을 때 한 번만 연다 (장면 삽입 중 이중 로드 · 중단 방지)
+      root.querySelectorAll("iframe[data-src]").forEach((f) => { if (!f.getAttribute("src")) f.src = f.dataset.src; });
+      return document.fonts.ready.then(() => Promise.all([
+        ...[...root.querySelectorAll("iframe")].map(partReady),
+        ...[...root.querySelectorAll("img")].map((i) => i.decode().catch(() => {})),
+      ]));
+    }
+    function offsetIn(el, root) { let x = 0, y = 0; while (el && el !== root) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x, y }; }
+    // cut-in-motion (motion.md 3장): scene-out(exit, dur-s)이 절반 진행된 프레임 = 장면 끝
+    const exitAt = (sceneDur) => sceneDur - DUR.s / 2;
+    function sceneOut(tl, target, sceneDur) { tl.fromTo(target, { opacity: 1 }, { opacity: 0, duration: DUR.s, ease: EASE_IN, immediateRender: false }, exitAt(sceneDur)); }
+    // ───────────────────────────────────────────────────────────────
+    const root = document.getElementById("s10-out").closest('[data-composition-id="s10"]');
+    // 글자 칸 경계 (svg 좌표, 폭 149): 심볼 | H | u | d | d | l | i | n | g | C | l | u | b
+    const GLYPH_EDGES = [0, 17.605, 34.345, 46.395, 58.185, 70.185, 75.385, 80.605, 92.685, 105.765, 120.84, 125.705, 137.535, 149];
+    const logo = root.querySelector("#s10-logo");
+    for (let i = 0; i < GLYPH_EDGES.length - 1; i++) {
+      const g = document.createElement("div");
+      g.className = "glyph";
+      g.style.clipPath = `inset(0 ${(149 - GLYPH_EDGES[i + 1]) * 6}px 0 ${GLYPH_EDGES[i] * 6}px)`;
+      g.innerHTML = `<div class="glyph-in" id="s10-g${i}"><iframe data-src="assets/src/parts/logo.html?state=logotype-white"></iframe></div>`;
+      logo.appendChild(g);
+    }
+    // video-grain: #ffffff 노이즈 · 1px · 알파 0–255 고르게 · seed 1 · 고정 · mulberry32
+    (function grain() {
+      let s = 1;
+      const rand = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+      const c = root.querySelector("#s10-grain"), ctx = c.getContext("2d");
+      const img = ctx.createImageData(c.width, c.height), d = img.data;
+      for (let i = 0; i < d.length; i += 4) { d[i] = 255; d[i + 1] = 255; d[i + 2] = 255; d[i + 3] = Math.floor(rand() * 256); }
+      ctx.putImageData(img, 0, 0);
+    })();
+
+    ready(root).then(() => {
+      const tl = gsap.timeline({ paused: true });
+      // logo-reveal (엔드 카드): logo 글자마다 enter (dur-m · ease-out · mask-rise 100% → 0), 글자 사이 stagger dur-xs, 7번째부터 같이
+      const n = GLYPH_EDGES.length - 1;
+      let end = 0;
+      for (let i = 0; i < n; i++) {
+        const at = Math.min(i, 6) * DUR.xs;
+        tl.fromTo(`#s10-g${i}`, { "--ty": "100%" }, { "--ty": "0%", duration: DUR.m, ease: EASE_OUT }, at);
+        end = Math.max(end, at + DUR.m);
+      }
+      // end-reveal: logo-reveal → dur-l 뒤 슬로건 enter + 마스크 대신 투명도 0 → 1 · dur-l
+      tl.fromTo("#s10-slogan", { opacity: 0 }, { opacity: 1, duration: DUR.l, ease: EASE_OUT }, end + DUR.l);
+      // hold-s → punch-cut: transition (0ms 컷) — 와이드(logo + 슬로건)를 빼고 같은 logo 클로즈(cut-scale)를 넣음. 컷 뒤 움직임 없음
+      const CUT = end + DUR.l + DUR.l + HOLD.s; // 54f = 1.8초
+      tl.set("#s10-out", { opacity: 1 }, 0);
+      tl.set("#s10-close", { opacity: 0 }, 0);
+      tl.set("#s10-out", { opacity: 0 }, CUT);
+      tl.set("#s10-close", { opacity: 1 }, CUT);
+      // hold-end (45f) → 마지막 hold 정지 (scene-out 없음) · CUT + hold-end = 99f = 3.3초 = 장면 끝
+      window.__timelines["s10"] = tl;
+    });
+  })();
+  </script>
+</template>

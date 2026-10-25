@@ -69,9 +69,9 @@
 | `video-text-on-dark` | `#ffffff` | `color-bg` | `video-bg-dark` · `video-bg-end` 위 글자 |
 
 - 한국어 줄바꿈은 단어 단위 (`word-break: keep-all`).
-- 덩어리(글자 · 부품) 안 글자는 왼쪽 정렬. 예외: 화면 가운데 한 줄만 있는 장면(훅 · `dark-cut` · 엔드 카드)은 가운데. (요청 2026-10-24)
+- 덩어리(글자 · 부품) 안 글자는 왼쪽 정렬. 예외: 화면 가운데 한 줄만 있는 장면(훅 · `dark-cut` · 엔드 카드)과 `slot-roll` 두 줄(윗줄 · 아랫줄 모두)은 가운데. (요청 2026-10-24)
 
-간격 (영상 화면 위 덩어리 사이 — design.md 4장의 부품 안 치수와 따로)
+간격 (영상 화면 위 덩어리 사이 — design.md 4장 Scale의 `space-*` · `radius-*`는 부품 안에서만 쓰고, 영상 화면 간격에는 아래 토큰만 쓴다)
 
 | 토큰 | 값 | 쓰는 곳 |
 |---|---|---|
@@ -99,9 +99,9 @@
 | `phone-screen-bg` | `#ffffff` | design.md `color-bg` |
 
 - 노치 · 다이내믹 아일랜드 없음. 화면 이미지에 상태 바(9:41)가 이미 있다.
-- 그림자 없음 (design.md에 그림자 색이 없음). 밝은 배경 위에서 `phone-color` 베젤만으로 구분된다.
+- 그림자 없음 (피그마 카드 컴포넌트에 Effect 없음 — stat-card · skill-card · mission-card · asset-card 모두 `Shadow/*` 미적용, 2026-10-25 Figma MCP로 확인). 밝은 배경 위에서 `phone-color` 베젤만으로 구분된다.
 - 화면 이미지는 자르거나 고치지 않는다. 배율만 바꾼다.
-- 예외 (요청 2026-10-24): 화면 이미지 속 요소를 parts로 움직일 때(motion.md 3장 `button-press`), 그 자리에 parts를 화면 이미지와 같은 배율(`phone-screen` 배율 1.066)로 겹치고, 바로 아래에 같은 모서리의 덮개판을 깐다 (크기는 사방 1px 크게 — 확대 보간으로 번지는 원래 가장자리를 가리기 위해, 화면 이미지 @1x 기준). 덮개판 색은 그 요소가 놓인 카드 바탕 (`phone-screen-bg` = `color-bg`). 화면 이미지 파일은 그대로 둔다.
+- 예외 (요청 2026-10-24): 화면 이미지 속 요소를 parts로 움직일 때(motion.md 3장 `button-press`), 그 자리에 parts를 화면 이미지와 같은 배율(`phone-screen` 배율 1.066)로 겹치고, 바로 아래에 같은 모서리의 덮개판을 깐다 (크기는 사방 1px 크게 — 확대 보간으로 번지는 원래 가장자리를 가리기 위해, 화면 이미지 @1x 기준). 덮개판 색은 그 요소가 놓인 카드 바탕 (`phone-screen-bg` = `color-bg`). 화면 이미지 파일은 그대로 둔다. 03-mission 제출하기 버튼 자리: 화면 이미지 @1x 기준 x 20 · y 753 · 350×44 (2026-10-25 새 PNG에서 잼, 전 PNG는 y 705).
 
 ---
 
@@ -112,9 +112,9 @@ src/parts의 HTML 부품을 `video-scale`(× 2.8)로 키워 쓴다. 그러면 �
 | 부품 | Figma 크기 | 영상 크기 (× 2.8) |
 |---|---|---|
 | mission-card | 350×253 | 980×708 |
-| stat-card | 350×81 | 980×227 |
+| stat-card | 350×101 | 980×283 |
 | asset-card | 350×74 | 980×207 |
-| skill-card-1 · 2 · 3 | 350×48 | 980×134 |
+| skill-card-1 · 2 · 3 | 350×88 | 980×246 |
 | button-submit | 350×44 | 980×123 |
 | badge-approved | 108×32 | 302×90 |
 | brand-icon | 98×98 | 274×274 |
@@ -123,7 +123,8 @@ src/parts의 HTML 부품을 `video-scale`(× 2.8)로 키워 쓴다. 그러면 �
 
 - 부품 원본은 고치지 않는다. 상태는 각 부품의 `data-state` · CSS 변수로만 바꾼다 (부품 주석대로).
 - 배율은 부품 전체에 한 번만 건다. 글자만 따로 키우거나 줄이지 않는다.
-- 흰 바탕 부품(mission-card · stat-card · skill-card)을 `video-bg` 위에 놓아 경계가 약하면 `video-bg-soft`를 쓴다.
+- stat-card · skill-card는 흰 바탕에 모서리 12(`radius-card`)와 안쪽 여백 20(`space-page`)이 있는 카드다. `video-bg`(흰색) 위에서는 모서리와 여백이 안 보여 카드 모양이 사라지므로 `video-bg-soft` 위에 놓는다. mission-card는 테두리 1px이 있어 `video-bg` 위에 놓아도 된다.
+- stat-card와 asset-card가 한 장면에 나오면 부품으로 따로 놓지 않고 05-assets 화면(폰 프레임) 안에서 보여준다 (둘이 원하는 바탕이 달라서).
 - asset-card는 바탕이 `color-surface`(#f7f7f8)라 `video-bg-soft` 위에서는 사라진다. `video-bg` 위에만 놓는다.
 - logo 색: `video-bg` · `video-bg-soft` · `video-bg-character` 위에는 `*-black`, `video-bg-brand` · `video-bg-dark` · `video-bg-end` 위에는 `*-white`.
 

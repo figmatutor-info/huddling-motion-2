@@ -1,7 +1,10 @@
 <!--
-  장면 5 · 8.7–10.9 (66프레임) — scenes.md 5행
-  배경 video-bg-dark → video-bg-soft · 제목 "미션을 완성했어요!" video-display · video-text-on-dark → video-text · 화면 가운데 (한 줄 장면 → 가운데 정렬)
-  움직임: dark-cut (transition으로 들어와 제목 enter → hold-s → 바탕만 dur-xl · ease-linear, 글자 색 같이) → hold-m → scene-out · 경계 cut-in-motion
+  장면 5 · 10.3–11.7 (42프레임) — scenes.md 5행
+  배경 video-bg-soft · src/parts/button-submit.html (data-state="submit") 하나 · 화면 가운데
+  움직임: cam-hold · button-submit part-in → hold-m → shape-morph 앞부분 (글자 exit → 원 → 점, scene-out 없음)
+  경계: shape-morph — 점 자리(화면 가운데 960 · 540)에서 transition, 장면6 badge-approved 로
+  프레임: part-in 0–6 · hold-m 6–27 · 글자 exit 27–30 (dur-s) · 폭 → 높이(원) 30–36 (dur-m · ease-in) · 원 → scale-from 36–42 (dur-m · ease-in) · 42 = 장면6 첫 프레임
+  shape-morph 동안 부품 안 #button-submit 의 width · border-radius · .label opacity 를 장면 스크립트가 인라인으로 움직인다 (부품 파일은 그대로)
 -->
 <template>
   <style>
@@ -25,14 +28,11 @@
     /* enter 마스크 (motion.md 2장 enter · 1장 mask-rise): 줄 밖은 잘림 */
     #root .mask { overflow: hidden; }
     #root .mask > * { display: block; }
-    #s5-bg { position: absolute; inset: 0; }
-    /* video-display 78/95 · 700 */
-    #s5-title { font-weight: 700; font-size: 78px; line-height: 95px; }
+    #root { background: #f7f7f8; /* video-bg-soft */ }
   </style>
-  <div id="root" data-composition-id="s5" data-width="1920" data-height="1080">
-    <div id="s5-bg"></div>
-    <div id="s5-out" class="center one-line">
-      <div class="mask"><p id="s5-title">미션을 완성했어요!</p></div>
+  <div data-hf-id="hf-4473" id="root" data-composition-id="s5" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-pm82" id="s5-out" class="center">
+      <div data-hf-id="hf-5xl3" id="s5-button" class="part p-button"><iframe data-hf-id="hf-few3" data-src="assets/src/parts/button-submit.html?state=submit"></iframe></div>
     </div>
   </div>
   <script>
@@ -78,18 +78,45 @@
     const exitAt = (sceneDur) => sceneDur - DUR.s / 2;
     function sceneOut(tl, target, sceneDur) { tl.fromTo(target, { opacity: 1 }, { opacity: 0, duration: DUR.s, ease: EASE_IN, immediateRender: false }, exitAt(sceneDur)); }
     // ───────────────────────────────────────────────────────────────
-    const SCENE = 2.2;
+    const SCENE = 1.4;
     const root = document.getElementById("s5-out").closest('[data-composition-id="s5"]');
-    const T_BG = DUR.m + HOLD.s;              // 제목 enter → hold-s 뒤 바탕 바뀜
     ready(root).then(() => {
       const tl = gsap.timeline({ paused: true });
-      // 바탕 video-bg-dark(#18191b) → video-bg-soft(#f7f7f8) · 글자 video-text-on-dark(#ffffff) → video-text(#18191b) · dur-xl · ease-linear
-      tl.fromTo("#s5-bg", { backgroundColor: "#18191b" }, { backgroundColor: "#f7f7f8", duration: DUR.xl, ease: EASE_LINEAR }, T_BG);
-      tl.fromTo("#s5-title", { color: "#ffffff" }, { color: "#18191b", duration: DUR.xl, ease: EASE_LINEAR }, T_BG);
-      // 제목 enter (dur-m · ease-out · mask-rise 100% → 0)
-      tl.fromTo("#s5-title", { yPercent: 100 }, { yPercent: 0, duration: DUR.m, ease: EASE_OUT }, 0);
-      // hold-m 뒤 scene-out
-      sceneOut(tl, "#s5-out", SCENE);
+      // 모든 상태를 장면 시간 t 하나로 정한다 (어느 프레임으로 바로 가도 같은 그림).
+      // GSAP 로 부품 상자의 transform 을 직접 트윈하면 GSAP 가 transform 을 읽으려고 상자를 잠깐 옮겨 iframe 이 다시 로드되고
+      // 부품 안 인라인 상태가 사라진다 → transform 도 여기서 직접 쓰고, iframe 이 다시 로드되면 다시 그린다.
+      const frame = root.querySelector("#s5-button iframe");
+      const boxEl = root.querySelector("#s5-button");
+      const outEl = root.querySelector("#s5-out");
+      const btnEl = () => frame.contentDocument && frame.contentDocument.getElementById("button-submit");
+      const prog = (t, at, dur, ease) => ease(Math.min(1, Math.max(0, (t - at) / dur)));
+      const T1 = DUR.m + HOLD.m;   // part-in 뒤 hold-m → shape-morph 시작 (27f)
+      const T2 = T1 + DUR.s;       // 글자 exit 끝 → 원으로 (30f)
+      const T3 = T2 + DUR.m;       // 원 → 점 (36f), T3 + dur-m = 42f = 장면 끝
+      const clock = { t: 0 };
+      const paint = () => {
+        const t = clock.t;
+        // part-in = enter + 마스크 대신 위 dist-m(24px) · 투명도 0 → 1 (dur-m · ease-out)
+        const pi = prog(t, 0, DUR.m, EASE_OUT);
+        // 2) 가로 폭이 높이(44)와 같아질 때까지 줄어 원 · dur-m · ease-in (가운데 기준 → 상자를 (350 − w) / 2 × 2.8 오른쪽으로)
+        const pw = prog(t, T2, DUR.m, EASE_IN);
+        // 3) 원이 scale-from(0)까지 줄어듦 · dur-m · ease-in, 중심 = 원 가운데 = 화면 가운데
+        const ps = prog(t, T3, DUR.m, EASE_IN);
+        boxEl.style.opacity = String(pi);
+        boxEl.style.transform = `translate(${(350 - 44) / 2 * 2.8 * pw}px, ${-24 * (1 - pi)}px)`;
+        outEl.style.transformOrigin = "960px 540px";
+        outEl.style.transform = `scale(${1 - ps})`;
+        const b = btnEl(); if (!b) return;
+        // 1) 버튼 글자 exit (dur-s · ease-in · 투명도 1 → 0)
+        b.querySelector(".label").style.opacity = String(1 - prog(t, T1, DUR.s, EASE_IN));
+        b.style.height = "44px"; // 원래 높이 (padding 12 × 2 + Text/label 행간 20) 고정 — 좁아질 때 글자 줄바꿈으로 늘어나지 않게
+        b.style.width = (350 + (44 - 350) * pw) + "px";
+        b.style.borderRadius = (8 + (22 - 8) * pw) + "px";
+      };
+      frame.addEventListener("load", paint);
+      tl.fromTo(clock, { t: 0 }, { t: SCENE, duration: SCENE, ease: "none", onUpdate: paint }, 0);
+      // 장면 끝 = 점 → 장면6 첫 프레임에 transition (scene-out 없음)
+      paint();
       window.__timelines["s5"] = tl;
     });
   })();

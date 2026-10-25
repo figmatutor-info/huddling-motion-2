@@ -1,4 +1,62 @@
-# used — snapboard · launch-30s (새 판 · 8장면 · 17.6초)
+# used — snapboard · launch-30s (새 판 · 10장면 · 21.7초)
+
+결과: `work/launch-30s/snapboard.html` (컷 1920×1080 · 장면 순서대로) · `work/launch-30s/snap/` 17장:
+`01` · `02a` · `02b` · `02c` · `03` · `03b` · `03c` (장면1–3, 손대지 않음) · `04` · `04b` · `05` · `05b` · `06` · `07` · `08` · `09` · `10` · `10b` (이번 회차 새로 캡처).
+캡처: playwright-core + Chromium 1248 (headless), `--allow-file-access-from-files`, `document.fonts.ready` (본문 + iframe 전부) 뒤 장면별 요소 캡처.
+
+## 이번 회차 (2026-10-24, scenes.md 10장면 승인본 반영)
+
+### 파일 정리 (지운 것 — 지우기 전에 확인)
+
+옛 번호 PNG 5개를 지우고 새 번호로 다시 캡처했다. 지운 파일 (md5 · 그때 담긴 장면):
+
+| 지운 파일 | md5 | 옛 내용 | 새 자리 |
+|---|---|---|---|
+| `snap/04.png` | 230f9d4f8cb0c877de67730b482a7302 | 옛 장면4 button-submit submit `part-in` → `hold-m` | 새 `05.png` (같은 그림, 다시 캡처) |
+| `snap/05.png` | 1e6b04155e4216b2e58736f921f4a8e8 | 옛 장면5 `dark-cut` 끝 | 새 `07.png` |
+| `snap/06.png` | b295886823b7c50cb8b55261cd935148 | 옛 장면6 stat-card `count-up` 끝 | 새 `08.png` |
+| `snap/07.png` | d7bcea8e3bd30f5c4b45f00e66a8d640 | 옛 장면7 `asset-list` | 새 `09.png` |
+| `snap/08.png` | 76ccd3ca7a89011bcbaf67d955a2299b | 옛 장면8 `end-reveal` 끝 | 새 `10.png` (와이드) |
+
+- 지우기 전 사본 (PNG 12장 + 옛 snapboard.html · used-snapboard.md): `/private/tmp/claude-501/-Users-bibi-huddling-motion-2/4a91afb7-f4f3-48f8-9dd7-2dab84bad245/scratchpad/prev/`
+- 번호만 바뀐 4장(새 07 · 08 · 09 · 10)을 옛 파일과 픽셀 비교: 07 · 08은 글자 안티앨리어스 ±2만 다름, 09는 부품 가장자리 ±21 (2만여 px, 카드 안 글자 · 아이콘 렌더 차), 10은 logo 가장자리 2601px만 >15 (나머지 glow ±1). 그림 차이 없음 — 렌더 잡음.
+- 장면1–3 PNG(01 · 02a · 02b · 02c · 03 · 03b · 03c)는 파일 그대로 둠 (md5 같음). HTML 해당 부분도 그대로. 다시 캡처해 보니 02a · 02b · 02c는 픽셀 같고, 01 · 03은 글자 안티앨리어스 ±2 · ±11 차뿐이라 바꾸지 않음.
+- snapboard.html 안 id도 새 번호로: 옛 `#s04`–`#s08` → `#s05` · `#s07` · `#s08` · `#s09` · `#s10`. 새 `#s04` · `#s04b` · `#s05b` · `#s06` · `#s10b`.
+
+### 장면별 (새 · 바뀐 · 번호 바뀐 것)
+
+| # | 배경 (video.md 2장) | 글자 스타일 · 색 (video.md 3장) | 간격 · 배치 (video.md 3 · 5장) | 머묾 상태 · 움직임 (motion.md) | 불러온 src |
+|---|---|---|---|---|---|
+| 4 · 04 | `video-bg-soft` | 윗줄 "일에 바로 적용하는 AI" `video-display` · `video-text` / 아랫줄 "리서치" `video-display` · `video-text-accent` · 두 줄 모두 가운데 (3장 정렬 줄 `slot-roll` 예외) | 줄 사이 `video-gap-line` (0, 행간만) · 묶음 화면 가운데 → 윗줄 y 445–540 (글자 x 625–1295) · 아랫줄 y 540–635 (x 859–1061) | `slot-roll` 첫 단어 상태 = `headline-in`(줄마다 `enter`, 사이 `stagger`) 끝 → `hold-m` · `cam-hold` (3 · 4 · 5장) | 폰트만 `src/assets/fonts/Pretendard-Bold.otf` |
+| 4 · 04b | 같음 | 아랫줄 "업무 자동화" (같은 스타일 · 색 · 가운데) | 윗줄 그대로 · 아랫줄 x 782–1138 · y 540–635 | `slot-roll` 마지막 단어 뒤 `hold-m` (장면4 머묾) | 같음 |
+| 5 · 05 | `video-bg-soft` | 부품 안 글자만 ("제출하기") | 화면 가운데 · × 2.8 = 980×123.2 (x 470–1450 · y 478.4–601.6) | `part-in` → `hold-m` · `cam-hold` | `src/parts/button-submit.html?state=submit` |
+| 5 · 05b | 같음 | 없음 (글자 `exit` 끝) | 원 지름 44 × 2.8 = 123.2 · 원 x 898.4–1021.6 · y 478.4–601.6 (가운데 960 · 540) | `shape-morph` 중간 = 글자 `exit`(`dur-s` · `ease-in`) 끝 → 가로 폭이 높이와 같아져 원이 된 순간 (`dur-m` · `ease-in` 끝). 다음: 원 → `scale-from`(0) 점 → `transition` | 같음 (같은 부품, 움직임 상태만 장면 스크립트로) |
+| 6 · 06 | `video-bg-soft` | 부품 안 글자만 ("승인 완료") | 화면 가운데 (장면5 점 자리) · × 2.8 = 302.4×89.6 (x 808.8–1111.2 · y 495.2–584.8) | `shape-morph` 뒷부분 `scale-from` → 1 (`dur-m` · `ease-out`, `badge-pulse`와 같은 움직임) 끝 → `hold-s` · `cam-hold` | `src/parts/badge-approved.html` (상태 없음) |
+| 7 · 07 (옛 05) | `video-bg-soft` (`dark-cut` 바탕 바뀐 뒤; 시작 `video-bg-dark` · `video-text-on-dark`) | `video-display` · `video-text` · 가운데 | 화면 가운데 (y 492.5–587.5) | `dark-cut` 끝 → `hold-m` | 폰트만 |
+| 8 · 08 (옛 06) | `video-bg-soft` | 부품 안 글자만 | 화면 가운데 (x 470–1450 · y 426.6–653.4) | `part-in` → `count-up` 끝 (`data-final` "29,700" = 원본 글자) → `hold-s` · 상태 없음 · counts 줄 보임 | `src/parts/stat-card.html` |
+| 9 · 09 (옛 07) | `video-bg` (asset-card 규칙, 5장) | 부품 안 글자만 | 세로 한 줄 · 카드 사이 `video-gap` · 묶음 가운데 (y 41.6–1038.4) | `asset-list` → `hold-l` | `src/parts/asset-card.html?state=private-image` · `review` · `selling` · `private-file` |
+| 10 · 10 (옛 08) | `video-bg-end` = `video-bg-dark` + `video-glow` + `video-grain` (2장) | 슬로건 `video-title` · `video-text-on-dark` · 가운데 | `logo-hero` × 6 = 894×114 (5장) · logo ↔ 슬로건 `video-gap-end` · 묶음 가운데 (logo x 513–1407 · y 414–528 · 슬로건 y 576–666) | 와이드 = `end-reveal`(`logo-reveal` → `dur-l` 뒤 슬로건) 끝 → `hold-s` (`punch-cut` 컷 직전) | `src/parts/logo.html?state=logotype-white` |
+| 10 · 10b | 같음 (`video-bg-end` 그대로, grain은 같은 seed 1 한 장) | 없음 — 클로즈에는 logo만 (`punch-cut` 정의) | 같은 `logo-hero`에 `cut-scale` × 1.7 (1장) → 1519.8×193.8 · 프레이밍 = logotype 안 심볼을 화면 가운데 (심볼 가운데 960 · 540) → logo 상자 x 886.1–2405.9 · y 443.2–637.0 (오른쪽 글자는 컷 밖) | `punch-cut`: `transition` 컷 → 클로즈, 컷 뒤 움직임 없음 → `hold-end` 마지막 정지 (4장 예외) | 같음 |
+
+### 이번 회차 이름 없이 넣은 값 (숨기지 않음)
+
+| 장면 | 값 | 왜 |
+|---|---|---|
+| 5 · 05b | `#button-submit` 인라인 `width: 44px` · `height: 44px` · `border-radius: 22px` · `.label` `opacity: 0` (iframe 안, 장면 스크립트) | `shape-morph` 정의 "가로 폭이 높이와 같아질 때까지 줄어 원" · 글자 `exit` 끝을 옮긴 값. 44 = 부품 높이(padding 12 × 2 + `Text/label` 행간 20), 22 = 그 절반(원). 높이 44 고정은 좁은 폭에서 글자가 줄바꿈돼 버튼이 104px로 늘어나는 것을 막으려고 — 원래 높이를 지키는 것. 부품 파일은 그대로, 상태 바꿈이 `data-state` · CSS 변수가 아닌 인라인 스타일이라는 점은 적어 둠 (video.md 5장 "상태는 data-state · CSS 변수로만"과 비교해 critic 판단 필요 — 움직임 중간 상태로 봄. 영상 `count-up`도 iframe 안 글자를 스크립트로 바꿈) |
+| 5 · 05b | 부품 상자 `translateX(428.4px)` = (350 − 44) / 2 × 2.8 | 부품 안 버튼이 왼쪽에 붙어 있어 폭이 줄면 왼쪽으로 몰림. 장면표 "점 자리 = 화면 가운데"를 지키려고 가운데로 옮긴 계산 값. 정의에 "줄어드는 기준점"은 없음 → 가운데 기준으로 읽음 |
+| 10 · 10b | logotype 안 심볼 상자 = svg 앞 5개 path, x 0–14.4871 · y 2.0016–16.9796 (149×19 좌표, `getBBox` 잰 값) → 심볼 가운데 (7.2436, 9.4906) | `punch-cut` "심볼을 화면 가운데"의 기준점. 이미지에서 잰 값 (docs 이름 아님). "심볼 = 6번째 path(x 20.7부터 글자 H) 앞의 꽃 모양 5개"로 나눔 |
+| 10 · 10b | `transform-origin: 43.4614px 56.9436px` · left 916.5386 · top 483.0564 | 위 잰 점 × 6 (`logo-hero`)을 화면 가운데에 놓는 계산. 새 값 아님 |
+| 10 · 10 · 10b | `video-glow` 색 표기 `rgba(55, 89, 222, 0.45 → 0)` | `#3759de`에 docs 불투명도를 거는 표기 (이전과 같음) |
+
+### 판단해 둔 것
+
+- 장면4 · 5 · 10은 요청대로 두 컷씩: 04(첫 단어) · 04b(마지막 단어 = 장면 머묾), 05(`hold-m`) · 05b(원), 10(와이드) · 10b(클로즈 = 마지막 머묾). 05는 요청 "button-submit submit + 원이 된 순간"을 두 컷으로 읽음 — 한 컷만이면 05b만 남기면 됨.
+- 모든 컷 원래 크기 (보드에서 작게 둔 것은 이전처럼 03b · 03c만).
+- `video-glow` · `video-grain`은 10b에도 그대로 (장면10 배경이 `video-bg-end`, 컷에서 빠지는 것은 슬로건뿐 — `punch-cut` 정의).
+- 05b의 원은 버튼 채움 `color-primary` 그대로 (부품 CSS).
+
+## 이전 회차 기록 (8장면 판, 장면 번호는 옛 번호)
+
 
 결과: `work/launch-30s/snapboard.html` (컷 1920×1080 · 장면 순서대로, 2장은 02a · 02b · 02c 세 컷 원래 크기, 3장만 2 · 3장째 컷을 반 크기로 한 줄 더) · `work/launch-30s/snap/01.png` · `02a.png` · `02b.png` · `02c.png` · `03.png` … `08.png` + `03b.png` · `03c.png` (`02.png` 없음)
 장면2 갱신 2 (2026-10-24, docs 바뀜: video.md 4장 마지막 예외 줄 덮개판 · motion.md 3장 `button-press` 누름 중심 버튼 가운데): 02a · 02b · 02c 모두 버튼 자리에 `phone-screen-bg` 덮개판 + `button-submit[apply-case]` 겹침 (덮개판 고정, 부품만 누름). 02a는 장면표 "첫 프레임부터 놓여 있음"이라 같은 겹침을 넣음. 세 컷 다시 캡처.
@@ -10,16 +68,16 @@
 캡처: playwright-core + Chromium (headless), `--allow-file-access-from-files`, `document.fonts.ready` (본문 + iframe 전부) 뒤 장면별 요소 캡처.
 각 컷 = 장면표의 "머묾"(마지막 hold) 상태. 3장은 skill-carousel 카드 1 · 2 · 3 각 `hold-m` 상태.
 
-## 공통
+## 공통 (모든 회차)
 
 - 폰트: Pretendard 400 · 600 · 700, `src/assets/fonts/Pretendard-*.otf` 로컬 로드 (design.md 3장 A · video.md 3장)
 - 줄바꿈 `word-break: keep-all` (video.md 3장)
 - 부품 배율 `video-scale` × 2.8, iframe 전체에 한 번 (video.md 5장). 부품 원본 그대로, 상태는 `?state=`로만
-- 정렬 (video.md 3장 정렬 줄): 화면 가운데 한 줄 장면(1 훅 · 5 dark-cut · 8 엔드)은 가운데 (2장 옆 묶음 없어짐)
+- 정렬 (video.md 3장 정렬 줄): 화면 가운데 한 줄 장면(1 훅 · 7 dark-cut · 10 엔드)과 4 `slot-roll` 두 줄은 가운데, 나머지 덩어리 안 글자는 부품뿐 (새 번호)
 - 묶음 전체 화면 가운데 (가로 · 세로) (video.md 3장)
 - 카메라: 2장 빼고 모든 머묾 컷 × 1 (`cam-hold`, 1장은 `cam-pull` 끝난 상태) (motion.md 5장). 2장 02a는 `cam-crane` 시작 컷, 02b는 `cam-crane` 끝 = `cam-in` × 2.4 상태 머묾 (`cam-pull` 생략)
 
-## 장면별
+## 장면별 — 장면1–3 (옛 표, 장면4 이후 줄은 옛 번호)
 
 | # | 배경 (video.md 2장) | 글자 스타일 · 색 (video.md 3장) | 간격 · 배치 (video.md 3 · 4 · 5장) | 머묾 상태 (motion.md) | 불러온 src |
 |---|---|---|---|---|---|
@@ -83,4 +141,4 @@
 
 ## 열기 주의
 
-`snapboard.html`은 저장소 루트를 로컬 서버로 열거나 Chrome `--allow-file-access-from-files`로 연다. 이번 판은 iframe 안을 스크립트로 바꾸는 곳이 없어 file://로 열어도 같은 그림.
+`snapboard.html`은 저장소 루트를 로컬 서버로 열거나 Chrome `--allow-file-access-from-files`로 연다. 이번 판은 05b(`shape-morph` 원)만 iframe 안을 스크립트로 바꾸므로, 플래그 없이 file://로 열면 05b가 원이 아닌 "제출하기" 버튼으로 보인다 (다른 컷은 같은 그림).

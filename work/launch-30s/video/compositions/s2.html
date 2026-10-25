@@ -33,13 +33,13 @@
     /* 덮개판 (video.md 4장 예외): 부품 바로 아래 · 사방 1px@1x (= 1.0667px) 크게 · 모서리 8 × 1.066667 · 색 phone-screen-bg (= color-bg). 고정 */
     #s2-cover { position: absolute; left: 52.4px; top: 531.1797px; width: 341.3333px; height: 49.0667px; border-radius: 8.5333px; background: #ffffff; }
   </style>
-  <div id="root" data-composition-id="s2" data-width="1920" data-height="1080" data-layout-allow-overflow>
-    <div id="s2-cam">
-      <div id="s2-out">
-        <div id="s2-stage">
-          <div id="s2-phone"><img id="s2-screen" src="assets/src/screens/01-home.png" alt="">
-            <div id="s2-cover"></div>
-            <div id="s2-btn"><iframe data-src="assets/src/parts/button-submit.html?state=apply-case"></iframe></div>
+  <div data-hf-id="hf-7c4z" id="root" data-composition-id="s2" data-width="1920" data-height="1080" data-layout-allow-overflow="">
+    <div data-hf-id="hf-69oc" id="s2-cam">
+      <div data-hf-id="hf-ccet" id="s2-out">
+        <div data-hf-id="hf-pmtr" id="s2-stage">
+          <div data-hf-id="hf-bs1h" id="s2-phone"><img data-hf-id="hf-dr31" id="s2-screen" src="assets/src/screens/01-home.png" alt="">
+            <div data-hf-id="hf-qb3k" id="s2-cover"></div>
+            <div data-hf-id="hf-c14l" id="s2-btn"><iframe data-hf-id="hf-b5ke" data-src="assets/src/parts/button-submit.html?state=apply-case"></iframe></div>
           </div>
         </div>
       </div>
@@ -113,6 +113,7 @@
         cam.style.transform = `translate(${960 - fx * s}px, ${540 - fy * s}px) scale(${s})`;
       };
 
+gsap.set("#s2", { z: 530, transformPerspective: 1080, rotationX: 10, rotationY: -15 });
       const tl = gsap.timeline({ paused: true });
       const c = { p: 0 };
       tl.fromTo(c, { p: 0 }, { p: 1, duration: DUR.x2l, ease: EASE_INOUT, onUpdate: () => craneAt(c.p) }, 0);

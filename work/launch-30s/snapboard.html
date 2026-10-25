@@ -1,11 +1,16 @@
 <!doctype html>
 <!--
-  work/launch-30s/snapboard.html — 스냅보드 (scenes.md 승인본 8장면 · 17.9초, 장면마다 "머묾" 한 컷 · 각 1920×1080)
-  2장만 예외: cam-crane 시작(#s02a) · cam-crane 끝 = cam-in 상태 hold-m(#s02b) · button-press 눌린 순간(#s02c) 세 컷, 모두 원래 크기.
-  3장(skill-carousel)만 예외: 카드 1장째가 가운데인 컷(#s03) + 2 · 3장째가 가운데인 컷(#s03b · #s03c)을 보드에 작게 같이.
-  값 출처: docs/video.md 1~5장 · docs/design.md 1~3장 · docs/motion.md (머묾 상태 판단 · text-type 커서 · skill-carousel 거리).
+  work/launch-30s/snapboard.html — 스냅보드 (scenes.md 승인본 10장면 · 21.7초, 장면마다 "머묾" 한 컷 · 각 1920×1080)
+  2장: cam-crane 시작(#s02a) · cam-crane 끝 = cam-in 상태 hold-m(#s02b) · button-press 눌린 순간(#s02c) 세 컷.
+  3장(skill-carousel): 카드 1장째가 가운데인 컷(#s03) + 2 · 3장째 컷(#s03b · #s03c)을 보드에 작게.
+  4장(slot-roll): 첫 단어 "리서치" 상태(#s04) · 마지막 단어 "업무 자동화" 상태(#s04b).
+  5장(shape-morph 앞부분): button-submit submit hold-m(#s05) · 원이 된 순간(#s05b).
+  6장: badge-approved shape-morph 뒷부분 끝(scale 1) 뒤 hold-s(#s06).
+  10장(punch-cut): 와이드 = end-reveal 끝 hold-s(#s10) · 클로즈 = cut-scale, 심볼 화면 가운데, logo만(#s10b) — hold-end 정지.
+  값 출처: docs/video.md 1~5장 · docs/design.md 1~3장 · docs/motion.md.
   쓴 이름 목록: used-snapboard.md
-  부품 · 화면: src/parts/*.html (iframe, 원본 그대로 · 상태는 ?state= 로만) · src/screens/01-home.png
+  부품 · 화면: src/parts/*.html (iframe, 원본 파일 그대로 · 상태는 ?state= 로만) · src/screens/01-home.png
+  #s05b만: 움직임(shape-morph) 중간 상태를 장면 스크립트가 iframe 안 요소에 인라인 스타일로 건다 (파일은 고치지 않음).
   열기: 저장소 루트에서 로컬 서버로 연다 (예: python3 -m http.server → /work/launch-30s/snapboard.html).
 -->
 <html lang="ko">
@@ -169,7 +174,24 @@
   /* 02c: button-press 누름 끝 = press-scale 0.96 (motion.md 1장), 중심 = 버튼 가운데 (motion.md 3장 button-press), 부품만 — 덮개판은 고정 */
   #s02c .overlay-btn { transform: scale(0.96); transform-origin: 50% 50%; }
 
-  /* 8장 video-bg-end (video.md 2장) */
+  /* 6장 badge-approved (video.md 5장 × 2.8 = 302.4×89.6) */
+  .p-badge { width: 302.4px; height: 89.6px; } .p-badge iframe { width: 108px; height: 32px; }
+
+  /* 5b shape-morph 중간 = 원이 된 순간 (motion.md 3장 shape-morph): 글자 exit 끝(투명도 0) · 버튼 가로 폭 = 높이 44 (× 2.8 = 123.2) · 원.
+     부품 안 #button-submit에 width 44px · height 44px(원래 높이 고정) · border-radius 22px(높이 절반) · .label opacity 0 을 스크립트로 건다 (아래 script).
+     부품 안 버튼은 왼쪽에 붙어 있어, 가운데를 지키려고 부품 상자 전체를 (350 - 44) / 2 × 2.8 = 428.4px 오른쪽으로 옮김 → 원 x 898.4–1021.6 (가운데 960) */
+  #s05b .p-button { transform: translateX(428.4px); }
+
+  /* 10b punch-cut 클로즈 (motion.md 3장 · 1장 cut-scale × 1.7): 같은 logo-hero(× 6)에 × 1.7.
+     프레이밍 = logotype 안 심볼을 화면 가운데. 심볼 = logotype svg 앞 5개 path, 상자 x 0–14.4871 · y 2.0016–16.9796 (getBBox 잰 값)
+     → 심볼 가운데 (7.2436, 9.4906) × 6 = (43.4614, 56.9436) → logo-hero 상자 left 960 - 43.4614 = 916.5386 · top 540 - 56.9436 = 483.0564,
+     그 점을 중심으로 scale(1.7) → 심볼 가운데가 (960, 540)에 남음. 슬로건 없음 (punch-cut 정의). */
+  #s10b .p-logo-hero {
+    position: absolute; left: 916.5386px; top: 483.0564px;
+    transform: scale(1.7); transform-origin: 43.4614px 56.9436px;
+  }
+
+  /* 10장 video-bg-end (video.md 2장) */
   .bg-end { background: var(--video-bg-dark); }
   .bg-end .glow {
     position: absolute; left: 50%; top: 50%;
@@ -263,29 +285,59 @@
   </div>
 </div>
 
-<!-- 4 · 8.0–9.0 · 머묾 = button-submit part-in 뒤 hold-m -->
+<!-- 4 · 7.7–10.3 · slot-roll 첫 단어 상태 = headline-in(윗줄 · "리서치") 끝 뒤 hold-m · 두 줄 모두 가운데 (video.md 3장 slot-roll 예외) -->
 <section class="cut bg-soft" id="s04" data-scene="4">
+  <div class="center one-line">
+    <p class="video-display t-text">일에 바로 적용하는 AI</p>
+    <p class="video-display t-accent">리서치</p>
+  </div>
+</section>
+
+<!-- 4b · 머묾 = slot-roll 마지막 단어 "업무 자동화" 뒤 hold-m -->
+<section class="cut bg-soft" id="s04b" data-scene="4b">
+  <div class="center one-line">
+    <p class="video-display t-text">일에 바로 적용하는 AI</p>
+    <p class="video-display t-accent">업무 자동화</p>
+  </div>
+</section>
+
+<!-- 5 · 10.3–11.7 · 머묾 = button-submit part-in 뒤 hold-m -->
+<section class="cut bg-soft" id="s05" data-scene="5">
   <div class="center">
     <div class="part p-button"><iframe src="../../src/parts/button-submit.html?state=submit"></iframe></div>
   </div>
 </section>
 
-<!-- 5 · 9.0–11.2 · 머묾 = dark-cut 바탕 바뀐 뒤 hold-m (video-bg-soft · video-text) -->
-<section class="cut bg-soft" id="s05" data-scene="5">
+<!-- 5b · shape-morph 중간 = 글자 exit 끝 · 가로 폭이 높이와 같아져 원이 된 순간 (다음: 원 → 점 → 장면6) -->
+<section class="cut bg-soft" id="s05b" data-scene="5b">
+  <div class="center">
+    <div class="part p-button"><iframe data-morph="circle" src="../../src/parts/button-submit.html?state=submit"></iframe></div>
+  </div>
+</section>
+
+<!-- 6 · 11.7–12.4 · 머묾 = shape-morph 뒷부분(점 자리 = 화면 가운데에서 scale-from → 1) 끝 뒤 hold-s -->
+<section class="cut bg-soft" id="s06" data-scene="6">
+  <div class="center">
+    <div class="part p-badge"><iframe src="../../src/parts/badge-approved.html"></iframe></div>
+  </div>
+</section>
+
+<!-- 7 · 12.4–14.6 · 머묾 = dark-cut 바탕 바뀐 뒤 hold-m (video-bg-soft · video-text) -->
+<section class="cut bg-soft" id="s07" data-scene="7">
   <div class="center one-line">
     <p class="video-display t-text">미션을 완성했어요!</p>
   </div>
 </section>
 
-<!-- 6 · 11.2–12.9 · 머묾 = part-in → count-up 끝(data-final) 뒤 hold-s -->
-<section class="cut bg-soft" id="s06" data-scene="6">
+<!-- 8 · 14.6–16.3 · 머묾 = part-in → count-up 끝(data-final) 뒤 hold-s -->
+<section class="cut bg-soft" id="s08" data-scene="8">
   <div class="center">
     <div class="part p-stat"><iframe src="../../src/parts/stat-card.html"></iframe></div>
   </div>
 </section>
 
-<!-- 7 · 12.9–15.0 · 머묾 = asset-list 뒤 hold-l -->
-<section class="cut bg" id="s07" data-scene="7">
+<!-- 9 · 16.3–18.4 · 머묾 = asset-list 뒤 hold-l -->
+<section class="cut bg" id="s09" data-scene="9">
   <div class="center">
     <div class="part p-asset"><iframe src="../../src/parts/asset-card.html?state=private-image"></iframe></div>
     <div class="gap"></div>
@@ -297,8 +349,8 @@
   </div>
 </section>
 
-<!-- 8 · 15.0–17.9 · 머묾 = end-reveal 뒤 hold-end (마지막 정지) -->
-<section class="cut bg-end" id="s08" data-scene="8">
+<!-- 10 · 18.4–21.7 · 와이드 = end-reveal 끝 뒤 hold-s (punch-cut 컷 직전) -->
+<section class="cut bg-end" id="s10" data-scene="10">
   <div class="glow"></div>
   <canvas class="grain" width="1920" height="1080"></canvas>
   <div class="center one-line">
@@ -308,16 +360,38 @@
   </div>
 </section>
 
+<!-- 10b · 머묾 = punch-cut 클로즈 (transition 컷 → cut-scale, 심볼 화면 가운데, logo만) → hold-end 마지막 정지 -->
+<section class="cut bg-end" id="s10b" data-scene="10b">
+  <div class="glow"></div>
+  <canvas class="grain" width="1920" height="1080"></canvas>
+  <div class="part p-logo-hero"><iframe src="../../src/parts/logo.html?state=logotype-white"></iframe></div>
+</section>
+
 <script>
   // video-grain (video.md 2장): #ffffff 노이즈 · 1px · 알파 0–255 고르게 · seed 1 · 고정 · mulberry32
   (function grain() {
     let s = 1;
     const rand = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
-    const c = document.querySelector("#s08 canvas.grain"), ctx = c.getContext("2d");
-    const img = ctx.createImageData(c.width, c.height), d = img.data;
+    const cs = document.querySelectorAll("canvas.grain");
+    const ctx0 = cs[0].getContext("2d");
+    const img = ctx0.createImageData(cs[0].width, cs[0].height), d = img.data;
     for (let i = 0; i < d.length; i += 4) { d[i] = 255; d[i + 1] = 255; d[i + 2] = 255; d[i + 3] = Math.floor(rand() * 256); }
-    ctx.putImageData(img, 0, 0);
+    cs.forEach((c) => c.getContext("2d").putImageData(img, 0, 0)); // seed 1 한 장을 10 · 10b에 같이 (고정)
   })();
+
+  // 5b shape-morph 중간 상태 (motion.md 3장): 글자 exit 끝 · 폭 = 높이 · 원. 부품 파일은 그대로, 움직임 상태만 인라인으로
+  function morphCircle(f) {
+    const d = f.contentDocument; if (!d) return;
+    const btn = d.getElementById("button-submit"); if (!btn) return;
+    btn.style.width = "44px";          // 버튼 높이 (padding 12 × 2 + Text/label 행간 20)
+    btn.style.height = "44px";         // 높이는 그대로 (글자가 좁은 폭에서 줄바꿈돼 늘어나지 않게 고정)
+    btn.style.borderRadius = "22px";   // 높이 절반 → 원
+    btn.querySelector(".label").style.opacity = "0"; // exit 끝
+  }
+  document.querySelectorAll('iframe[data-morph="circle"]').forEach((f) => {
+    if (f.contentDocument && f.contentDocument.readyState === "complete" && f.contentDocument.getElementById("button-submit")) morphCircle(f);
+    f.addEventListener("load", () => morphCircle(f));
+  });
 </script>
 </body>
 </html>

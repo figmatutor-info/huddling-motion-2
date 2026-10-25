@@ -6,5 +6,7 @@
 - 레퍼런스:
   - snapcn-word-flip — 구도 · 전환 · 패턴 참고
   - snapcn-phone-frame — 구도 · 전환 · 패턴 참고
+  - skillry-saadpastadev — 구도 · 전환 · 패턴 참고 (2026-10-24 추가)
+  - snapcn-wordmark-cut — 구도 · 전환 · 패턴 참고 (2026-10-24 추가)
+  - snapcn-roster-grant — 구도 · 전환 · 패턴 참고 (2026-10-24 추가)
   - 박자: 별도 레퍼런스 없음 → motion.md 4장 "머무는 시간"
-- 메모: motion.md에 없는 움직임은 바꿔 넣지 않고 work/launch-30s/decisions.md에 "새 Pattern 후보"로 적는다.

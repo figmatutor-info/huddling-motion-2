@@ -1,7 +1,7 @@
 <!--
-  장면 7 · 12.6–14.7 (63프레임) — scenes.md 7행
-  배경 video-bg (asset-card 규칙, video.md 5장) · src/parts/asset-card.html × 4 (private-image · review · selling · private-file) 세로 한 줄 · 카드 사이 video-gap · 묶음 가운데
-  움직임: cam-hold · asset-list (= skill-list: 카드마다 enter + 마스크 대신 위 dist-m · 투명도 0 → 1, stagger dur-m) → hold-l → scene-out · 경계 cut-in-motion
+  장면 7 · 12.4–14.6 (66프레임) — scenes.md 7행
+  배경 video-bg-dark → video-bg-soft · 제목 "미션을 완성했어요!" video-display · video-text-on-dark → video-text · 화면 가운데 (한 줄 장면 → 가운데 정렬)
+  움직임: dark-cut (transition으로 들어와 제목 enter → hold-s → 바탕만 dur-xl · ease-linear, 글자 색 같이) → hold-m → scene-out · 경계 cut-in-motion
 -->
 <template>
   <style>
@@ -25,18 +25,14 @@
     /* enter 마스크 (motion.md 2장 enter · 1장 mask-rise): 줄 밖은 잘림 */
     #root .mask { overflow: hidden; }
     #root .mask > * { display: block; }
-    #root { background: #ffffff; /* video-bg */ }
-    #root .gap { height: 56px; flex: none; /* video-gap */ }
+    #s7-bg { position: absolute; inset: 0; }
+    /* video-display 78/95 · 700 */
+    #s7-title { font-weight: 700; font-size: 78px; line-height: 95px; }
   </style>
-  <div id="root" data-composition-id="s7" data-width="1920" data-height="1080">
-    <div id="s7-out" class="center">
-      <div id="s7-a1" class="part p-asset"><iframe data-src="assets/src/parts/asset-card.html?state=private-image"></iframe></div>
-      <div class="gap"></div>
-      <div id="s7-a2" class="part p-asset"><iframe data-src="assets/src/parts/asset-card.html?state=review"></iframe></div>
-      <div class="gap"></div>
-      <div id="s7-a3" class="part p-asset"><iframe data-src="assets/src/parts/asset-card.html?state=selling"></iframe></div>
-      <div class="gap"></div>
-      <div id="s7-a4" class="part p-asset"><iframe data-src="assets/src/parts/asset-card.html?state=private-file"></iframe></div>
+  <div data-hf-id="hf-6yl5" id="root" data-composition-id="s7" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-ibkl" id="s7-bg"></div>
+    <div data-hf-id="hf-lpu5" id="s7-out" class="center one-line">
+      <div data-hf-id="hf-dolc" class="mask"><p data-hf-id="hf-9817" id="s7-title">미션을 완성했어요!</p></div>
     </div>
   </div>
   <script>
@@ -82,14 +78,17 @@
     const exitAt = (sceneDur) => sceneDur - DUR.s / 2;
     function sceneOut(tl, target, sceneDur) { tl.fromTo(target, { opacity: 1 }, { opacity: 0, duration: DUR.s, ease: EASE_IN, immediateRender: false }, exitAt(sceneDur)); }
     // ───────────────────────────────────────────────────────────────
-    const SCENE = 2.1;
+    const SCENE = 2.2;
     const root = document.getElementById("s7-out").closest('[data-composition-id="s7"]');
+    const T_BG = DUR.m + HOLD.s;              // 제목 enter → hold-s 뒤 바탕 바뀜
     ready(root).then(() => {
       const tl = gsap.timeline({ paused: true });
-      ["#s7-a1", "#s7-a2", "#s7-a3", "#s7-a4"].forEach((id, i) => {
-        tl.fromTo(id, { y: -24, opacity: 0 }, { y: 0, opacity: 1, duration: DUR.m, ease: EASE_OUT }, i * DUR.m); // stagger: 항목 사이 dur-m
-      });
-      // hold-l 뒤 scene-out
+      // 바탕 video-bg-dark(#18191b) → video-bg-soft(#f7f7f8) · 글자 video-text-on-dark(#ffffff) → video-text(#18191b) · dur-xl · ease-linear
+      tl.fromTo("#s7-bg", { backgroundColor: "#18191b" }, { backgroundColor: "#f7f7f8", duration: DUR.xl, ease: EASE_LINEAR }, T_BG);
+      tl.fromTo("#s7-title", { color: "#ffffff" }, { color: "#18191b", duration: DUR.xl, ease: EASE_LINEAR }, T_BG);
+      // 제목 enter (dur-m · ease-out · mask-rise 100% → 0)
+      tl.fromTo("#s7-title", { yPercent: 100 }, { yPercent: 0, duration: DUR.m, ease: EASE_OUT }, 0);
+      // hold-m 뒤 scene-out
       sceneOut(tl, "#s7-out", SCENE);
       window.__timelines["s7"] = tl;
     });

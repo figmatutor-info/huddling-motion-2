@@ -1,59 +1,99 @@
-# used — video · launch-30s (8장면 · 17.6초 · 528프레임)
+# used — video · launch-30s (10장면 · 21.7초 · 651프레임)
 
-다시 렌더 (2026-10-24, 2회째): 장면2에 첫 프레임부터 button-submit `apply-case` + 덮개판을 화면 이미지 속 버튼 자리에 겹치고, `cam-crane` 끝 → `hold-m` → `button-press` → 컷으로 바꿈 (2.3초 → 2.0초, `scene-out` 없음). 3~8장은 내용 그대로 시작만 0.3초 당김 (index.html `data-start`만 바꿈). 경계 0 / 2.7 / 4.7 / 7.7 / 8.7 / 10.9 / 12.6 / 14.7 / 17.6.
+이번 회차 (2026-10-24, 승인 2 스냅보드 기준): 장면표 10장면에 맞춰 HyperFrames 프로젝트를 고침. mp4 렌더는 하지 않음 (`out.mp4`는 이전 8장면 렌더가 남아 있는 것, 이번 프로젝트와 다름).
+경계 0 / 2.7 / 4.7 / 7.7 / 10.3 / 11.7 / 12.4 / 14.6 / 16.3 / 18.4 / 21.7 (index.html `data-start` · `data-duration`, 루트 21.7).
 
-결과: `work/launch-30s/out.mp4` (H.264 · yuv420p · 1920×1080 · 30fps · 17.600초 · 528프레임, ffprobe로 확인) · 프로젝트 `work/launch-30s/video/`
-머묾 프레임: `work/launch-30s/video-frames/01.png` · `02a.png` · `02b.png` · `02c.png` · `03.png` · `03b.png` · `03c.png` · `04.png` … `08.png` (스냅보드 `snap/`과 같은 이름, 폴더를 비우고 다시 뽑음). out.mp4에서 ffmpeg로 프레임 번호 그대로 뽑음
-렌더: HyperFrames 0.8.191, `npx hyperframes render -f 30 -q delivery`. 소리 없음 (장면표에 소리가 없어서).
+- 장면 1–3: 그림 · 시간 그대로. 3장만 구현 한 줄 바뀜 (아래 "구현 메모").
+- 장면 4 (새) `compositions/s4.html`: slot-roll
+- 장면 5 (바뀜, 옛 4장 파일에서) `compositions/s5.html`: button-submit `part-in` → `hold-m` → `shape-morph` 앞부분
+- 장면 6 (새) `compositions/s6.html`: badge-approved `shape-morph` 뒷부분
+- 장면 7–9 = 옛 5–7장 (dark-cut · stat-card · asset-card). 내용 그대로, 파일 이름 · id만 s5→s7 · s6→s8 · s7→s9, 시작 시각만 밀림
+- 장면 10 = 옛 8장 + `punch-cut` · `compositions/s10.html`
+
+결과: 프로젝트 `work/launch-30s/video/` (미리보기 `npx hyperframes preview`, 띄워 둔 서버 http://localhost:3077/#project/video)
+lint: 0 errors · 0 warnings. check: `ok: true`, error 0 (아래 경고 참고).
+프레임: `work/launch-30s/video-frames/` — `npx hyperframes snapshot --at`(브라우저 캡처)으로 프레임 시각 n/30 그대로 뽑음. 이전 8장면 프레임은 지우고 다시 뽑음.
 
 ## 공통
 
-- 폰트: Pretendard 400 · 600 · 700, 로컬 파일 `src/assets/fonts/Pretendard-*.otf`를 `@font-face`로 (design.md 3장 A · video.md 3장). 장면마다 `document.fonts.ready` + 부품 iframe 안 `fonts.ready` · 이미지 decode를 기다린 뒤 timeline 등록 (첫 프레임 전)
-- src 불러오기: `src/parts` · `src/assets` · `src/screens`를 `video/assets/src/`에 바이트 그대로 복사 (`diff -r` 같음, `_check/`만 뺌). 부품은 iframe으로 원본 HTML 그대로, 상태는 `?state=`로만, 배율 `video-scale` × 2.8을 iframe 전체에 한 번 (video.md 5장)
-- 줄바꿈 `word-break: keep-all` · 정렬 규칙 (video.md 3장)
-- Easing: `ease-out` · `ease-in` · `ease-inout` · `ease-linear` (motion.md 1장) 값 그대로를 cubic-bezier 함수로 GSAP에 넘김
-- 장면 경계: 2→3은 `button-press` 뗌 끝 프레임에서 `transition` (컷, `scene-out` 없음, motion.md 3장). 나머지는 `cut-in-motion` (motion.md 3장): `scene-out`(= `exit` · `dur-s` · `ease-in` · 투명도 1 → 0, motion.md 2장)이 절반 진행된 때 = scenes.md 장면 끝
-- 프레임 수: 30fps 기준 motion.md 1장 · 4장 프레임 값 그대로
+- 폰트: Pretendard 400 · 600 · 700, 로컬 `src/assets/fonts/Pretendard-*.otf` `@font-face` (design.md 3장 A · video.md 3장). 장면마다 `document.fonts.ready` + 부품 iframe 안 `fonts.ready` · 이미지 decode 뒤 timeline 등록
+- src 불러오기: `src/parts` · `src/assets` · `src/screens`를 `video/assets/src/`에 바이트 그대로 (`diff -rq` 같음, `_check/` · `.DS_Store`만 뺌). 부품은 iframe 원본 HTML, 상태는 `?state=`로만, `video-scale` × 2.8 (video.md 5장), logo는 `logo-hero` × 6 (video.md 5장)
+- 줄바꿈 `word-break: keep-all` · 정렬 (video.md 3장)
+- Easing `ease-out` · `ease-in` · `ease-inout` · `ease-linear` (motion.md 1장) 값 그대로 cubic-bezier
+- Duration · hold 프레임 = motion.md 1장 · 4장 (30fps)
+- 장면 경계: 2→3 `button-press` 뗌 끝 `transition` · 5→6 `shape-morph` (점 자리에서 `transition`) · 10 끝 · 나머지 `cut-in-motion` (motion.md 3장: `scene-out` 절반 = 장면 끝)
 
 ## 장면별
 
-| # | 시간 | 배경 · 글자 (video.md) | 움직임 · 카메라 (motion.md) | 불러온 src |
+| # | 시간 (프레임) | 배경 · 글자 (video.md) | 움직임 · 카메라 (motion.md) | 불러온 src |
 |---|---|---|---|---|
-| 1 | 0.0–2.7 | `video-bg-soft` (2장) · `video-display` · `video-text`, "실력" `video-text-accent` · 가운데 (3장) | `text-type` (3장: `type-step` = `dur-s` 3f마다 한 글자, 커서 폭 6 · 띄움 6 · 높이 `video-display` 행간 95) + `cam-in` × 2.4 상태에서 `cam-follow` (`ease-linear`) → `cam-pull` (`dur-l` · `ease-inout`) (5장 · 1장) → `hold-m` (4장) → `scene-out` | `src/assets/fonts/Pretendard-Bold.otf` (폰트만) |
-| 2 | 2.7–4.7 (60f) | `video-bg-soft` · 폰 `phone-size` · `phone-screen` · `phone-bezel` · `phone-radius` · `phone-color` · `phone-screen-bg` (4장) · 폰 하나 화면 가운데 (3장, 폰 x 738–1182 · y 76–1004) · 영상 글자 없음 · 첫 프레임부터 덮개판 (4장 예외 줄: 같은 모서리 · 사방 1px@1x 크게 · 색 `phone-screen-bg` = `color-bg` #ffffff) + button-submit `apply-case`를 `phone-screen` 배율 1.066 (4장)으로 화면 이미지 속 버튼 자리에 겹침, 둘 다 폰 안 (폰과 함께 기울고 줌됨) | 폰 `crane-angle` (1장: rotateX 12° · rotateY -18° · perspective 2400px · 회전 중심 폰 가운데) + 아래 `dist-l` 70px (1장) · × 1 로 시작 → `cam-crane` (5장: 각도 · 위치 · 줌 같은 진행값, `dur-2xl` 30f · `ease-inout`, 끝 = 각도 0 · `cam-in` × 2.4, 대상 = 01-home 미션 카드 영역) → `cam-pull` 생략 → `cam-in` 상태 `hold-m` 21f (4장 · 3장 `button-press` 앞 hold) → `button-press` (3장: 누름 1 → `press-scale` 0.96 (1장) · `dur-s` 3f · `ease-in`, 뗌 0.96 → 1 · `dur-m` 6f · `ease-out`, 중심 버튼 가운데, 부품만 — 덮개판 고정) → 뗌 끝 = 2.0초 = 장면3 첫 프레임 `transition` (컷) | `src/screens/01-home.png` · `src/parts/button-submit.html?state=apply-case` |
-| 3 | 4.7–7.7 | `video-bg-soft` · 부품 안 글자만 · 카드 사이 `video-gap` | `cam-hold` · 카드 등장 없음 · `skill-carousel` (3장: 거리 980 + 56 = 1036 · `dur-l` · `ease-inout`, 카드마다 `hold-m`) → `scene-out` | `src/parts/skill-card-1.html` · `skill-card-2.html` · `skill-card-3.html` |
-| 4 | 7.7–8.7 | `video-bg-soft` · 부품 안 글자만 | `cam-hold` · `part-in` → `hold-m` → `scene-out` | `src/parts/button-submit.html?state=submit` |
-| 5 | 8.7–10.9 | `video-bg-dark` → `video-bg-soft` · `video-display` · `video-text-on-dark` → `video-text` · 가운데 | `dark-cut` (3장: 제목 `enter` → `hold-s` → 바탕 · 글자 색 `dur-xl` · `ease-linear`) → `hold-m` → `scene-out` | 폰트만 |
-| 6 | 10.9–12.6 | `video-bg-soft` · 부품 안 글자만 | `cam-hold` · `part-in` → 바로 `count-up` (3장: 0 → `data-final` 29,700 · `dur-2xl` · `ease-out` · 정수) → `hold-s` → `scene-out` | `src/parts/stat-card.html` (원본 그대로, `#stat-card-amount` textContent만 바꿈) |
-| 7 | 12.6–14.7 | `video-bg` (5장 asset-card 규칙) · 부품 안 글자만 · 카드 사이 `video-gap` | `cam-hold` · `asset-list` (= `skill-list`: 카드마다 `enter` + 위 `dist-m` · 투명도, `stagger` `dur-m`) → `hold-l` → `scene-out` | `src/parts/asset-card.html?state=private-image` · `review` · `selling` · `private-file` |
-| 8 | 14.7–17.6 | `video-bg-end` = `video-bg-dark` + `video-glow` + `video-grain` (2장) · `logo-hero` × 6 (5장) · 슬로건 `video-title` · `video-text-on-dark` · 가운데 · `video-gap-end` | `end-reveal` (3장: `logo-reveal` 엔드 카드 = logo 글자마다 `enter`, 글자 사이 `stagger` `dur-xs`, 7번째부터 같이 → `dur-l` 뒤 슬로건 투명도 0 → 1 · `dur-l`) → `hold-end` → 정지 (4장 예외) | `src/parts/logo.html?state=logotype-white` (같은 iframe 13개, 아래 참고) |
+| 1 | 0.0–2.7 (0–81) | 그대로 — `video-bg-soft` (2장) · `video-display` · `video-text`, "실력" `video-text-accent` (3장) · 가운데 | 그대로 — `text-type` + `cam-in` 상태 `cam-follow` → `cam-pull` (3장 · 5장 · 1장) → `hold-m` → `scene-out` · `cut-in-motion` | `src/assets/fonts/Pretendard-Bold.otf` |
+| 2 | 2.7–4.7 (81–141) | 그대로 — `video-bg-soft` · 폰 프레임 `phone-size` · `phone-screen` · `phone-bezel` · `phone-radius` · `phone-color` · `phone-screen-bg` (4장) · 덮개판 (4장 예외 줄) | 그대로 — `crane-angle` · `dist-l` (1장) → `cam-crane` (5장, `dur-2xl` · `ease-inout`, `cam-in`) → `hold-m` → `button-press` (`press-scale` · `dur-s` · `ease-in` / `dur-m` · `ease-out`) → `transition` | `src/screens/01-home.png` · `src/parts/button-submit.html?state=apply-case` |
+| 3 | 4.7–7.7 (141–231) | 그대로 — `video-bg-soft` · `video-gap` (3장) | 그대로 — `cam-hold` · `skill-carousel` (3장: 거리 980 + 56, `dur-l` · `ease-inout`, 카드마다 `hold-m`) → `scene-out` · `cut-in-motion` | `src/parts/skill-card-1.html` · `skill-card-2.html` · `skill-card-3.html` |
+| 4 (새) | 7.7–10.3 (231–309, 78f) | `video-bg-soft` (2장) · 윗줄 "일에 바로 적용하는 AI" `video-display` · `video-text` · 아랫줄 "리서치" → "콘텐츠" → "분석" → "업무 자동화" `video-display` · `video-text-accent` (3장) · 줄 사이 `video-gap-line` 0 (3장) · 두 줄 모두 가운데 (3장 `slot-roll` 예외) | `cam-hold` (5장) · `headline-in` (3장: 줄마다 `enter` = `dur-m` · `ease-out` · `mask-rise`, 줄 사이 `stagger` `dur-m`) 0–12f → `hold-m` 12–33f → `slot-roll` (3장, 2026-10-24 바뀐 정의: 나가는 단어와 다음 단어가 세로로 붙은 한 덩어리로 마스크 안에서 같이 위로 `mask-rise` · `dur-s` · `ease-out` — 나가는 단어 0 → −100%, 다음 단어 100% → 0; 바뀜 33 · 45 · 51f = 간격 `dur-l` 12f → `dur-m` 6f) → 54f 마지막 단어 → `hold-m` → `scene-out` 76.5f · `cut-in-motion` | 폰트만 `src/assets/fonts/Pretendard-Bold.otf` |
+| 5 (바뀜) | 10.3–11.7 (309–351, 42f) | `video-bg-soft` · 부품 안 글자만 ("제출하기") · 화면 가운데 (3장) | `cam-hold` · `part-in` (3장: `enter` + 위 `dist-m` 24px · 투명도, `dur-m` · `ease-out`) 0–6f → `hold-m` 6–27f → `shape-morph` 앞부분 (3장): 글자 `exit` (`dur-s` · `ease-in` · 투명도 1 → 0) 27–30f → 가로 폭 350 → 44 (높이와 같음, 원) `dur-m` · `ease-in` 30–36f → 원 → `scale-from` 0 `dur-m` · `ease-in` 36–42f → 42f = 장면6 첫 프레임 `transition` (`scene-out` 없음) | `src/parts/button-submit.html?state=submit` |
+| 6 (새) | 11.7–12.4 (351–372, 21f) | `video-bg-soft` · 부품 안 글자만 ("승인 완료") · 화면 가운데 = 장면5 점 자리 (960, 540) · badge-approved × 2.8 = 302.4×89.6 (5장) | `cam-hold` · `shape-morph` 뒷부분 = `badge-pulse`와 같은 움직임 (3장: `scale-from` 0 → 1 · `dur-m` · `ease-out`, 중심 배지 가운데) — `transition` (2장)대로 장면 첫 프레임에 이미 1f 들어간 상태 (진행 −1f–5f) → `hold-s` 5–18f → `scene-out` 19.5f · `cut-in-motion` | `src/parts/badge-approved.html` (상태 없음) |
+| 7 | 12.4–14.6 (372–438) | 그대로 (옛 5장) — `video-bg-dark` → `video-bg-soft` · `video-display` · `video-text-on-dark` → `video-text` · 가운데 | 그대로 — `dark-cut` (3장: `transition` → 제목 `enter` → `hold-s` → 바탕 · 글자 색 `dur-xl` · `ease-linear`) → `hold-m` → `scene-out` · `cut-in-motion` | 폰트만 |
+| 8 | 14.6–16.3 (438–489) | 그대로 (옛 6장) — `video-bg-soft` · 부품 안 글자만 | 그대로 — `cam-hold` · `part-in` → 바로 `count-up` (3장: 0 → `data-final` 29,700 · `dur-2xl` · `ease-out` · 정수) → `hold-s` → `scene-out` · `cut-in-motion` | `src/parts/stat-card.html` |
+| 9 | 16.3–18.4 (489–552) | 그대로 (옛 7장) — `video-bg` (5장 asset-card 규칙) · `video-gap` | 그대로 — `cam-hold` · `asset-list` (= `skill-list`: 카드마다 `enter` + 위 `dist-m` · 투명도, `stagger` `dur-m`) → `hold-l` → `scene-out` · `cut-in-motion` | `src/parts/asset-card.html?state=private-image` · `review` · `selling` · `private-file` |
+| 10 (바뀜) | 18.4–21.7 (552–651, 99f) | `video-bg-end` = `video-bg-dark` + `video-glow` + `video-grain` (2장) · `logo-hero` × 6 (5장) · 와이드: 슬로건 `video-title` · `video-text-on-dark` · 가운데 · `video-gap-end` (3장) · 클로즈: logo만 | `end-reveal` (3장: `logo-reveal` 엔드 카드 = logo 글자마다 `enter`, 글자 사이 `stagger` `dur-xs`, 7번째부터 같이 0–18f → `dur-l` 뒤 슬로건 투명도 0 → 1 · `dur-l` 30–42f) → `hold-s` 42–54f → `punch-cut` (3장: 54f `transition` 컷 → 같은 logo `cut-scale` × 1.7 (1장), logotype 안 심볼을 화면 가운데, 슬로건 빠짐, 컷 뒤 움직임 없음) → `hold-end` 54–99f → 마지막 hold 정지 (4장 예외) | `src/parts/logo.html?state=logotype-white` (와이드: 같은 iframe 13개 글자 칸 · 클로즈: 1개) |
 
-프레임 확인 (video-frames 뽑은 프레임): 01 = 72f · 02a = 81f (2.7초, `cam-crane` 시작) · 02b = 121f (장면2 40f, `hold-m` 중) · 02c = 135f (장면2 54f, 누름 끝 0.96) · 03 / 03b / 03c = 153 · 186 · 219f · 04 = 252f · 05 = 321f · 06 = 369f · 07 = 429f · 08 = 516f. 140f(장면2 마지막, 뗌 5/6) → 141f(장면3 첫 프레임) 컷 확인.
+## 프레임 (`work/launch-30s/video-frames/`, 루트 프레임 번호 · 30fps)
 
-스냅보드 비교 (PSNR): 02a 46.5dB · 02b 38.6dB · 02c 37.5dB · 03 52.1 · 04 44.0 · 08 34.7 (08은 grain) — 눈으로 같은 그림 (차이는 H.264 인코딩 · 확대 리샘플링 정도). 3~8장은 이전 렌더와 같은 코드 · 같은 프레임 상태.
+| 파일 | 프레임 | 무엇 |
+|---|---|---|
+| 01 | 72 | 1장 머묾 |
+| 02a · 02b · 02c | 81 · 121 · 135 | 2장 cam-crane 시작 · cam-in hold-m · 누름 끝 |
+| 03 · 03b · 03c | 153 · 186 · 219 | 3장 카드 1 · 2 · 3 hold-m |
+| 04 | 251 | 4장 "리서치" hold-m (스냅 04) |
+| 04-roll1 | 265 | slot-roll 첫 바뀜 1f 진행 (리서치 → 콘텐츠, 한 덩어리로 올라가는 중 · `ease-out`이라 거의 도착, 겹침 없음) |
+| 04-roll2 | 277 | 둘째 바뀜 1f 진행 (콘텐츠 → 분석) |
+| 04-roll3 | 283 | 셋째 바뀜 1f 진행 (분석 → 업무 자동화) |
+| 04b | 296 | 4장 "업무 자동화" hold-m (스냅 04b) |
+| 05 | 329 | 5장 button-submit hold-m (스냅 05) |
+| 05-morph | 342 | 글자 exit 끝 · 폭이 줄어드는 중 (30f+3) |
+| 05b | 345 | 원이 된 순간 (36f, 스냅 05b) |
+| 05-dot | 350 | 장면5 마지막 프레임 = 점 (41f, scale ≈ 0.52) |
+| 06-first | 351 | 장면6 첫 프레임 — 배지가 이미 `enter` 1f 진행 (scale ≈ 0.68, `ease-out` 1/6), 빈 바탕 없음 (critic 불합격 1회 뒤 고침) |
+| 06-pop | 353 | 장면6 2f — enter 3f 진행 중 |
+| 06 | 363 | 6장 hold-s (스냅 06) |
+| 07 · 08 · 09 | 432 · 480 · 540 | 7 · 8 · 9장 머묾 |
+| 10 | 602 | 10장 와이드 hold-s (스냅 10) |
+| 10-cut-before | 605 | 컷 바로 앞 프레임 (와이드, 53f) |
+| 10-cut-after | 606 | 컷 바로 뒤 프레임 (클로즈 cut-scale, 54f) |
+| 10b | 642 | 클로즈 hold-end (스냅 10b) |
+| 10-end | 650 | 영상 마지막 프레임 (정지) |
 
 ## 이름 없이 넣은 값 (숨기지 않음)
 
 | 장면 | 값 | 왜 · 어디서 |
 |---|---|---|
-| 2 빼고 전부 | `scene-out` 시작 = 장면 끝 − 1.5f (`dur-s` 절반) → 마지막 hold가 docs 값보다 1.5f 김 (예: 1장 `hold-m` 21f → 22.5f) | scenes.md 길이는 `exit` 3f 전부를 더한 합인데, `cut-in-motion`은 절반에서 컷. 장면 경계를 scenes.md 그대로 지키려고 남는 1.5f를 hold에 붙임 |
-| 1 | `cam-follow` 초점 = 커서 가운데 (가로) · 줄 가운데 (세로 540). 첫 글자 때 커서 → 끝 글자 나타나는 때(42f) 커서까지 일직선, 42–45f 멈춤, 45f부터 `cam-pull` | motion.md 5장은 "커서 쪽으로 · 글자 늘어나는 속도 그대로"만 있고 초점 위치 · 시작 끝 프레임은 없음 |
-| 1 | 커서는 깜빡이지 않고 hold · scene-out 동안 그대로 보임 | 스냅보드 머묾 컷과 같게. 깜빡임 값은 docs에 없음 |
-| 2 | `cam-in` 대상 점 = 01-home.png 안 미션 카드 영역 가운데 (이미지 780×1688 기준 x 390 · y 841, 카드 x 40–740 · y 588–1094를 이미지에서 잼) → 영상 좌표 (960, 538.4) (폰 가운데로 옮겨져 바뀜, 스냅보드 02b와 같은 값) | scenes.md "01-home 미션 카드 영역". 점 좌표는 docs에 없어 src 이미지에서 잼 (이전과 같은 점) |
-| 2 | `cam-crane` 줌의 보간 방식 = 카메라 초점을 화면 가운데(960, 540) → 대상 점으로, 배율 1 → 2.4를 같은 진행값으로 일직선 (원점 0 0 `translate(960 − 초점x × 배율, 540 − 초점y × 배율) scale(배율)`, 1장 `cam-pull`과 같은 식을 거꾸로). 폰의 `translateY` · `rotateX` · `rotateY`도 같은 진행값으로 일직선 | motion.md 5장 "각도 · 위치 · 줌이 같은 시간에 같은 곡선으로"까지 docs. 줌을 초점 기준으로 보간할지 translate 값 기준으로 보간할지는 docs에 없음 (이번 장면은 대상 x가 960이라 두 방식 차이가 세로 1.6px 이내) |
-| 2 | 폰의 `perspective`는 폰 자신의 transform 안에 (`perspective(2400px) rotateX rotateY`), 카메라 층 배율은 그 바깥에 걸림 | 스냅보드 02a CSS와 같은 짜임 |
-| 2 (새) | 겹침 자리 = 화면 이미지 속 버튼을 잰 값 (이미지 780×1688 안 x 74–709 · y 972–1059) → 폰 안 left 53.4667 · top 532.2464 · 339.2×46.9333, 덮개판 left 52.4 · top 531.1797 · 341.3333×49.0667 · 모서리 8.5333 (= 부품 8 × 1.066667, 덮개판이 1px 커도 모서리는 같게) | 스냅보드 `.overlay-btn` · `.overlay-cover`와 같은 값. 위치는 docs 이름 없음, src 이미지에서 잼 |
-| 2 (새) | `button-press` 시작 = `cam-crane` 끝 + `hold-m` = 장면2 51f, 이 hold는 공통의 `scene-out` 1.5f 보정 없음 (컷이라) | 2→3 경계는 `cut-in-motion`이 아니어서 1.5f 줄은 장면2에 해당 없음 |
-| 2 (새) | 뗌 끝(scale 1)은 60f = 장면3 첫 프레임 시각이라, 장면2에서 실제로 보이는 마지막 프레임(59f)은 뗌 5/6 진행 (`ease-out`이라 거의 1) | "떼는 끝 프레임에 transition" 해석 |
-| 2·4·6·7 | `part-in` · `asset-list`의 "위 `dist-m`" = 위에서 24px 내려오며 (y −24 → 0) | motion.md 출처 "위에서 차례로 쌓임"으로 읽음. "위로 24px 올라옴"으로도 읽힐 수 있음 |
-| 5 | 글자 색 #ffffff → #18191b 사이 중간색 (RGB 일직선 보간) | `dark-cut` "글자 색 같이 바뀜". 중간색은 전환 중에만 나옴 |
-| 6 | 금액 표기 = 천 단위 쉼표 (`data-final` "29,700"과 같은 형식), `tabular-nums` 안 씀 | 부품 주석은 tabular-nums를 "장면에서 더한다"고 하지만 docs 값이 없어 넣지 않음 → 세는 동안 금액 폭이 조금씩 바뀜 (왼쪽 정렬이라 오른쪽 끝만 움직임) |
-| 8 | logo 글자 나누기: logo.html을 13번 불러 각각 한 글자 칸만 `clip-path`로 보이게 함. 칸 경계(svg 좌표 0–149) = 0 · 17.605 · 34.345 · 46.395 · 58.185 · 70.185 · 75.385 · 80.605 · 92.685 · 105.765 · 120.84 · 125.705 · 137.535 · 149 (logo-logotype-white.svg path 경계 상자에서 이웃 글자 사이 가운데를 잼). 심볼(path 5개)을 한 글자로 셈 → 13글자 | `logo-reveal` "logo 글자마다 enter"인데 부품은 svg 한 장이라 글자 단위가 없음. 부품 · svg는 고치지 않음 |
-| 8 | 슬로건 투명도 곡선 = `ease-out` | `end-reveal` "enter + 마스크 대신 투명도"라 `enter`의 이징을 그대로 씀 |
-| 8 | `video-glow` 색 표기 `rgba(55, 89, 222, 0.45 → 0)` | 스냅보드와 같음. `#3759de`에 docs 불투명도를 거는 표기 |
-| 공통 | 부품 iframe은 `data-src`에 적고 장면 스크립트가 붙을 때 `src`를 엶 | 렌더 설정일 뿐 화면 값 아님 |
+| 1 · 3 · 4 · 6–9 | `scene-out` 시작 = 장면 끝 − 1.5f → 마지막 hold가 docs 값보다 1.5f 김 | `cut-in-motion` 절반 컷으로 scenes.md 경계를 지키려고 (이전 회차와 같음) |
+| 1 · 2 · 8 · 9 · 10 | 이전 회차 used-video.md "이름 없이 넣은 값" 그대로 (1장 cam-follow 초점 · 커서 안 깜빡임 · 2장 대상 점 · 겹침 자리 · 줌 보간 · 8장 천 단위 쉼표 · 9장 "위 dist-m" = y −24 → 0 · 10장 글자 칸 경계 13개 · 슬로건 투명도 `ease-out` · glow rgba 표기) | 내용 바뀌지 않음 |
+| 4 | slot-roll 간격 2개 = `dur-l` 12f, `dur-m` 6f (바뀜 3번 → 간격 2개라 중간 단계 없음). "간격" = 바뀜 시작 ↔ 다음 바뀜 시작 | motion.md "dur-l로 시작해 한 번마다 짧아져 마지막 dur-m". 3번이면 시작 · 끝만 있음. scenes.md 2.6초와 프레임이 맞음 (12 + 21 + 12 + 6 + 3 + 21 + 3 = 78) |
+| 4 | 아랫줄 마스크 = 폭 1920 · 높이 95 (`video-display` 행간), 단어마다 그 안에서 가운데 정렬 | 단어 폭이 다 달라 줄 상자를 화면 폭으로 두고 가운데 맞춤. 스냅 04 · 04b와 같은 자리 |
+| 5 | 폭 줄어드는 동안 `border-radius` 8 → 22를 폭과 같은 진행값으로 일직선 | `shape-morph` 정의는 "원이 됨"까지만. 원 = 22 (높이 절반, 스냅 05b), 시작 = 부품 8. 사이 곡선은 docs에 없음 |
+| 5 | 부품 상자 `translateX` = (350 − w) / 2 × 2.8 (폭과 같은 진행값) · 원 축소 중심 (960, 540) | 부품 안 버튼이 왼쪽에 붙어 있어 가운데 기준으로 줄이려고 (스냅 05b와 같은 계산). 정의에 줄어드는 기준점 없음 → 가운데로 읽음 |
+| 5 | `#button-submit` 인라인 `height: 44px` · `width` · `border-radius` · `.label` `opacity` (iframe 안, 장면 스크립트) | 움직임 중간 상태. 부품 파일은 그대로. 스냅 05b와 같은 방식 (video.md 5장 "상태는 data-state로만"과 비교는 critic 판단 — 이전 회차에 적은 것과 같음) |
+| 5 | 마지막 프레임 41f는 점 scale ≈ 0.52 (`ease-in` 5/6), scale 0은 42f = 장면6 첫 프레임 시각 | "점 자리에서 transition" 해석 |
+| 6 | 배지 `scale-from` 진행을 1f 앞당김 (장면 시간 t + 1f) → 장면 첫 프레임 = 1f 들어간 상태, enter는 5f에 끝나 `hold-s`가 12f → 13f (+ 공통 1.5f) | critic 불합격 1회 (351f 빈 바탕). `transition` "다음 장면 첫 프레임에 이미 enter 중" · `shape-morph` "빈 바탕 프레임 없음"을 지키고 장면 길이 0.7초를 유지하려고. 1f는 docs에 이름 없는 값 |
+| 10 | 클로즈 logo 자리 left 916.5386 · top 483.0564 · `transform-origin` 43.4614 56.9436 · scale 1.7 (심볼 상자 svg 앞 5개 path, 가운데 (7.2436, 9.4906) × 6) | 스냅 10b와 같은 잰 값 · 계산 |
+| 10 | 클로즈 logo는 와이드의 글자 칸 13개가 아닌 logo.html iframe 하나 (같은 부품 · 같은 상태) | 컷 뒤 움직임이 없어 글자 나누기가 필요 없음. 그림은 같은 logo |
+| 10 | 컷 = 54f에 와이드 묶음 투명도 1 → 0, 클로즈 묶음 0 → 1 (`tl.set`, 0ms). glow · grain은 그대로 둠 | `transition` 0ms 컷을 두 겹 교체로. 바탕은 스냅 10b대로 그대로 |
 
-## 렌더 · check 메모
+## 구현 메모 (그림 · 시간은 바뀌지 않음)
 
-- `npx hyperframes check`: error `request_failed` 22건 (이번 렌더도 같음) (부품 iframe 첫 로드가 장면을 붙이는 중 `ERR_ABORTED`로 끊기고 다시 로드됨). 렌더 프레임에서는 모든 부품이 정상으로 그려짐 (아래 비교). 경고 `line_unread` 2건 (1장 · 8장 hold가 HyperFrames 권장 읽기 시간보다 짧음 — hold는 motion.md 4장 값이라 그대로 둠) · `film_silent` (소리 없음) · info 2건 (1장 카메라 확대로 화면 밖으로 나가는 것, 의도 · 2장은 `data-layout-allow-overflow` 표시)
-- 6장 count-up과 1 · 2장 카메라는 장면 시간 t 하나로 계산 (어느 프레임으로 바로 가도 같은 그림)
+- 부품 iframe을 담은 상자를 GSAP `x` · `y` · `scale` · `yPercent`로 트윈하면, GSAP가 숨은 장면에서 transform을 읽으려고 상자를 잠깐 옮겨 iframe이 다시 로드됨 → check `request_failed`(ERR_ABORTED) 22건의 원인이었음 (이전 회차 check 메모의 22건). 그래서
+  - 3 · 8 · 9 · 10장: 같은 이동을 CSS 변수(`--tx` · `--ty`)를 GSAP로 트윈하고 `transform: translate(var(--…))`로 걸게 바꿈 (값 · 이징 · 시간 그대로)
+  - 5 · 6장: 상태 전부를 장면 시간 t 하나로 계산해 직접 씀 (8장 count-up과 같은 방식), iframe이 다시 로드되면 다시 그림
+- 결과: check error 0, `ok: true`.
+
+## check 경고 (그대로 둠)
+
+- `line_unread` 3건: 1장 훅 (이전과 같음) · 4장 "분석" 0.26초 (`slot-roll` 간격 `dur-l` · `dur-m`이 docs 값) · 10장 슬로건 0.73초 (`punch-cut` 정의상 클로즈에서 슬로건이 빠짐). 모두 motion.md 값이라 바꾸지 않음
+- `film_silent`: 장면표에 소리 없음
+- info `container_overflow` (4장): 마스크 밖으로 밀려난 단어 (의도, 마스크가 가림). `content_overlap`은 slot-roll 정의 변경 뒤 없어짐. info (1장): 카메라 확대로 화면 밖 (의도)
+
+## 확인 필요 (사람 · critic)
+
+- 없음. 4장 slot-roll 겹침은 사람이 motion.md 정의를 바꿔 해결 (2026-10-24), 6장 첫 프레임 빈 바탕은 critic 불합격 1회 뒤 고침.

@@ -28,14 +28,15 @@
     #root { background: #f7f7f8; /* video-bg-soft */ }
     #s3-out { position: absolute; inset: 0; }
     /* 줄의 왼쪽 끝 = (1920 - 980) / 2 → 카드 1이 가로 가운데. 세로 가운데 */
-    #s3-row { position: absolute; top: 0; left: 470px; height: 1080px; display: flex; flex-direction: row; align-items: center; gap: 56px; /* video-gap */ }
+    #s3-row { position: absolute; top: 0; left: 470px; height: 1080px; display: flex; flex-direction: row; align-items: center; gap: 56px; /* video-gap */
+             transform: translateX(var(--tx, 0px)); /* 이동은 CSS 변수 --tx 로 (GSAP transform 직접 트윈은 숨은 장면의 상자를 옮겨 iframe 을 다시 로드함) */ }
   </style>
-  <div id="root" data-composition-id="s3" data-width="1920" data-height="1080">
-    <div id="s3-out" data-layout-allow-overflow>
-      <div id="s3-row">
-        <div class="part p-skill"><iframe data-src="assets/src/parts/skill-card-1.html"></iframe></div>
-        <div class="part p-skill"><iframe data-src="assets/src/parts/skill-card-2.html"></iframe></div>
-        <div class="part p-skill"><iframe data-src="assets/src/parts/skill-card-3.html"></iframe></div>
+  <div data-hf-id="hf-3xc5" id="root" data-composition-id="s3" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-r0cp" id="s3-out" data-layout-allow-overflow>
+      <div data-hf-id="hf-2oek" id="s3-row">
+        <div data-hf-id="hf-qd2n" class="part p-skill"><iframe data-hf-id="hf-yief" data-src="assets/src/parts/skill-card-1.html"></iframe></div>
+        <div data-hf-id="hf-9scv" class="part p-skill"><iframe data-hf-id="hf-pkja" data-src="assets/src/parts/skill-card-2.html"></iframe></div>
+        <div data-hf-id="hf-9e1u" class="part p-skill"><iframe data-hf-id="hf-rtlx" data-src="assets/src/parts/skill-card-3.html"></iframe></div>
       </div>
     </div>
   </div>
@@ -88,9 +89,9 @@
     ready(root).then(() => {
       const tl = gsap.timeline({ paused: true });
       // 카드 1 hold-m 뒤 왼쪽으로 한 장 (dur-l · ease-inout)
-      tl.fromTo("#s3-row", { x: 0 }, { x: -STEP_X, duration: DUR.l, ease: EASE_INOUT }, HOLD.m);
+      tl.fromTo("#s3-row", { "--tx": "0px" }, { "--tx": -STEP_X + "px", duration: DUR.l, ease: EASE_INOUT }, HOLD.m);
       const t2 = HOLD.m + DUR.l + HOLD.m;                                                                              // 카드 2 hold-m 뒤
-      tl.fromTo("#s3-row", { x: -STEP_X }, { x: -2 * STEP_X, duration: DUR.l, ease: EASE_INOUT, immediateRender: false }, t2);
+      tl.fromTo("#s3-row", { "--tx": -STEP_X + "px" }, { "--tx": -2 * STEP_X + "px", duration: DUR.l, ease: EASE_INOUT, immediateRender: false }, t2);
       // 카드 3 hold-m 뒤 scene-out
       sceneOut(tl, "#s3-out", SCENE);
       window.__timelines["s3"] = tl;

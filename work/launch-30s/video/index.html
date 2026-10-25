@@ -1,14 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <!--
-  launch-30s 영상 — 루트. 장면 8개를 scenes.md 시작–끝(초) 그대로 건다 (총 17.6초 = 528프레임 · 30fps).
-  장면 경계: 2→3은 button-press 뗌 끝에서 transition(컷, scene-out 없음), 나머지는 cut-in-motion (motion.md 3장): 각 장면 scene-out이 절반 진행된 프레임 = 장면 끝.
+  launch-30s 영상 — 루트. 장면 10개를 scenes.md 시작–끝(초) 그대로 건다 (총 21.7초 = 651프레임 · 30fps).
+  장면 경계: 2→3은 button-press 뗌 끝에서 transition(컷), 5→6은 shape-morph (점 자리에서 transition), 10은 끝.
+  나머지는 cut-in-motion (motion.md 3장): 각 장면 scene-out이 절반 진행된 프레임 = 장면 끝.
   화면 · 부품: assets/src/ = 저장소 src/ 를 바이트 그대로 복사한 것 (parts 는 iframe, 상태는 ?state= 로만).
   쓴 이름 목록: ../used-video.md
 -->
 <html lang="ko" data-resolution="landscape">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       /* design.md 3장 A · video.md 3장: 로컬 파일 */
@@ -21,15 +22,17 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="17.6" data-width="1920" data-height="1080">
-      <div id="s1" data-composition-id="s1" data-composition-src="compositions/s1.html" data-start="0"    data-duration="2.7" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
-      <div id="s2" data-composition-id="s2" data-composition-src="compositions/s2.html" data-start="2.7"  data-duration="2"   data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
-      <div id="s3" data-composition-id="s3" data-composition-src="compositions/s3.html" data-start="4.7"  data-duration="3"   data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
-      <div id="s4" data-composition-id="s4" data-composition-src="compositions/s4.html" data-start="7.7"  data-duration="1"   data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
-      <div id="s5" data-composition-id="s5" data-composition-src="compositions/s5.html" data-start="8.7"  data-duration="2.2" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
-      <div id="s6" data-composition-id="s6" data-composition-src="compositions/s6.html" data-start="10.9" data-duration="1.7" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
-      <div id="s7" data-composition-id="s7" data-composition-src="compositions/s7.html" data-start="12.6" data-duration="2.1" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
-      <div id="s8" data-composition-id="s8" data-composition-src="compositions/s8.html" data-start="14.7" data-duration="2.9" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+    <div data-hf-id="hf-aqn4" id="root" data-composition-id="main" data-start="0" data-duration="20.09" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-23ji" id="s1" data-composition-id="s1" data-composition-src="compositions/s1.html" data-start="0" data-duration="2.7" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-qomd" id="s2" data-composition-id="s2" data-composition-src="compositions/s2.html" data-start="2.7" data-duration="2" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-pfbt" id="s3" data-composition-id="s3" data-composition-src="compositions/s3.html" data-start="4.7" data-duration="2.32" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" data-playback-start="0"></div>
+      <div data-hf-id="hf-f5c2" id="s4" data-composition-id="s4" data-composition-src="compositions/s4.html" data-start="7.7" data-duration="2.6" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-80a4" id="s5" data-composition-id="s5" data-composition-src="compositions/s5.html" data-start="10.3" data-duration="1.4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-iz5u" id="s6" data-composition-id="s6" data-composition-src="compositions/s6.html" data-start="11.7" data-duration="0.7" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-tqls" id="s7" data-composition-id="s7" data-composition-src="compositions/s7.html" data-start="12.4" data-duration="2.2" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-9bvf" id="s8" data-composition-id="s8" data-composition-src="compositions/s8.html" data-start="14.6" data-duration="1.7" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-0kwg" id="s9" data-composition-id="s9" data-composition-src="compositions/s9.html" data-start="16.3" data-duration="2.1" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-playback-start="0" data-hf-id="hf-sgdu" id="s10" data-composition-id="s10" data-composition-src="compositions/s10.html" data-start="18.4" data-duration="1.688" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
     </div>
     <script>
       const tl = gsap.timeline({ paused: true });

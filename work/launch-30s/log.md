@@ -37,3 +37,14 @@
 - snapboard · 장면2 · 덮개판 사방 1px@1x(1.0667px) 크게 (video.md 4장 바뀜), 02a · 02b · 02c 다시 캡처 · 02c 둘레 자국 0 · 2026-10-24
 - 승인 2 · snapboard 장면2 02a · 02b · 02c (button-press · 덮개판) · 사람 "ㄱㄱ" + critic 통과 · 2026-10-24
 - video · out.mp4 다시 렌더 (button-press) · critic 통과 · 17.6초 · 528f · 2026-10-24
+- art-director · 레퍼런스 3개 추가(skillry-saadpastadev · snapcn-wordmark-cut · snapcn-roster-grant) notes 작성 · 새 후보 14개 decisions.md · 2026-10-24
+- 결정 · 새 후보 shape-morph · slot-roll · punch-cut 승인 → motion.md 3장 추가 · 1장 cut-scale ×1.7 추가 · 나머지 11개 빼기 (사람 선택) · 2026-10-24
+- 결정 · 장면4 · slot-roll 두 줄 모두 가운데 → video.md 3장 정렬 예외 추가 (사람 선택) · 2026-10-24
+- 결정 · 장면10 · punch-cut 클로즈엔 logo만 → motion.md 3장 punch-cut 정의에 한 줄 추가 (사람 선택) · 2026-10-24
+- 승인 1 · scenes.md 10장면 21.7초 (slot-roll · shape-morph · punch-cut) · 사람 "ㄱㄱ" + critic 통과 · 2026-10-24
+- 승인 2 · snapboard 10장면 17컷 (04 · 04b · 05 · 05b · 06 · 10 · 10b 새로) · 사람 "제작해봐" + critic 통과 · 2026-10-24
+- video · 장면6 · 값 · 첫 프레임(351f) badge scale 0 빈 바탕 (shape-morph · transition 위반) · 1회
+- 결정 · 장면4 · slot-roll 바뀔 때 두 단어 겹침 → 두 단어 붙여 같이 mask-rise · dur-s · ease-out으로 정의 변경 (사람 선택) · 2026-10-24
+- video · 장면4 slot-roll 새 정의 · 장면6 첫 프레임 고침 · critic 통과 (미리보기, 렌더 안 함) · 2026-10-24
+- 멈춤 · 사람 "됐어 안해" · 렌더 안 함, 미리보기 단계에서 끝 · 2026-10-24
+- render · 장면2만 s2.mp4 (전체 렌더에서 81–140f 잘라냄, 2.0초 60f) · 사람 요청 · 2026-10-25

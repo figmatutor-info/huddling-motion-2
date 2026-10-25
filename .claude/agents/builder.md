@@ -19,8 +19,10 @@ tools: Read, Glob, Grep, Bash, Write, Edit, Skill
 - 영상 도구: `hyperframes` 스킬
 
 ## 할 일
-**snapboard** — `work/<이름>/snapboard.html` (1920×1080 컷을 장면 순서대로) + 장면별 PNG `work/<이름>/snap/NN.png`. 각 장면이 "머묾" 상태일 때의 한 컷.
-**video** — HyperFrames 프로젝트를 `work/<이름>/video/`에, 렌더 결과 `work/<이름>/out.mp4` (1920×1080 · 30fps).
+**snapboard** — `work/<이름>/snapboard.html` (1920×1080 컷을 장면 순서대로) + 장면별 PNG `work/<이름>/snap/NN.png`. 각 장면이 "머묾" 상태일 때의 한 컷. 대표 컷은 그 장면 첫 hold의 첫 프레임으로 잡는다 (움직임 중간 프레임 아님). hold가 없는 장면은 마지막 움직임이 끝난 프레임.
+  + 항상 `work/<이름>/snapboard.png`도 만든다: `snap/NN.png`를 순서대로 4열 그리드 한 장, 칸마다 아래에 `번호 · 시작–끝(초) · 장면 이름` 한 줄 (scenes.md의 # · 시작–끝 · 비트 이름). 그리드 HTML을 Chrome headless로 캡처한다 (ffmpeg에 drawtext가 없음).
+**video** — HyperFrames 프로젝트를 `work/<이름>/video/`에 만들고 미리보기로 확인할 수 있게만 한다. mp4 렌더 · 인코딩 비교는 하지 않는다. 장면별 머묾 프레임은 브라우저 캡처로 `work/<이름>/video-frames/`에.
+**render** — 사람이 "렌더"라고 했을 때만. `video/`를 `work/<이름>/out.mp4` (1920×1080 · 30fps)로 렌더하고 길이 · 프레임 수를 확인한다.
 
 - 화면 · 부품은 `src/` 파일을 그대로 불러 쓴다. 비슷하게 다시 그리지 않는다.
 - 값은 docs에서 이름으로 찾아 쓴다. 없으면 만들지 말고 멈추고 돌려준다.

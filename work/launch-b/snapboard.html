@@ -1,0 +1,246 @@
+<!doctype html>
+<!--
+  work/launch-b/snapboard.html — 스냅보드 (scenes.md 승인본 안 a · 12장면 · 20.0초). 장면마다 "머묾" 한 컷 · 각 1920×1080 · 장면 순서대로.
+  값 출처: docs/video.md 1~5장 · docs/design.md 1~3장 · docs/motion.md 1~5장 (이름은 used-snapboard.md).
+  부품 · 화면: src/parts/*.html (iframe, 원본 파일 그대로 · 상태는 ?state= 로만) · src/screens/01-home.png · 03-mission.png · 04-approved.png
+  화면 이미지 속 자리 (잰 값, 780×1688 @2x 기준): used-snapboard.md "이름 없이 넣은 값".
+  열기: 저장소 루트에서 로컬 서버 (예: python3 -m http.server → /work/launch-b/snapboard.html) 또는 file:// (--allow-file-access-from-files).
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>snapboard — launch-b</title>
+<style>
+  /* design.md 3장 A · video.md 3장: 로컬 파일 */
+  @font-face { font-family: "Pretendard"; font-weight: 400; src: url("../../src/assets/fonts/Pretendard-Regular.otf") format("opentype"); }
+  @font-face { font-family: "Pretendard"; font-weight: 600; src: url("../../src/assets/fonts/Pretendard-SemiBold.otf") format("opentype"); }
+  @font-face { font-family: "Pretendard"; font-weight: 700; src: url("../../src/assets/fonts/Pretendard-Bold.otf") format("opentype"); }
+
+  :root {
+    /* video.md 2장 배경 */
+    --video-bg: #ffffff;
+    --video-bg-soft: #f7f7f8;
+    --video-bg-dark: #18191b;
+    /* video.md 3장 글자 색 */
+    --video-text: #18191b;
+    --video-text-accent: #3759de;
+    /* video.md 3장 간격 */
+    --video-gap: 56px;
+    /* video.md 4장 폰 프레임 */
+    --phone-bezel: 14px;
+    --phone-radius-outer: 64px;
+    --phone-radius-screen: 50px;
+    --phone-color: #18191b;
+    --phone-screen-bg: #ffffff;
+  }
+
+  html, body { margin: 0; padding: 0; }
+  body { font-family: "Pretendard", sans-serif; }
+  p { margin: 0; }
+
+  .cut {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    word-break: keep-all; /* video.md 3장 */
+  }
+  .bg      { background: var(--video-bg); }
+  .bg-soft { background: var(--video-bg-soft); }
+
+  /* video.md 3장 글자 스타일 · 색 */
+  .video-display { font-weight: 700; font-size: 78px; line-height: 95px; }
+  .t-text   { color: var(--video-text); }
+  .t-accent { color: var(--video-text-accent); }
+
+  /* 묶음 전체 화면 가운데 (video.md 3장). 화면 가운데 한 줄 장면 · slot-roll 두 줄은 글자 가운데 정렬 */
+  .center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .center.one-line { text-align: center; }
+  .gap { height: var(--video-gap); flex: none; }
+
+  /* parts: video.md 5장 — 부품 전체에 × 2.8 한 번. iframe 크기 = 부품 원래 크기 (Figma 크기, design.md 6장 · video.md 5장 표) */
+  .part { flex: none; position: relative; }
+  .part iframe {
+    position: absolute; left: 0; top: 0;
+    border: 0; background: transparent;
+    transform: scale(2.8); transform-origin: 0 0;
+  }
+  .p-brand     { width: 274.4px; height: 274.4px; } .p-brand     iframe { width: 98px;  height: 98px;  }
+  .p-btn-apply { width: 890.4px; height: 123.2px; } .p-btn-apply iframe { width: 318px; height: 44px;  } /* apply-case 상태 폭 318 (부품 주석) */
+  .p-btn       { width: 980px;   height: 123.2px; } .p-btn       iframe { width: 350px; height: 44px;  }
+  .p-mission   { width: 980px;   height: 708.4px; } .p-mission   iframe { width: 350px; height: 253px; }
+  .p-stat      { width: 980px;   height: 282.8px; } .p-stat      iframe { width: 350px; height: 101px; }
+  /* logo-hero: video.md 5장 배율 예외 × 6 = 894×114 */
+  .p-logo-hero { width: 894px; height: 114px; } .p-logo-hero iframe { width: 149px; height: 19px; transform: scale(6); }
+
+  /* video.md 4장 폰 프레임: phone-size 444×928 · phone-screen 416×900 · phone-bezel 14 · phone-radius 64 / 50 · 그림자 없음 */
+  .phone {
+    position: absolute; left: 738px;            /* 가로 가운데 (1920 - 444) / 2 */
+    box-sizing: border-box;
+    width: 444px; height: 928px;
+    padding: var(--phone-bezel);
+    border-radius: var(--phone-radius-outer);
+    background: var(--phone-color);
+  }
+  .phone > img {
+    display: block;
+    width: 416px; height: 900px;
+    border-radius: var(--phone-radius-screen);
+    background: var(--phone-screen-bg);
+  }
+
+  /* 3: phone-rise-tilt 끝 (위치 0 · 각도 0) = 폰 화면 가운데 · cam-hold → 폰 y 76–1004 */
+  #s03 .phone { top: 76px; }
+
+  /* 6: cam-pan 끝 → button-press 앞 hold-m. cam-pan은 × 1 세로 이동, 거리 = 미션 카드 가운데 → "제출하기" 가운데.
+     시작 프레이밍: 03-mission 미션 카드 (@2x y 208–602, 가운데 405) 를 화면 가운데 → 폰 top = 540 - 14 - 405 × 900/1688 = 310.06
+     끝 프레이밍: "제출하기" 자리 (video.md 4장 @1x y 753 · 높이 44 → 가운데 775) 를 화면 가운데 → 폰 top = 540 - 14 - 775 × 900/844 = -300.42 */
+  #s06 .phone { top: 310.06px; } /* hold 첫 프레임 (screen-dissolve 직후 hold-m): 미션 카드 가운데 = 화면 가운데. cam-pan 끝은 top -300.42 */
+
+  /* 6: video.md 4장 예외 — button-submit submit을 화면 이미지 속 "제출하기" 자리 (@1x x 20 · y 753 · 350×44)에 화면 이미지와 같은 배율로 겹침
+     배율 phone-screen 416/390 = 1.066667 (부품 전체에 한 번). 위치 (폰 안, 베젤 포함) left = 14 + 20 × 416/390 · top = 14 + 753 × 900/844 */
+  .phone .overlay-btn {
+    position: absolute; left: 35.3333px; top: 816.9479px;
+    width: 373.3333px; height: 46.9333px;
+  }
+  .phone .overlay-btn iframe {
+    position: absolute; left: 0; top: 0; border: 0; background: transparent;
+    width: 350px; height: 44px;
+    transform: scale(1.066667); transform-origin: 0 0;
+  }
+  /* 덮개판: 부품 바로 아래 · 사방 1px @1x 크게 (x 19 · y 752 · 352×46) · 같은 모서리 (부품 8 × 1.066667) · 색 phone-screen-bg (= color-bg) */
+  .phone .overlay-cover {
+    position: absolute; left: 34.2667px; top: 815.8815px;
+    width: 375.4667px; height: 49.0667px;
+    border-radius: 8.5333px;
+    background: var(--phone-screen-bg);
+  }
+
+  /* 7: 04-approved 화면 속 미션 카드(100%) · "승인 완료" · "미션을 완성했어요!" 묶음 (@2x y 208–770, 가운데 489) 를 화면 가운데 → 폰 top = 540 - 14 - 489 × 900/1688 = 265.28 (폰 아래 화면 밖) */
+  #s07 .phone { top: 265.28px; }
+
+  /* 10: cam-push 끝 = × 1 → cut-scale × 1.7 (motion.md 1장 · 5장), 대상 = stat-card 금액 #stat-card-amount.
+     stat-card × 2.8 화면 가운데 → 상자 x 470 · y 398.6. 금액 span 가운데 (부품 좌표, 잰 값) 176.836 · 35 → 화면 965.141 · 496.6
+     대상을 화면 가운데로: translate(960 - 1.7 × 965.141, 540 - 1.7 × 496.6) scale(1.7) */
+  .cam { position: absolute; inset: 0; transform-origin: 0 0; }
+  #s10 .cam { transform: translate(-680.7397px, -304.22px) scale(1.7); }
+
+  /* 12: video-bg-end (video.md 2장) = video-bg-dark + video-glow + video-grain */
+  .bg-end { background: var(--video-bg-dark); }
+  .bg-end .glow {
+    position: absolute; left: 50%; top: 50%;
+    width: 1200px; height: 1200px; margin: -600px 0 0 -600px;
+    border-radius: 50%;
+    background: radial-gradient(circle closest-side, rgba(55, 89, 222, 0.45), rgba(55, 89, 222, 0));
+    filter: blur(160px);
+  }
+  .bg-end canvas.grain { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; opacity: 0.06; }
+</style>
+</head>
+<body>
+
+<!-- 1 · 0.0–1.6 · 비트1 훅 · 머묾 = 구절2 단어 조립(enter + scale-from, stagger) 끝 뒤 hold-s · cam-hold -->
+<section class="cut bg" id="s01" data-scene="1">
+  <div class="center one-line">
+    <p class="video-display t-text">내 실력으로</p>
+  </div>
+</section>
+
+<!-- 2 · 1.6–2.4 · 비트2 훅의 답 · 머묾 = brand-icon scale-from → 1 · 글자 enter (stagger) 끝 뒤 hold-s · cam-hold -->
+<section class="cut bg" id="s02" data-scene="2">
+  <div class="center one-line">
+    <div class="part p-brand"><iframe src="../../src/parts/brand-icon.html"></iframe></div>
+    <div class="gap"></div>
+    <p class="video-display t-accent">바로 써먹는 스킬</p>
+  </div>
+</section>
+
+<!-- 3 · 2.4–4.4 · 비트3 앱 첫 화면 · 머묾 = phone-rise-tilt 끝 뒤 hold-l · cam-hold -->
+<section class="cut bg-soft" id="s03" data-scene="3">
+  <div class="phone"><img src="../../src/screens/01-home.png" alt=""></div>
+</section>
+
+<!-- 4 · 4.4–5.2 · 비트4 입력 · 머묾 = zoom-through 이어짐(첫 프레임부터 놓임) 뒤 hold-m · cam-hold -->
+<section class="cut bg-soft" id="s04" data-scene="4">
+  <div class="center">
+    <div class="part p-btn-apply"><iframe src="../../src/parts/button-submit.html?state=apply-case"></iframe></div>
+  </div>
+</section>
+
+<!-- 5 · 5.2–6.0 · 비트5 형태 이어받기 · 머묾 없음 → 대표 = shape-morph 끝 (mission-card scale-from → 1 끝, 점 자리 = 화면 가운데) · cam-hold -->
+<section class="cut bg-soft" id="s05" data-scene="5">
+  <div class="center">
+    <div class="part p-mission"><iframe src="../../src/parts/mission-card.html"></iframe></div>
+  </div>
+</section>
+
+<!-- 6 · 6.0–8.3 · 비트6 상세 → 행동 버튼 · 머묾 = cam-pan 끝 → button-press 앞 hold-m (button-submit submit 겹침 · 덮개판) -->
+<section class="cut bg-soft" id="s06" data-scene="6">
+  <div class="phone"><img src="../../src/screens/03-mission.png" alt="">
+    <div class="overlay-cover"></div>
+    <div class="overlay-btn"><iframe src="../../src/parts/button-submit.html?state=submit"></iframe></div>
+  </div>
+</section>
+
+<!-- 7 · 8.3–9.5 · 비트7 · 머묾 = screen-dissolve 끝 뒤 hold-l · cam-hold · 부품 겹침 없음 -->
+<section class="cut bg-soft" id="s07" data-scene="7">
+  <div class="phone"><img src="../../src/screens/04-approved.png" alt=""></div>
+</section>
+
+<!-- 8 · 9.5–11.2 · 비트8 확정 · 머묾 = part-in 끝 → button-press 앞 hold-m · cam-hold -->
+<section class="cut bg-soft" id="s08" data-scene="8">
+  <div class="center">
+    <div class="part p-btn"><iframe src="../../src/parts/button-submit.html?state=view-assets"></iframe></div>
+  </div>
+</section>
+
+<!-- 9 · 11.2–12.8 · 비트9 결과 · 머묾 = shape-morph 끝(scale-from → 1) → count-up 끝(data-final "29,700") 뒤 hold-s · cam-hold -->
+<section class="cut bg-soft" id="s09" data-scene="9">
+  <div class="center">
+    <div class="part p-stat"><iframe src="../../src/parts/stat-card.html"></iframe></div>
+  </div>
+</section>
+
+<!-- 10 · 12.8–14.1 · 비트10 밀어붙이기 · 머묾 없음 → 대표 = cam-push 끝 (× cut-scale, 대상 금액) · 다음 icon-expand 직전 -->
+<section class="cut bg-soft" id="s10" data-scene="10">
+  <div class="cam">
+    <div class="center">
+      <div class="part p-stat"><iframe src="../../src/parts/stat-card.html"></iframe></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · 14.1–18.0 · 비트11 규모 · 머묾 = headline-in 끝 뒤 hold-l (아랫줄 첫 단어) · slot-roll 두 줄 모두 가운데 · 줄 사이 video-gap-line (0) -->
+<section class="cut bg" id="s11" data-scene="11">
+  <div class="center one-line">
+    <p class="video-display t-text">배움이 쌓여,</p>
+    <p class="video-display t-accent">회의록 자동 정리 템플릿</p>
+  </div>
+</section>
+
+<!-- 12 · 18.0–20.0 · 비트12 엔드 · 머묾 = logo-reveal (엔드 카드: 글자마다 enter, stagger) 끝 뒤 hold-end 마지막 정지 -->
+<section class="cut bg-end" id="s12" data-scene="12">
+  <div class="glow"></div>
+  <canvas class="grain" width="1920" height="1080"></canvas>
+  <div class="center one-line">
+    <div class="part p-logo-hero"><iframe src="../../src/parts/logo.html?state=logotype-white"></iframe></div>
+  </div>
+</section>
+
+<script>
+  // video-grain (video.md 2장): #ffffff 노이즈 · 1px · 알파 0–255 고르게 · seed 1 · 고정 · mulberry32
+  (function grain() {
+    let s = 1;
+    const rand = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    const c = document.querySelector("canvas.grain");
+    const ctx = c.getContext("2d");
+    const img = ctx.createImageData(c.width, c.height), d = img.data;
+    for (let i = 0; i < d.length; i += 4) { d[i] = 255; d[i + 1] = 255; d[i + 2] = 255; d[i + 3] = Math.floor(rand() * 256); }
+    ctx.putImageData(img, 0, 0);
+  })();
+</script>
+</body>
+</html>
